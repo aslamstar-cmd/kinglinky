@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Elite Biker News | Step 1</title>
+  <style>
+    :root {
+      --bg-color: #061c1c;
+      --card-bg: #0b3d3d;
+      --accent: #00ffd0;
+      --text-color: #eafffa;
+    }
+    body {
+      background: var(--bg-color);
+      color: var(--text-color);
+      font-family: 'Segoe UI', Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      line-height: 1.6;
+    }
+
+    /* Sticky Timer at Top */
+    .sticky-header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: var(--card-bg);
+      padding: 15px;
+      text-align: center;
+      border-bottom: 2px solid var(--accent);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+    }
+    #sec { font-weight: bold; color: var(--accent); font-size: 1.4rem; }
+    .status-msg { color: var(--accent); font-weight: bold; display: none; }
+
+    .container {
+      max-width: 700px;
+      margin: 20px auto;
+      background: var(--card-bg);
+      padding: 25px;
+      border-radius: 15px;
+    }
+
+    /* Article Content */
+    .article-content {
+      margin: 20px 0;
+    }
+    .article-content h1 { color: var(--accent); font-size: 2rem; }
+    .article-content h2 { color: var(--accent); border-bottom: 1px solid #1a4a4a; padding-bottom: 5px; }
+    
+    .bike-img {
+      width: 100%;
+      border-radius: 12px;
+      margin: 20px 0;
+      border: 1px solid var(--accent);
+      box-shadow: 0 0 15px rgba(0, 255, 208, 0.2);
+    }
+
+    /* Big Ad Gaps */
+    .ad-space {
+      background: rgba(0,0,0,0.3);
+      height: 250px; /* Big gap for Ads */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      margin: 40px 0;
+      font-size: 14px;
+      color: #555;
+      border: 1px dashed #1a4a4a;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    /* Button Area at Bottom */
+    .btn-container {
+      text-align: center;
+      padding: 40px 0;
+      border-top: 1px solid #1a4a4a;
+    }
+    button {
+      padding: 15px 40px;
+      background: var(--accent);
+      color: #061c1c;
+      border: none;
+      border-radius: 50px;
+      font-weight: bold;
+      font-size: 18px;
+      cursor: pointer;
+      display: none; /* Initially hidden */
+      box-shadow: 0 0 20px rgba(0, 255, 208, 0.4);
+    }
+    button:disabled { opacity: 0.5; }
+
+    .note { font-size: 13px; opacity: .7; margin-top: 15px; }
+    b { color: var(--accent); }
+  </style>
+</head>
+<body>
+
+<div class="sticky-header">
+  <div id="timer-text">Verification: <span id="sec">15</span> seconds remaining</div>
+  <div id="scroll-msg" class="status-msg">✅ VERIFIED! SCROLL DOWN TO CONTINUE</div>
+</div>
+
+<div class="container">
+  
+  <div class="article-content">
+    <h1>Top Superbikes Redefining Speed in 2025</h1>
+    <p>The world of two-wheelers is evolving faster than ever. From aerodynamic wings to AI-assisted traction control, 2025 marks a new era for speed enthusiasts.</p>
+    
+    <div class="ad-space">-- Advertisement Area --</div>
+
+    <h2>1. Kawasaki Ninja H2R: The Beast Unlocked</h2>
+    <p>The <b>Kawasaki Ninja H2R</b> remains the king of the track. With its supercharged 998cc engine, it produces a staggering 310 horsepower. It's not just a motorcycle; it's a feat of engineering that pushes the limits of physics.</p>
+    <img src="https://th.bing.com/th/id/OIP.TX7YgjRIkcAjVLI6v-PQ5wHaFj?w=247&h=185&c=7&r=0&o=5&cb=ucfimg2&pid=1.7&ucfimg=1" class="bike-img" alt="Superbike">
+
+    <p>Riders in 2025 are looking for more than just raw power. The new H2R features upgraded carbon-fiber wings for better downforce at speeds exceeding 300 km/h.</p>
+
+    <div class="ad-space">-- Advertisement Area --</div>
+
+    <h2>2. BMW S1000RR: Precision Personified</h2>
+    <p>The <b>BMW S1000RR</b> has been updated with the "M" package as standard for 2025. Its ShiftCam technology ensures that you have massive torque at low speeds and explosive power at high RPMs.</p>
+    <img src="https://th.bing.com/th/id/OIP.-OlXzs5PvVF74yY228nTRgHaEo?w=254&h=180&c=7&r=0&o=5&cb=ucfimg2&pid=1.7&ucfimg=1" class="bike-img" alt="BMW S1000RR">
+
+    <p>It is widely considered the best "daily-able" superbike. With a lightweight frame and the latest Brembo Stylema brakes, the S1000RR offers a level of control that few other bikes can match.</p>
+
+    <div class="ad-space">-- Advertisement Area --</div>
+
+    <h2>3. Suzuki Hayabusa: The Legend Lives On</h2>
+    <p>The <b>Suzuki Hayabusa</b> continues to be the ultimate sports tourer. The 2025 variant focuses on "intelligent" riding. With the Suzuki Intelligent Ride System (S.I.R.S.), the bike now predicts road conditions to adjust engine braking and wheelie control.</p>
+    <img src="https://th.bing.com/th/id/OIP.21rvIqxIZGky3hkTFtLP5QHaE7?w=282&h=188&c=7&r=0&o=5&cb=ucfimg2&pid=1.7&ucfimg=1" class="bike-img" alt="Hayabusa">
+
+    <p>Whether you are cruising the highways or hitting the apex on a mountain pass, the Hayabusa remains an icon of stability and comfort.</p>
+
+  </div>
+
+  <div class="btn-container">
+    <button id="btn">Continue to Step 2</button>
+    <div class="note" id="note">You must wait for the timer to complete</div>
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@3/dist/fp.min.js"></script>
+<script>
+  // Fingerprint Logic
+  (async () => {
+    const fp = await FingerprintJS.load();
+    const result = await fp.get();
+    sessionStorage.setItem("fp", result.visitorId);
+  })();
+
+  const sec = document.getElementById("sec");
+  const btn = document.getElementById("btn");
+  const timerText = document.getElementById("timer-text");
+  const scrollMsg = document.getElementById("scroll-msg");
+  const note = document.getElementById("note");
+
+  let t = 15;
+  let human = false;
+
+  // Interaction check
+  window.addEventListener("mousemove", () => human = true);
+  window.addEventListener("scroll", () => human = true);
+  window.addEventListener("touchstart", () => human = true);
+
+  const timer = setInterval(() => {
+    t--;
+    if(t >= 0) sec.innerText = t;
+    
+    if (t <= 0) {
+      clearInterval(timer);
+      if (!human) {
+        document.body.innerHTML = "<h1 style='color:white; text-align:center; margin-top:100px;'>Bot detected! Please refresh and interact with the page.</h1>";
+      } else {
+        timerText.style.display = "none";
+        scrollMsg.style.display = "block";
+        btn.style.display = "inline-block";
+        note.innerText = "Scroll to the bottom and click Continue";
+      }
+    }
+  }, 1000);
+
+  btn.onclick = () => {
+    btn.disabled = true;
+    btn.innerText = "Verifying Traffic...";
+    
+    setTimeout(() => {
+      const urlParams = new URLSearchParams(location.search);
+      location.href = "step2.html?code=" + (urlParams.get("code") || "EliteBiker");
+    }, 3000);
+  };
+</script>
+
+</body>
+</html>

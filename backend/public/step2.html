@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Elite Auto | Step 2</title>
+  <style>
+    :root { --bg: #061c1c; --card: #0b3d3d; --accent: #00ffd0; --text: #eafffa; }
+    body { background: var(--bg); color: var(--text); font-family: sans-serif; margin: 0; padding: 0; text-align: center; }
+    .sticky-header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: var(--card-bg);
+      padding: 15px;
+      text-align: center;
+      border-bottom: 2px solid var(--accent);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+    }
+    #sec { font-weight: bold; color: var(--accent); font-size: 1.4rem; }
+    .status-msg { color: var(--accent); font-weight: bold; display: none; }
+    .container { max-width: 700px; margin: 20px auto; background: var(--card); padding: 25px; border-radius: 15px; text-align: left; }
+    .ad-space { background: rgba(0,0,0,0.3); height: 250px; display: flex; align-items: center; justify-content: center; border-radius: 8px; margin: 30px 0; border: 1px dashed #1a4a4a; font-size: 12px; }
+    .car-img { width: 100%; border-radius: 10px; margin: 15px 0; }
+    #btn { padding: 15px 40px; background: var(--accent); color: #061c1c; border: none; border-radius: 50px; font-weight: bold; cursor: pointer; display: none; width: 100%; margin-top: 20px; }
+  </style>
+</head>
+<body>
+<div class="sticky-header">
+  Step 1: Please wait <span id="sec">15</span> seconds...
+</div>
+
+<div class="container">
+  
+  <div class="article-content">
+    <h1>The Future of Speed: Top Luxury Cars of 2025</h1>
+    <p>As we move into 2025, the automotive industry is witnessing a massive shift. It's no longer just about horsepower; it's about sustainable luxury and artificial intelligence integrated into the driving experience.</p>
+
+    <div class="ad-space">-- Advertisement Slot 1 --</div>
+
+    <h2>1. Porsche Taycan Turbo GT: The EV King</h2>
+    <p>The <b>Porsche Taycan Turbo GT</b> has officially redefined what an electric car can do. With over 1,000 horsepower in overboost mode, it hits 0-100 km/h in just 2.2 seconds. This is Porsche's answer to the future of electric mobility without sacrificing the soul of a sports car.</p>
+    <img src="https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?auto=format&fit=crop&q=80&w=700" class="car-img" alt="Luxury Car">
+
+    <p>The interior features a completely sustainable "vegan leather" option and a curved display that spans the entire dashboard. Performance and planet-friendly tech finally go hand in hand.</p>
+
+    <div class="ad-space">-- Advertisement Slot 2 --</div>
+
+    <h2>2. Lamborghini Revuelto: The Hybrid Revolution</h2>
+    <p>Lamborghini has entered the hybrid era with the <b>Revuelto</b>. It combines a massive V12 engine with three electric motors. The result? A screaming exhaust note with the instant torque of an EV. It produces a total of 1,001 HP.</p>
+    <img src="https://th.bing.com/th/id/OIP.5Fwvz0XaURetX_2N_YTnCwHaEK?w=288&h=180&c=7&r=0&o=5&cb=ucfimg2&pid=1.7&ucfimg=1" class="car-img" alt="Supercar">
+
+    <p>With its Y-shaped LED lights and aerospace-inspired cockpit, the Revuelto looks like a fighter jet on wheels. It’s the perfect blend of traditional Italian muscle and futuristic technology.</p>
+
+    <div class="ad-space">-- Advertisement Slot 3 --</div>
+
+    <h2>3. Tesla Model S Plaid (2025 Edition)</h2>
+    <p>Tesla continues to dominate the tech space. The 2025 Model S Plaid introduces the <b>Autopilot 5.0</b>, which offers near-perfect urban navigation. While the speed remains insane, the focus has shifted to the "In-car Cinema" and gaming experience.</p>
+    <img src="https://th.bing.com/th/id/OIP.AHnidL8oK71ddghL9lihIgHaEK?w=303&h=180&c=7&r=0&o=5&cb=ucfimg2&pid=1.7&ucfimg=1" class="car-img" alt="Tesla">
+
+    <div class="ad-space">-- Advertisement Slot 4 --</div>
+
+    <p>Conclusion: Whether you prefer the roar of a hybrid V12 or the silent thrust of an EV, 2025 has a dream car for everyone. The road ahead is cleaner, faster, and smarter.</p>
+  </div>
+
+  <div class="btn-container">
+    <button id="btn" onclick="next()">Continue to Step 3</button>
+    <p id="note" style="font-size: 13px; opacity: 0.6;">Finish reading to unlock the button</p>
+  </div>
+
+</div>
+<script>
+let s = 15;
+const t = setInterval(()=>{
+  s--;
+  document.getElementById("sec").innerText = s;
+  if(s <= 0){
+    clearInterval(t);
+    document.getElementById("btn").style.display="block";
+  }
+}, 1000);
+
+function next(){
+  btn.disabled = true;
+  btn.innerText = "Securing Connection...";
+  
+  setTimeout(()=>{
+    sessionStorage.setItem("step","3");
+    // Getting current URL parameters to pass to next step
+    const urlParams = new URLSearchParams(location.search);
+    location.href = "step3.html?code=" + (urlParams.get("code") || "CarLovers");
+  }, 4000);
+}
+</script>
+</body>
+</html>

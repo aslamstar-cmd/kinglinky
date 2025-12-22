@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Elite Biker News | Step 1</title>
+  <style>
+    :root {
+      --bg-color: #061c1c;
+      --card-bg: #0b3d3d;
+      --accent: #00ffd0;
+      --text-color: #eafffa;
+    }
+    body {
+      background: var(--bg-color);
+      color: var(--text-color);
+      font-family: 'Segoe UI', Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      line-height: 1.6;
+    }
+
+    /* Sticky Timer */
+    .sticky-header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: var(--card-bg);
+      padding: 15px;
+      text-align: center;
+      border-bottom: 2px solid var(--accent);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+    }
+    #sec { font-weight: bold; color: var(--accent); font-size: 1.4rem; }
+
+    .container {
+      max-width: 700px;
+      margin: 20px auto;
+      background: var(--card-bg);
+      padding: 25px;
+      border-radius: 15px;
+    }
+
+    /* Article Content */
+    .article-content h1 { color: var(--accent); font-size: 2rem; text-align: center; }
+    .article-content h2 { color: var(--accent); margin-top: 30px; border-left: 4px solid var(--accent); padding-left: 10px; }
+    
+    .bike-img {
+      width: 100%;
+      border-radius: 12px;
+      margin: 20px 0;
+      border: 1px solid rgba(0, 255, 208, 0.3);
+    }
+
+    /* 4 Ad Spaces */
+    .ad-space {
+      background: rgba(0,0,0,0.3);
+      height: 250px; 
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 10px;
+      margin: 35px 0;
+      font-size: 13px;
+      color: #4a7a7a;
+      border: 1px dashed #1a4a4a;
+      text-transform: uppercase;
+    }
+
+    /* Button Styling */
+    .btn-container {
+      text-align: center;
+      padding: 40px 0;
+      border-top: 1px solid #1a4a4a;
+    }
+    #btn {
+      padding: 15px 45px;
+      background: var(--accent);
+      color: #061c1c;
+      border: none;
+      border-radius: 50px;
+      font-weight: bold;
+      font-size: 18px;
+      cursor: pointer;
+      display: none; /* Initially hidden */
+      box-shadow: 0 0 20px rgba(0, 255, 208, 0.4);
+      width: 100%;
+    }
+    #btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .denied { color: #ff4d4d; font-weight: bold; margin-top: 100px; text-align: center; font-size: 20px; }
+  </style>
+</head>
+<body>
+
+<script>
+  // Initial check or Set Start Time
+  if (!sessionStorage.getItem("step")) {
+    sessionStorage.setItem("step", "1");
+    sessionStorage.setItem("startTime", Date.now());
+  } else if (sessionStorage.getItem("step") !== "1") {
+    // If user manually tries to refresh or come back to step 1
+    sessionStorage.setItem("startTime", Date.now()); 
+  }
+</script>
+
+<div class="sticky-header">
+  Step 1: Please wait <span id="sec">15</span> seconds...
+</div>
+
+<div class="container">
+  
+  <div class="article-content">
+    <h1>Top Superbikes of 2025</h1>
+    <p>Performance biking has reached a new peak this year. Aerodynamics and engine electronics are now the most important factors for speed.</p>
+
+    <div class="ad-space">-- Advertisement Slot 1 --</div>
+
+    <h2>Kawasaki Ninja H2R</h2>
+    <p>The Ninja H2R remains the only supercharged production bike, pushing the boundaries of what's legal on the track. Its carbon wings provide maximum stability at 300+ km/h.</p>
+    <img src="https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?auto=format&fit=crop&q=80&w=600" class="bike-img" alt="Ninja H2R">
+
+    <div class="ad-space">-- Advertisement Slot 2 --</div>
+
+    <h2>BMW S1000RR M-Package</h2>
+    <p>BMW has upgraded its S1000RR with the 'M' performance kit, making it lighter and faster in the corners. The ShiftCam technology is the secret to its massive powerband.</p>
+    <img src="https://th.bing.com/th/id/OIP.-OlXzs5PvVF74yY228nTRgHaEo?w=254&h=180&c=7&r=0&o=5&cb=ucfimg2&pid=1.7&ucfimg=1" class="bike-img" alt="BMW S1000RR">
+
+    <div class="ad-space">-- Advertisement Slot 3 --</div>
+    
+    <div class="ad-space">-- Advertisement Slot 4 --</div>
+
+    <p>Choosing the right superbike depends on your riding style. Whether it's the raw power of the Ninja or the precision of the BMW, 2025 has something for every enthusiast.</p>
+  </div>
+
+   <div class="ad-space">-- Advertisement Area --</div>
+
+    <h2>3. Suzuki Hayabusa: The Legend Lives On</h2>
+    <p>The <b>Suzuki Hayabusa</b> continues to be the ultimate sports tourer. The 2025 variant focuses on "intelligent" riding. With the Suzuki Intelligent Ride System (S.I.R.S.), the bike now predicts road conditions to adjust engine braking and wheelie control.</p>
+    <img src="https://th.bing.com/th/id/OIP.21rvIqxIZGky3hkTFtLP5QHaE7?w=282&h=188&c=7&r=0&o=5&cb=ucfimg2&pid=1.7&ucfimg=1" class="bike-img" alt="Hayabusa">
+
+    <p>Whether you are cruising the highways or hitting the apex on a mountain pass, the Hayabusa remains an icon of stability and comfort.</p>
+
+  </div>
+
+  <div class="btn-container">
+    <button id="btn">Continue to Step 2</button>
+    <div class="note" id="note">You must wait for the timer to complete</div>
+  </div>
+
+  <div class="btn-container">
+    <button id="btn" onclick="next()">Continue to Step 2</button>
+  </div>
+
+</div>
+
+<script>
+let s = 15;
+const sec = document.getElementById("sec");
+const btn = document.getElementById("btn");
+
+// 15 seconds timer logic
+const t = setInterval(()=>{
+  s--;
+  sec.innerText = s;
+  if(s <= 0){
+    clearInterval(t);
+    btn.style.display="inline-block";
+  }
+},1000);
+
+// Backend redirect logic with Step 2 unlock
+  btn.onclick = () => {
+    btn.disabled = true;
+    btn.innerText = "Verifying Traffic...";
+    
+    setTimeout(() => {
+      const urlParams = new URLSearchParams(location.search);
+      location.href = "step2.html?code=" + (urlParams.get("code") || "EliteBiker");
+    }, 3000);
+  };
+</script
+</script>
+
+</body>
+</html>

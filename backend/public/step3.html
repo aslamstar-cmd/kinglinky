@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aviation Elite | Step 3</title>
+  <style>
+    :root {
+      --bg-color: #061c1c;
+      --card-bg: #0b3d3d;
+      --accent: #00ffd0;
+      --text-color: #eafffa;
+    }
+    body {
+      background: var(--bg-color);
+      color: var(--text-color);
+      font-family: 'Segoe UI', Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      line-height: 1.6;
+    }
+
+    /* Sticky Header */
+    .sticky-header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: var(--card-bg);
+      padding: 15px;
+      text-align: center;
+      border-bottom: 2px solid var(--accent);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+    }
+    #sec { font-weight: bold; color: var(--accent); font-size: 1.4rem; }
+    .status-msg { color: var(--accent); font-weight: bold; display: none; }
+
+    .container {
+      max-width: 700px;
+      margin: 20px auto;
+      background: var(--card-bg);
+      padding: 25px;
+      border-radius: 15px;
+    }
+
+    /* Article Content */
+    .article-content h1 { color: var(--accent); font-size: 1.8rem; text-align: center; text-transform: uppercase; }
+    .article-content h2 { color: var(--accent); margin-top: 35px; border-bottom: 1px solid #1a4a4a; }
+    
+    .jet-img {
+      width: 100%;
+      border-radius: 12px;
+      margin: 20px 0;
+      border: 1px solid rgba(0, 255, 208, 0.4);
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    }
+
+    /* 4 Ad Slots */
+    .ad-space {
+      background: rgba(0,0,0,0.3);
+      height: 250px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 10px;
+      margin: 40px 0;
+      font-size: 12px;
+      color: #555;
+      border: 1px dashed #1a4a4a;
+      letter-spacing: 2px;
+    }
+
+    /* Button Styling */
+    .btn-container {
+      text-align: center;
+      padding: 40px 0;
+      border-top: 1px solid #1a4a4a;
+    }
+    #btn {
+      padding: 15px 45px;
+      background: var(--accent);
+      color: #061c1c;
+      border: none;
+      border-radius: 50px;
+      font-weight: bold;
+      font-size: 18px;
+      cursor: pointer;
+      display: none; 
+      box-shadow: 0 0 15px rgba(0, 255, 208, 0.4);
+    }
+    #btn:disabled { opacity: 0.5; }
+
+    .note { font-size: 13px; opacity: .7; margin-top: 10px; }
+  </style>
+</head>
+<body>
+
+<script>
+  if (sessionStorage.getItem("step") !== "3") {
+    document.body.innerHTML = "<div style='text-align:center; margin-top:100px; color:#ff4d4d;'>❌ Access Denied: Step 2 not completed</div>";
+  }
+</script>
+
+<div class="sticky-header">
+  <div id="timer-text">Step 3: Verification <span id="sec">15</span>s</div>
+  <div id="scroll-msg" class="status-msg">✅ JET FUEL READY! SCROLL DOWN</div>
+</div>
+
+<div class="container">
+  
+  <div class="article-content">
+    <h1>Supersonic Giants: The Fastest Fighter Jets of 2025</h1>
+    <p>Aviation technology has reached a point where pilots are now assisted by AI "Co-pilots" to handle extreme G-forces. Let's look at the titans of the sky.</p>
+
+    <div class="ad-space">-- Advertisement Slot 1 --</div>
+
+    <h2>1. F-35 Lightning II: The Stealth Master</h2>
+    <p>The <b>F-35 Lightning II</b> is not just a jet; it's a flying supercomputer. In 2025, its Block 4 upgrade allows it to control a fleet of "Loyal Wingman" drones simultaneously. Its stealth capabilities make it nearly invisible to enemy radar.</p>
+    <img src="https://images.unsplash.com/photo-1517976384346-3136801d605d?auto=format&fit=crop&q=80&w=700" class="jet-img" alt="F-35 Jet">
+
+    <div class="ad-space">-- Advertisement Slot 2 --</div>
+
+    <h2>2. Sukhoi Su-57: The Agile Predator</h2>
+    <p>Russia's <b>Su-57 Felon</b> is known for its extreme maneuverability. With 3D thrust vectoring, it can perform maneuvers that defy gravity. The 2025 model features new Izdelie 30 engines, pushing it to Mach 2.0 without using afterburners.</p>
+    <img src="https://th.bing.com/th/id/OIP.0b6D7dZDS5uiB0b1HIou0wHaE8?w=245&h=180&c=7&r=0&o=5&cb=ucfimg2&pid=1.7&ucfimg=1" class="jet-img" alt="Fighter Jet">
+
+    <div class="ad-space">-- Advertisement Slot 3 --</div>
+
+    <h2>3. The 6th Generation: NGAD</h2>
+    <p>The <b>Next Generation Air Dominance (NGAD)</b> program is the hottest topic in aviation. These jets will eliminate traditional cockpits in favor of full VR-integrated helmets, giving pilots a 360-degree view of the battlefield through the aircraft's skin.</p>
+    <img src="https://th.bing.com/th/id/OIP.PpwY2jAlB8HPFnRod7gG9gHaD3?w=271&h=180&c=7&r=0&o=5&cb=ucfimg2&pid=1.7&ucfimg=1" class="jet-img" alt="Aviation Tech">
+
+    <div class="ad-space">-- Advertisement Slot 4 --</div>
+
+    <p>Modern air combat is shifting from "who has the fastest jet" to "who has the best data link." As we look towards 2026, the sky is no longer the limit—it's the playground of advanced AI.</p>
+  </div>
+
+  <div class="btn-container">
+    <button id="btn" onclick="next()">Continue to Final Step</button>
+    <div class="note" id="note">Read the full article to proceed</div>
+  </div>
+
+</div>
+
+<script>
+let s = 15;
+const sec = document.getElementById("sec");
+const btn = document.getElementById("btn");
+const timerText = document.getElementById("timer-text");
+const scrollMsg = document.getElementById("scroll-msg");
+
+let human = false;
+window.addEventListener("scroll", () => human = true);
+window.addEventListener("touchstart", () => human = true);
+
+const t = setInterval(()=>{
+  s--;
+  if(s >= 0) sec.innerText = s;
+  
+  if(s <= 0){
+    clearInterval(t);
+    if(human) {
+      timerText.style.display = "none";
+      scrollMsg.style.display = "block";
+      btn.style.display = "inline-block";
+    } else {
+      alert("Please scroll through the article to verify.");
+      s = 5; 
+    }
+  }
+}, 1000); // 1 sec logic
+
+function next(){
+  btn.disabled = true;
+  btn.innerText = "Finalizing Check...";
+  
+  setTimeout(()=>{
+    sessionStorage.setItem("step","4");
+    const urlParams = new URLSearchParams(location.search);
+    location.href = "step4.html?code=" + (urlParams.get("code") || "JetSpeed");
+  }, 4000);
+}
+</script>
+
+</body>
+</html>
