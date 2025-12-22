@@ -24,14 +24,14 @@ dotenv.config();
 const app = express();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.resolve();
-
-/* ---------------- MIDDLEWARE ---------------- */
-app.use(express.json());
-app.use(express.static(path.join(__dirname, "public")));
 app.use(cors({ origin: ["https://kinglinky.vercel.app"],   
 methods: ["GET", "POST", "PUT", "DELETE"],
 credentials: true
  }));
+/* ---------------- MIDDLEWARE ---------------- */
+app.use(express.json());
+app.use(express.static(path.join(__dirname, "public")));
+
 
 /* ---------------- ROUTES ---------------- */
 app.use("/api/admin", adminAuthRoutes);
