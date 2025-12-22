@@ -48,7 +48,7 @@ router.post("/shorten", async (req, res) => {
     }
 
     const code = Math.random().toString(36).substring(2, 8);
-    const shortUrl = `http://localhost:5000/step1.html?code=${code}`;
+    const shortUrl = `${BASE_URL}/step1.html?code=${code}`;
 
     const link = await Shortcut.create({
       fullUrl: longUrl,
