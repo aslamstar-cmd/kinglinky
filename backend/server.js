@@ -28,6 +28,8 @@ app.use(cors({ origin: ["https://kinglinky.vercel.app"],
 methods: ["GET", "POST", "PUT", "DELETE"],
 credentials: true
  }));
+
+ app.options("*", cors());
 /* ---------------- MIDDLEWARE ---------------- */
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
