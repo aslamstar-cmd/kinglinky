@@ -1,5 +1,5 @@
 import express from "express";
-import Admin from "../models/Admin.js";
+import admin from "../models/admin.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
