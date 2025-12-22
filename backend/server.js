@@ -59,7 +59,9 @@ app.post("/api/links/shorten", async (req, res) => {
       return res.status(400).json({ message: "URL or email missing" });
 
     const shortCode = Math.random().toString(36).substring(2, 8);
-    const shortUrl = `http://localhost:5000/step1/${shortCode}`;
+    const BASE_URL = process.env.BASE_URL;
+
+    const shortUrl = `${BASE_URL}/step1/${shortCode}`;
 
     const link = await Shortcut.create({
       fullUrl: longUrl,
