@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./adminSettings.css";
 
-const API = "http://localhost:5000/api/admin/settings";
+const API = "https://kinglinky.onrender.com/api/admin/settings";
 
 export default function AdminSettings() {
   const [form, setForm] = useState({

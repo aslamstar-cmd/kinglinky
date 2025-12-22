@@ -7,7 +7,7 @@ export default function AdminLinks() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/api/admin/links")
+      .get("https://kinglinky.onrender.com/api/admin/links")
       .then((res) => {
         setLinks(res.data || []);
         setLoading(false);

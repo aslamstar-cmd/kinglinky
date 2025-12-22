@@ -7,7 +7,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-const API = "http://localhost:5000";
+const API = "https://kinglinky.onrender.com";
 
 export default function AdminUsers() {
   const [users, setUsers] = useState([]);

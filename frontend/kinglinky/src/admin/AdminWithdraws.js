@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-const API_BASE = "http://localhost:5000/api/withdraw";
+const API_BASE = "https://kinglinky.onrender.com/api/withdraw";
 
 export default function AdminWithdraws() {
   const [withdraws, setWithdraws] = useState([]);

@@ -33,7 +33,7 @@ export default function Home({ isLoggedIn, userEmail }) {
     try {
       setLoadingShorten(true);
       // Example: call your shorten API
-      const res = await axios.post("http://localhost:5000/api/shorten", {
+      const res = await axios.post("https://kinglinky.onrender.com/api/shorten", {
         longUrl,
         email: userEmail || localStorage.getItem("userEmail"),
       });

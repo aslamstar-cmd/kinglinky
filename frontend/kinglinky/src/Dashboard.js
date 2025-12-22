@@ -10,7 +10,7 @@ import {
 } from "recharts";
 
 /* ================= CONFIG ================= */
-const API = "http://localhost:5000";
+const API = "https://kinglinky.onrender.com";
 const CPM_USD = 10;
 const USD_TO_INR = 89.5;
 const MIN_WITHDRAW = 1;
@@ -101,7 +101,7 @@ async function shorten() {
   }
 
   try {
-    const res = await axios.post("http://localhost:5000/api/links/shorten", {
+    const res = await axios.post("https://kinglinky.onrender.com/api/links/shorten", {
       longUrl,
       email: user.email,
     });
