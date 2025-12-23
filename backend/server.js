@@ -37,6 +37,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 
 /* ---------------- ROUTES ---------------- */
+app.use(express.json());
 app.use("/api/admin", adminAuthRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/admin", adminUsers);
@@ -44,7 +45,6 @@ app.use("/api/admin/settings",settingsRoutes);
 app.use("/api/withdraw", withdrawRoutes);
 app.use("/api/links", linksRoutes);
 app.use("/api/track", trackRoutes);
-app.use(express.json());
 app.use(express.static("public")); // 👈 VERY IMPORTANT
 app.use(stepRoutes);
 

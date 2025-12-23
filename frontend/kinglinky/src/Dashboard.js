@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { API_BASE } from "./api.js";
 import {
   LineChart,
   Line,
@@ -19,6 +20,8 @@ const MIN_WITHDRAW = 1;
 export default function Dashboard({ user, token }) {
   const [tab, setTab] = useState("dashboard");
   const [currency, setCurrency] = useState("USD");
+  // "all" state added for month filter
+  const [selectedMonth, setSelectedMonth] = useState("all"); 
 
   const [links, setLinks] = useState([]);
   const [withdraws, setWithdraws] = useState([]);
@@ -44,13 +47,13 @@ export default function Dashboard({ user, token }) {
   async function loadData() {
     try {
       const linksRes = await axios.get(
-        `${API}/api/links/${user.email}`,
+        `${API_BASE}/api/links/${user.email}`,
         auth
       );
 
       let wdRes = { data: [] };
       try {
-        wdRes = await axios.get(`${API}/api/withdraw/my`, auth);
+        wdRes = await axios.get(`${API_BASE}/api/withdraw/my`, auth);
       } catch {}
 
       setLinks(Array.isArray(linksRes.data) ? linksRes.data : []);
@@ -62,8 +65,25 @@ export default function Dashboard({ user, token }) {
     }
   }
 
-  /* ========== STATS ========== */
-  const totalViews = links.reduce((a, b) => a + (b.clicks || 0), 0);
+  /* ========== GLOBAL STATS (Unga Original Logic) ========== */
+  const allTimeViews = links.reduce((a, b) => a + (b.clicks || 0), 0);
+  const allTimeUSD = (allTimeViews / 1000) * CPM_USD;
+  
+  const paidUSD = withdraws
+    .filter((w) => w.status === "paid")
+    .reduce((a, b) => a + (b.amount || 0), 0);
+
+  const walletUSD = Math.max(allTimeUSD - paidUSD, 0);
+
+  /* ========== MONTHLY/ALL FILTERED STATS ========== */
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+  const filteredLinks = links.filter((l) => {
+    if (selectedMonth === "all") return true;
+    return new Date(l.createdAt).getMonth() === Number(selectedMonth);
+  });
+
+  const monthlyViews = filteredLinks.reduce((a, b) => a + (b.clicks || 0), 0);
 
   const todayStr = new Date().toDateString();
   const todayViews = links.reduce((a, b) => {
@@ -71,15 +91,7 @@ export default function Dashboard({ user, token }) {
       ? a + (b.clicks || 0)
       : a;
   }, 0);
-
-  const totalUSD = (totalViews / 1000) * CPM_USD;
   const todayUSD = (todayViews / 1000) * CPM_USD;
-
-  const paidUSD = withdraws
-    .filter((w) => w.status === "paid")
-    .reduce((a, b) => a + (b.amount || 0), 0);
-
-  const walletUSD = Math.max(totalUSD - paidUSD, 0);
 
   function money(v) {
     return currency === "USD"
@@ -87,37 +99,30 @@ export default function Dashboard({ user, token }) {
       : `₹ ${(v * USD_TO_INR).toFixed(2)}`;
   }
 
-  /* ========== CHART DATA ========== */
-  const chartData = links.map((l) => ({
-    date: new Date(l.createdAt).toLocaleDateString(),
+  /* ========== CHART DATA (Filtered) ========== */
+  const chartData = filteredLinks.map((l) => ({
+    date: new Date(l.createdAt).toLocaleDateString(undefined, { day: 'numeric', month: 'short' }),
     clicks: l.clicks || 0,
   }));
 
   /* ========== SHORTEN ========== */
-async function shorten() {
-  if (!longUrl) {
-    alert("Paste URL");
-    return;
+  async function shorten() {
+    if (!longUrl) {
+      alert("Paste URL");
+      return;
+    }
+    try {
+      const res = await axios.post(`${API_BASE}/api/links/shorten`, {
+        longUrl,
+        email: user.email,
+      }, auth);
+      setShortUrl(res.data.shortUrl);
+      setLongUrl("");
+      loadData();
+    } catch (err) {
+      alert("Shorten failed");
+    }
   }
-
-  try {
-    const res = await axios.post("https://kinglinky.onrender.com/api/links/shorten", {
-      longUrl,
-      email: user.email,
-    });
-
-    // 🔥 IMPORTANT FIX
-    const newShortUrl = res.data.shortUrl;
-
-    setShortUrl(newShortUrl);
-    setLongUrl("");
-
-    loadData(); // reload user links
-  } catch (err) {
-    console.error("SHORTEN ERROR:", err);
-    alert("Shorten failed");
-  }
-}
 
   function copy(text) {
     navigator.clipboard.writeText(text);
@@ -127,33 +132,16 @@ async function shorten() {
   /* ========== WITHDRAW ========== */
   async function requestWithdraw() {
     const amt = Number(withdrawAmount);
-
-    if (!amt || amt <= 0) {
-      alert("Enter valid amount");
+    if (!amt || amt <= 0 || amt < MIN_WITHDRAW || amt > walletUSD) {
+      alert("Invalid amount or insufficient balance");
       return;
     }
-
-    if (amt < MIN_WITHDRAW) {
-      alert(`Minimum withdraw $${MIN_WITHDRAW}`);
-      return;
-    }
-
-    if (amt > walletUSD) {
-      alert("Insufficient balance");
-      return;
-    }
-
     try {
-      await axios.post(
-        `${API}/api/withdraw`,
-        {
-          userId: user._id,
-          userEmail: user.email,
-          amount: amt,
-        },
-        auth
-      );
-
+      await axios.post(`${API}/api/withdraw`, {
+        userId: user._id,
+        userEmail: user.email,
+        amount: amt,
+      }, auth);
       alert("Withdraw request submitted ✅");
       setWithdrawAmount("");
       loadData();
@@ -162,18 +150,14 @@ async function shorten() {
     }
   }
 
-  /* ================= UI ================= */
   return (
     <div style={wrap}>
       {/* HEADER */}
-      <div style={header}>
+      <div style={{...header, fontFamily:"-moz-initial"}}>
         <h2>👑 Kinglinky</h2>
         <div>
-          <b>{user.name}</b>{" "}
-          <select
-            value={currency}
-            onChange={(e) => setCurrency(e.target.value)}
-          >
+          <b style={{fontFamily:"-moz-initial"}}>👑{user.name}</b>{" "}
+          <select value={currency} onChange={(e) => setCurrency(e.target.value)}>
             <option value="USD">USD</option>
             <option value="INR">INR</option>
           </select>
@@ -182,29 +166,34 @@ async function shorten() {
 
       {/* MENU */}
       <div style={menu}>
-        <Btn active={tab === "dashboard"} onClick={() => setTab("dashboard")}>
-          Dashboard
-        </Btn>
-        <Btn active={tab === "manage"} onClick={() => setTab("manage")}>
-          Manage Links
-        </Btn>
-        <Btn active={tab === "withdraw"} onClick={() => setTab("withdraw")}>
-          Withdraw
-        </Btn>
-        <Btn active={tab === "history"} onClick={() => setTab("history")}>
-          History
-        </Btn>
-        <Btn active={tab === "support"} onClick={() => setTab("support")}>
-          Support
-        </Btn>
+        {["dashboard", "manage", "withdraw", "history", "support"].map((t) => (
+          <Btn key={t} active={tab === t} onClick={() => setTab(t)}>
+            {t.charAt(0).toUpperCase() + t.slice(1)}
+          </Btn>
+        ))}
       </div>
 
       {/* DASHBOARD */}
       {tab === "dashboard" && (
         <>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "10px" }}>
+             <h4 style={{margin:0}}>Stats Overview</h4>
+             <select 
+                value={selectedMonth} 
+                onChange={(e) => setSelectedMonth(e.target.value)}
+                style={{ padding: "5px", borderRadius: "5px", background: "#033", color: "#fff", border: "1px solid #00ffd0" }}
+             >
+                <option value="all">All Time</option>
+                {months.map((m, idx) => <option key={m} value={idx}>{m}</option>)}
+             </select>
+          </div>
+
           <div style={grid}>
             <Card title="Today Views" value={todayViews} />
-            <Card title="Total Views" value={totalViews} />
+            <Card 
+                title={selectedMonth === "all" ? "Total Views" : `${months[selectedMonth]} Views`} 
+                value={monthlyViews} 
+            />
             <Card title="Today Earnings" value={money(todayUSD)} />
             <Card title="Avg CPM" value={money(CPM_USD)} />
             <Card title="Available Wallet" value={money(walletUSD)} />
@@ -212,18 +201,13 @@ async function shorten() {
           </div>
 
           <div style={chartBox}>
-            <h4>📈 Views Chart</h4>
+            <h4>📈 Views Chart ({selectedMonth === "all" ? "All Time" : months[selectedMonth]})</h4>
             <ResponsiveContainer width="100%" height={250}>
               <LineChart data={chartData}>
                 <XAxis dataKey="date" stroke="#9ff" />
                 <YAxis stroke="#9ff" />
-                <Tooltip />
-                <Line
-                  type="monotone"
-                  dataKey="clicks"
-                  stroke="#00ffd0"
-                  strokeWidth={2}
-                />
+                <Tooltip contentStyle={{background:"#053737", border:"none"}} />
+                <Line type="monotone" dataKey="clicks" stroke="#00ffd0" strokeWidth={2} />
               </LineChart>
             </ResponsiveContainer>
           </div>
@@ -235,22 +219,15 @@ async function shorten() {
         <>
           <h3>Shorten URL</h3>
           <div style={row}>
-            <input
-              placeholder="Paste long URL"
-              value={longUrl}
-              onChange={(e) => setLongUrl(e.target.value)}
-              style={input}
-            />
-            <button onClick={shorten}>Shorten</button>
+            <input placeholder="Paste long URL" value={longUrl} onChange={(e) => setLongUrl(e.target.value)} style={input} />
+            <button onClick={shorten} style={{backgroundColor:"#033", color:"#fff", border:"none", padding:"0 15px", borderRadius:6}}>Shorten</button>
           </div>
-
           {shortUrl && (
             <div style={box}>
               <span>{shortUrl}</span>
-              <button onClick={() => copy(shortUrl)}>Copy</button>
+              <button onClick={() => copy(shortUrl)} style={{backgroundColor:"#033", color:"#fff"}}>Copy</button>
             </div>
           )}
-
           <h3>Your Links</h3>
           {links.map((l) => (
             <div key={l._id} style={box}>
@@ -266,36 +243,18 @@ async function shorten() {
       {tab === "withdraw" && (
         <div style={{ maxWidth: 400 }}>
           <h3>Withdraw</h3>
-
           <div style={card}>
-            <p>
-              <b>Available Wallet:</b> {money(walletUSD)}
-            </p>
+            <p><b>Available Wallet:</b> {money(walletUSD)}</p>
             <p style={{ fontFamily:"monospace"}}>Minimum Withdraw $1</p>
-
             <input
               type="number"
               placeholder="Enter amount"
               value={withdrawAmount}
               onChange={(e) => setWithdrawAmount(e.target.value)}
-              style={{input,
-                     margin:"20px",
-                     widht:"50px",
-                     height:"25px",
-                     color:"green",
-                     fontFamily:"-moz-initial",
-                     borderRadius:"7px",
-              }}
+              style={{ padding:"8px", margin:"10px 0", width:"95%", borderRadius:"7px" }}
             />
-
             <button
-              style={{ margin: 5,
-                       borderRadius:"7px",
-                       height:"30px",
-                       color:"green",
-                       fontFamily:"-moz-initial"
-                      
-              }}
+              style={{ width:"100%", padding:"10px", borderRadius:"7px", backgroundColor: "#00ffd0", color: "#000", fontWeight: "bold" }}
               onClick={requestWithdraw}
             >
               Request Withdraw
@@ -314,11 +273,7 @@ async function shorten() {
 
       {/* SUPPORT */}
       {tab === "support" && (
-        <button
-          onClick={() =>
-            window.open("https://t.me/KinglinkySupport", "_blank")
-          }
-        >
+        <button onClick={() => window.open("https://t.me/KinglinkySupport", "_blank")} style={{ width:"100%",fontFamily:"cursive", padding:"10px", borderRadius:"7px", backgroundColor: "#00ffd0", color: "#000", fontWeight: "bold" }}>
           Telegram Support
         </button>
       )}
@@ -326,20 +281,10 @@ async function shorten() {
   );
 }
 
-/* ========== UI PARTS ========== */
+/* ========== UI COMPONENTS ========== */
 function Btn({ children, active, onClick }) {
   return (
-    <button
-      onClick={onClick}
-      style={{
-        padding: "6px 12px",
-        background: active ? "#00ffd0" : "#033",
-        color: active ? "#000" : "#cff",
-        border: "none",
-        borderRadius: 6,
-        cursor: "pointer",
-      }}
-    >
+    <button onClick={onClick} style={{ padding: "6px 12px", background: active ? "#00ffd0" : "#033", color: active ? "#000" : "#cff", border: "none", borderRadius: 6, cursor: "pointer" }}>
       {children}
     </button>
   );
@@ -355,60 +300,12 @@ function Card({ title, value }) {
 }
 
 /* ========== STYLES ========== */
-const wrap = {
-  padding: 20,
-  minHeight: "100vh",
-  background: "#021616",
-  color: "#eafffa",
-};
-
-const header = {
-  display: "flex",
-  justifyContent: "space-between",
-  alignItems: "center",
-};
-
-const menu = {
-  display: "flex",
-  gap: 8,
-  margin: "15px 0",
-  flexWrap: "wrap",
-};
-
-const grid = {
-  display: "grid",
-  gridTemplateColumns: "repeat(auto-fit, minmax(150px,1fr))",
-  gap: 10,
-};
-
-const card = {
-  background: "#053737",
-  padding: 14,
-  borderRadius: 10,
-};
-
-const box = {
-  background: "#053737",
-  padding: 10,
-  borderRadius: 8,
-  marginBottom: 8,
-  display: "flex",
-  justifyContent: "space-between",
-  alignItems: "center",
-};
-
+const wrap = { padding: 20, minHeight: "100vh", background: "#021616", color: "#eafffa" };
+const header = { display: "flex", justifyContent: "space-between", alignItems: "center" };
+const menu = { display: "flex", gap: 8, margin: "15px 0", flexWrap: "wrap" };
+const grid = { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px,1fr))", gap: 10 };
+const card = { background: "#053737", padding: 14, borderRadius: 10 };
+const box = { background: "#053737", padding: 10, borderRadius: 8, marginBottom: 8, display: "flex", justifyContent: "space-between", alignItems: "center" };
 const row = { display: "flex", gap: 8 };
-
-const input = {
-  flex: 1,
-  padding: 6,
-  borderRadius: 6,
-  border: "none",
-};
-
-const chartBox = {
-  marginTop: 20,
-  background: "#053737",
-  padding: 15,
-  borderRadius: 10,
-};
+const input = { flex: 1, padding: 6, borderRadius: 6, border: "none" };
+const chartBox = { marginTop: 20, background: "#053737", padding: 15, borderRadius: 10 };

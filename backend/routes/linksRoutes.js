@@ -59,10 +59,9 @@ router.post("/shorten", async (req, res) => {
       clickedIPs: [],
     });
 
-    res.json({
+    res.status(201).json({
       success: true,
-      shortUrl: link.shortUrl,
-      link,
+      shortUrl: shortLink,
     });
   } catch (err) {
     console.error("SHORTEN ERROR", err);
