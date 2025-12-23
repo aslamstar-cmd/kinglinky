@@ -31,8 +31,6 @@ methods: ["GET", "POST", "PUT", "DELETE"],
 allowedHeaders: ["Content-type", "Authorization"],
 credentials: true
  }));
-
- app.options("*", cors());
 /* ---------------- MIDDLEWARE ---------------- */
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
