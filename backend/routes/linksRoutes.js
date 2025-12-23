@@ -48,7 +48,7 @@ router.post("/shorten", async (req, res) => {
     }
 
     const code = Math.random().toString(36).substring(2, 8);
-    const shortUrl = `${BASE_URL}/step1.html?code=${code}`;
+    const shortUrl = `${process.env.BASE_URL}/step1.html?code=${code}`;
 
     const link = await Shortcut.create({
       fullUrl: longUrl,
@@ -61,7 +61,7 @@ router.post("/shorten", async (req, res) => {
 
     res.status(201).json({
       success: true,
-      shortUrl: shortLink,
+      shortUrl: link.shortUrl, link,
     });
   } catch (err) {
     console.error("SHORTEN ERROR", err);
