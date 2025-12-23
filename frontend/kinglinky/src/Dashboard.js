@@ -13,7 +13,7 @@ import {
 /* ================= CONFIG ================= */
 const API = "https://kinglinky.onrender.com";
 const CPM_USD = 10;
-const USD_TO_INR = 89.5;
+const USD_TO_INR = 85.5;
 const MIN_WITHDRAW = 1;
 /* ========================================= */
 

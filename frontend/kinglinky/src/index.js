@@ -2,9 +2,11 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
+import axios from "axios";
 import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
+axios.defaults.baseUrl = "https://kinglinky/onrender.com";
 root.render(
   <React.StrictMode>
     <App />
