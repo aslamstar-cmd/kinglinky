@@ -61,13 +61,15 @@ app.get("/", (_req, res) => res.send("Server running 🚀"));
 app.post("/api/links/shorten", async (req, res) => {
   try {
     const { longUrl, email } = req.body;
-    if (!longUrl || !email)
+
+    if (!longUrl || !email) {
       return res.status(400).json({ message: "URL or email missing" });
+    }
 
     const shortCode = Math.random().toString(36).substring(2, 8);
-    const BASE_URL = process.env.BASE_URL;
 
-    const shortUrl = `${BASE_URL}/step1/${shortCode}`;
+    const shortUrl =
+      `${process.env.BASE_URL}/step1.html?code=${shortCode}`;
 
     const link = await Shortcut.create({
       fullUrl: longUrl,
@@ -78,9 +80,13 @@ app.post("/api/links/shorten", async (req, res) => {
       clickedIPs: [],
     });
 
-    res.json({ success: true, shortUrl, link });
-  } catch (e) {
-    console.error(e);
+    return res.status(201).json({
+      success: true,
+      shortUrl: link.shortUrl, // ✅ ONLY THIS
+    });
+
+  } catch (err) {
+    console.error("SHORTEN ERROR:", err);
     res.status(500).json({ message: "Shorten failed" });
   }
 });
