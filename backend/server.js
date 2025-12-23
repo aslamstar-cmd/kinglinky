@@ -56,13 +56,17 @@ mongoose
 
 /* ---------------- BASIC ---------------- */
 app.get("/create-admin", async(req, res)=>{
+  try{
   const hashed = await bcrypt.hash("aslamlord", 10);
   await admin.create({
     username:"kingaslam",
     password:hashed,
   });
   res.send("admin created");
-});
+}catch (err){
+ console.log("Created Admin Error", err );
+ res.status(500).send(err.message);
+}});
 
 app.get("/", (_req, res) => res.send("Server running 🚀"));
 
