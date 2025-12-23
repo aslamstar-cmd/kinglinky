@@ -24,7 +24,7 @@ dotenv.config();
 const app = express();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.resolve();
-app.use(cors({ origin: ["https://kinglinky.vercel.app"],   
+app.use(cors({ origin: ["https://kinglinky-aslams-projects-4088e534.vercel.app"],   
 methods: ["GET", "POST", "PUT", "DELETE"],
 credentials: true
  }));
