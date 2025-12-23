@@ -32,8 +32,8 @@ export default function Signup() {
         alert("Signup failed");
       }
     } catch (err) {
-      console.error(err);
-      alert("Signup failed. Try again!");
+      console.error("SINGUP ERROR", err.respons?.data || err);
+      alert(err.response?.data?.message || "Signup failed. Try again!");
     } finally {
       setLoading(false);
     }
