@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import {API_BASE} from "../api";
 import { useNavigate } from "react-router-dom";
 
 function Login({ setIsLoggedIn, setUser }) {
@@ -13,7 +14,7 @@ function Login({ setIsLoggedIn, setUser }) {
     e.preventDefault();
 
     try {
-      const res = await axios.post("https://kinglinky.onrender.com/api/login", {
+      const res = await axios.post(`${API_BASE}/api/login`, {
         email,
         password,
       });

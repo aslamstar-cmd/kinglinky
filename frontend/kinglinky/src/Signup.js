@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
+import {API_BASE} from "../api";
 import { useNavigate, Link } from "react-router-dom";
-
-const API = "https://kinglinky.onrender.com";
 
 export default function Signup() {
   const [name, setName] = useState("");
@@ -20,7 +19,7 @@ export default function Signup() {
     try {
       setLoading(true);
 
-      const res = await axios.post(`${API}/api/signup`, {
+      const res = await axios.post(`${API_BASE}/api/signup`, {
         name: name.trim(),
         email: email.trim(),
         password,
