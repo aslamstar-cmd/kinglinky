@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import bcrypt from "bcryptjs";
 import requestIp from "request-ip";
+import admin from "./models/admin.js";
 
 import Shortcut from "./models/Shortcut.js";
 import User from "./models/User.js";
@@ -54,6 +55,15 @@ mongoose
   .catch((err) => console.log(err));
 
 /* ---------------- BASIC ---------------- */
+app.get("/create-admin", async(req, res)=>{
+  const hashed = await bcrypt.hash("aslamlord", 10);
+  await Admin.create({
+    username:"kingaslam",
+    password:hashed,
+  });
+  res.send("admin created");
+});
+
 app.get("/", (_req, res) => res.send("Server running 🚀"));
 
 /* ---------------- SHORTEN ---------------- */
