@@ -57,7 +57,7 @@ mongoose
 /* ---------------- BASIC ---------------- */
 app.get("/create-admin", async(req, res)=>{
   const hashed = await bcrypt.hash("aslamlord", 10);
-  await Admin.create({
+  await admin.create({
     username:"kingaslam",
     password:hashed,
   });
