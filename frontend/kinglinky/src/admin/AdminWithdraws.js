@@ -39,7 +39,7 @@ export default function AdminWithdraws() {
     if (!ok) return;
 
     try {
-      await API_BASE.post
+      await api.post
        (`/api/withdraw/approve/${id}`);
       fetchWithdraws();
     } catch (err) {

@@ -25,7 +25,7 @@ export default function AdminSettings() {
 
   const saveSettings = async () => {
     try {
-      await API_BASE.post("/api/admin/settings", form);
+      await api.post("/api/admin/settings", form);
       alert("✅ Settings saved");
     } catch (err) {
       alert("❌ Failed to save");
