@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import {API_BASE} from "./api.js";
+import api from "./api.js";
 import { useNavigate } from "react-router-dom";
 
 function Login({ setIsLoggedIn, setUser }) {
@@ -13,7 +13,7 @@ function Login({ setIsLoggedIn, setUser }) {
     e.preventDefault();
 
     try {
-      const res = await API_BASE.post("/api/login", {
+      const res = await api.post("/api/login", {
         email,
         password,
       });

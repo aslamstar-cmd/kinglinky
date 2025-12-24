@@ -1,6 +1,6 @@
 // src/admin/AdminLogin.js
 import React, { useState } from "react";
-import {API_BASE} from "../api.js"
+import api from "../api.js"
 import { useNavigate } from "react-router-dom";
 
 export default function AdminLogin() {
@@ -24,7 +24,7 @@ export default function AdminLogin() {
     setErrorMsg("");
 
     try {
-      const res = await API_BASE.post("/api/admin/login", {
+      const res = await api.post("/api/admin/login", {
         username:form.username,
         password:form.password
       });
