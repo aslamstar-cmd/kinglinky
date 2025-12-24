@@ -37,7 +37,7 @@ router.get("/", async (req, res) => {
    SHORTEN LINK
    POST /api/links/shorten
 ========================= */
-router.post("/links/shorten", async (req, res) => {
+router.post("/shorten", async (req, res) => {
   try {
     const { longUrl, email } = req.body;
 
