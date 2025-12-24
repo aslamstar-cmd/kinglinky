@@ -24,7 +24,10 @@ export default function AdminLogin() {
     setErrorMsg("");
 
     try {
-      const res = await API_BASE.post("/api/admin/login", form);
+      const res = await API_BASE.post("/api/admin/login", {
+        username:form.username,
+        password:form.password
+      });
 
       if (res.data.success) {
         localStorage.setItem("adminToken", res.data.token);
