@@ -50,7 +50,6 @@ export default function Dashboard({ user }) {
 
   async function loadData() {
     try {
-      // ✅ FIX 2: email remove pannitan (JWT backend handle)
       const linksRes = await axios.get(
         `${API_BASE}/api/links`,
         auth
@@ -70,7 +69,7 @@ export default function Dashboard({ user }) {
     }
   }
 
-  /* ========== GLOBAL STATS (UNCHANGED) ========== */
+  /* ========== GLOBAL STATS ========== */
   const allTimeViews = links.reduce((a, b) => a + (b.clicks || 0), 0);
   const allTimeUSD = (allTimeViews / 1000) * CPM_USD;
 
@@ -110,25 +109,31 @@ export default function Dashboard({ user }) {
     clicks: l.clicks || 0,
   }));
 
-  /* ========== SHORTEN (UNTOUCHED) ========== */
+  /* ========== SHORTEN (FIXED HERE) ========== */
   async function shorten() {
     if (!longUrl) {
       alert("Paste URL");
       return;
     }
     try {
+      // ✅ FIX: Backend require panra 'email' field-ah add panniten
       const res = await axios.post(
         `${API_BASE}/api/links/shorten`,
         {
-          longUrl
+          longUrl,
+          email: user.email // Intha line thaan missing-ah irundhuchu
         },
         auth
       );
-      setShortUrl(res.data.shortUrl);
-      setLongUrl("");
-      loadData();
-    } catch {
-      alert("Shorten failed");
+      
+      if(res.data && res.data.shortUrl) {
+        setShortUrl(res.data.shortUrl);
+        setLongUrl("");
+        loadData(); // Success aana udane list-ah refresh pannum
+      }
+    } catch (error) {
+      console.error("Shorten Error:", error.response?.data || error.message);
+      alert("Shorten failed: " + (error.response?.data?.message || "Server Error"));
     }
   }
 
@@ -145,7 +150,6 @@ export default function Dashboard({ user }) {
       return;
     }
     try {
-      // ✅ FIX 3: API_BASE correct
       await axios.post(
         `${API_BASE}/api/withdraw`,
         {
@@ -156,20 +160,21 @@ export default function Dashboard({ user }) {
       );
       alert("Withdraw request submitted ✅");
       setWithdrawAmount("");
+      setNote("");
       loadData();
     } catch {
       alert("Withdraw failed");
     }
   }
 
-  /* UI – UNCHANGED */
+  /* UI */
   return (
     <div style={wrap}>
       {/* HEADER */}
       <div style={{ ...header, fontFamily: "-moz-initial" }}>
         <h2>👑 Kinglinky</h2>
         <div>
-          <b style={{ fontFamily: "-moz-initial" }}>👑{user.name}</b>{" "}
+          <b style={{ fontFamily: "-moz-initial" }}>👑 {user.name}</b>{" "}
           <select value={currency} onChange={(e) => setCurrency(e.target.value)}>
             <option value="USD">USD</option>
             <option value="INR">INR</option>
@@ -233,20 +238,22 @@ export default function Dashboard({ user }) {
           <h3>Shorten URL</h3>
           <div style={row}>
             <input placeholder="Paste long URL" value={longUrl} onChange={(e) => setLongUrl(e.target.value)} style={input} />
-            <button onClick={shorten} style={{ backgroundColor: "#033", color: "#fff", border: "none", padding: "0 15px", borderRadius: 6 }}>Shorten</button>
+            <button onClick={shorten} style={{ backgroundColor: "#00ffd0", color: "#000", border: "none", padding: "0 15px", borderRadius: 6, fontWeight: "bold", cursor: "pointer" }}>Shorten</button>
           </div>
           {shortUrl && (
             <div style={box}>
-              <span>{shortUrl}</span>
-              <button onClick={() => copy(shortUrl)} style={{ backgroundColor: "#033", color: "#fff" }}>Copy</button>
+              <span style={{color: "#00ffd0", fontWeight: "bold"}}>{shortUrl}</span>
+              <button onClick={() => copy(shortUrl)} style={{ backgroundColor: "#033", color: "#fff", border: "1px solid #00ffd0", padding: "5px 10px", borderRadius: "5px" }}>Copy</button>
             </div>
           )}
-          <h3>Your Links</h3>
-          {links.map((l) => (
+          <h3 style={{marginTop: "20px"}}>Your Links</h3>
+          {links.length === 0 ? <p>No links found.</p> : links.map((l) => (
             <div key={l._id} style={box}>
-              <div>{l.shortUrl}</div>
-              <small>Clicks: {l.clicks}</small>
-              <button onClick={() => copy(l.shortUrl)}>Copy</button>
+              <div style={{display: "flex", flexDirection: "column"}}>
+                <span style={{fontSize: "14px"}}>{l.shortUrl}</span>
+                <small style={{color: "#9ff"}}>Views: {l.clicks || 0}</small>
+              </div>
+              <button onClick={() => copy(l.shortUrl)} style={{padding: "5px 10px", borderRadius: "5px", background: "#033", color: "#fff", border: "1px solid #00ffd0"}}>Copy</button>
             </div>
           ))}
         </>
@@ -258,29 +265,24 @@ export default function Dashboard({ user }) {
           <h3>Withdraw</h3>
           <div style={card}>
             <p><b>Available Wallet:</b> {money(walletUSD)}</p>
-            <p style={{ fontFamily: "monospace" }}>Minimum Withdraw $1</p>
+            <p style={{ fontFamily: "monospace", fontSize: "12px", color: "#9ff" }}>Minimum Withdraw $1</p>
             <input
               type="number"
               placeholder="Enter amount"
               value={withdrawAmount}
               onChange={(e) => setWithdrawAmount(e.target.value)}
-              style={{ padding: "8px", margin: "10px 0", width: "95%", borderRadius: "7px" }}
+              style={{ padding: "8px", margin: "10px 0", width: "95%", borderRadius: "7px", border: "none" }}
             />
             <input
               type="text"
               placeholder="Enter UPI / Bank details"
               value={note}
               onChange={(e) => setNote(e.target.value)}
-              style={{
-                padding: "8px",
-                margin: "10px 0",
-                width: "95%",
-                borderRadius: "7px"
-              }}
+              style={{ padding: "8px", margin: "10px 0", width: "95%", borderRadius: "7px", border: "none" }}
             />
 
             <button
-              style={{ width: "100%", padding: "10px", borderRadius: "7px", backgroundColor: "#00ffd0", color: "#000", fontWeight: "bold" }}
+              style={{ width: "100%", padding: "10px", borderRadius: "7px", backgroundColor: "#00ffd0", color: "#000", fontWeight: "bold", border: "none", cursor: "pointer" }}
               onClick={requestWithdraw}
             >
               Request Withdraw
@@ -290,18 +292,30 @@ export default function Dashboard({ user }) {
       )}
 
       {/* HISTORY */}
-      {tab === "history" &&
-        withdraws.map((w) => (
-          <div key={w._id} style={box}>
-            {money(w.amount)} — {w.status}
-          </div>
-        ))}
+      {tab === "history" && (
+        <>
+          <h3>Withdraw History</h3>
+          {withdraws.length === 0 ? <p>No history found.</p> : withdraws.map((w) => (
+            <div key={w._id} style={box}>
+              <span>{money(w.amount)}</span>
+              <span style={{ 
+                color: w.status === "paid" ? "#00ffd0" : w.status === "pending" ? "#ffcc00" : "#ff4444",
+                textTransform: "capitalize"
+              }}>
+                {w.status}
+              </span>
+            </div>
+          ))}
+        </>
+      )}
 
       {/* SUPPORT */}
       {tab === "support" && (
-        <button onClick={() => window.open("https://t.me/KinglinkySupport", "_blank")} style={{ width: "100%", fontFamily: "cursive", padding: "10px", borderRadius: "7px", backgroundColor: "#00ffd0", color: "#000", fontWeight: "bold" }}>
-          Telegram Support
-        </button>
+        <div style={{textAlign: "center", marginTop: "20px"}}>
+          <button onClick={() => window.open("https://t.me/KinglinkySupport", "_blank")} style={{ width: "100%", fontFamily: "sans-serif", padding: "12px", borderRadius: "7px", backgroundColor: "#0088cc", color: "#fff", fontWeight: "bold", border: "none", cursor: "pointer" }}>
+            Join Telegram Support
+          </button>
+        </div>
       )}
     </div>
   );
@@ -310,7 +324,7 @@ export default function Dashboard({ user }) {
 /* ========== UI COMPONENTS ========== */
 function Btn({ children, active, onClick }) {
   return (
-    <button onClick={onClick} style={{ padding: "6px 12px", background: active ? "#00ffd0" : "#033", color: active ? "#000" : "#cff", border: "none", borderRadius: 6, cursor: "pointer" }}>
+    <button onClick={onClick} style={{ padding: "8px 16px", background: active ? "#00ffd0" : "#053737", color: active ? "#000" : "#cff", border: active ? "none" : "1px solid #00ffd0", borderRadius: 6, cursor: "pointer", fontWeight: active ? "bold" : "normal" }}>
       {children}
     </button>
   );
@@ -319,8 +333,8 @@ function Btn({ children, active, onClick }) {
 function Card({ title, value }) {
   return (
     <div style={card}>
-      <small>{title}</small>
-      <h3>{value}</h3>
+      <small style={{color: "#9ff"}}>{title}</small>
+      <h3 style={{margin: "5px 0 0 0"}}>{value}</h3>
     </div>
   );
 }
@@ -328,10 +342,10 @@ function Card({ title, value }) {
 /* ========== STYLES ========== */
 const wrap = { padding: 20, minHeight: "100vh", background: "#021616", color: "#eafffa" };
 const header = { display: "flex", justifyContent: "space-between", alignItems: "center" };
-const menu = { display: "flex", gap: 8, margin: "15px 0", flexWrap: "wrap" };
-const grid = { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px,1fr))", gap: 10 };
-const card = { background: "#053737", padding: 14, borderRadius: 10 };
-const box = { background: "#053737", padding: 10, borderRadius: 8, marginBottom: 8, display: "flex", justifyContent: "space-between", alignItems: "center" };
-const row = { display: "flex", gap: 8 };
-const input = { flex: 1, padding: 6, borderRadius: 6, border: "none" };
-const chartBox = { marginTop: 20, background: "#053737", padding: 15, borderRadius: 10 };
+const menu = { display: "flex", gap: 8, margin: "20px 0", flexWrap: "wrap" };
+const grid = { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px,1fr))", gap: 12 };
+const card = { background: "#053737", padding: 14, borderRadius: 10, border: "1px solid #0a4a4a" };
+const box = { background: "#053737", padding: 12, borderRadius: 8, marginBottom: 8, display: "flex", justifyContent: "space-between", alignItems: "center", border: "1px solid #0a4a4a" };
+const row = { display: "flex", gap: 8, marginBottom: "15px" };
+const input = { flex: 1, padding: "10px", borderRadius: 6, border: "none", outline: "none" };
+const chartBox = { marginTop: 20, background: "#053737", padding: 15, borderRadius: 10, border: "1px solid #0a4a4a" };
