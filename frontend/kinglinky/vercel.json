@@ -5,6 +5,6 @@
     { "source": "/step3.html", "destination": "/step3.html" },
     { "source": "/step4.html", "destination": "/step4.html" },
     { "source": "/final.html", "destination": "/final.html" },
-    { "source": "/(.*)", "destination": "/index.html" }
+    { "source": "/(.*)", "destination": "/kinglinky/build/index.html" }
   ]
 }
