@@ -37,7 +37,6 @@
     h2 { color: var(--accent); margin-bottom: 10px; }
     p { font-size: 15px; opacity: 0.9; }
 
-    /* Countdown Styling */
     #wait-timer {
       font-size: 24px;
       font-weight: bold;
@@ -45,7 +44,6 @@
       margin: 20px 0;
     }
 
-    /* Ad Spaces */
     .ad-slot {
       background: rgba(0,0,0,0.3);
       height: 200px;
@@ -60,7 +58,6 @@
       text-transform: uppercase;
     }
 
-    /* Button - Initially Hidden */
     #final-btn {
       padding: 15px 40px;
       background: var(--accent);
@@ -73,7 +70,7 @@
       width: 100%;
       box-shadow: 0 5px 15px rgba(0, 255, 208, 0.3);
       transition: 0.3s;
-      display: none; /* Inga hide panni vachuruken */
+      display: none;
     }
     #final-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0, 255, 208, 0.5); }
     #final-btn:disabled { background: #334e4e; color: #777; cursor: not-allowed; }
@@ -92,7 +89,7 @@
 
 <div class="box">
   <h2>Final Step</h2>
-  
+
   <div class="ad-slot">-- Advertisement Slot 1 --</div>
 
   <div id="timer-container">
@@ -112,7 +109,7 @@
 </div>
 
 <script>
-  // --- 5 SECONDS COUNTDOWN LOGIC ---
+  // --- COUNTDOWN ---
   let timeLeft = 5;
   const waitTimer = document.getElementById("wait-timer");
   const timerContainer = document.getElementById("timer-container");
@@ -124,12 +121,16 @@
 
     if (timeLeft <= 0) {
       clearInterval(countdown);
-      timerContainer.style.display = "none"; // Timer-ah hide pannidum
-      finalBtn.style.display = "block";      // Button-ah show pannidum
+      timerContainer.style.display = "none";
+      finalBtn.style.display = "block";
     }
   }, 1000);
 
-  // --- FINAL REDIRECT LOGIC ---
+  // 🔥 BACKEND API BASE (IMPORTANT FIX)
+  const API_BASE = "https://api.kinglinky.com";
+  // if subdomain illa na temporarily:
+  // const API_BASE = "https://kinglinky.onrender.com";
+
   async function finish(){
     const btn = document.getElementById("final-btn");
     const loading = document.getElementById("loading");
@@ -146,7 +147,7 @@
     loading.style.display = "block";
 
     try {
-      const res = await fetch("/api/track/final", {
+      const res = await fetch(`${API_BASE}/api/track/final`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ code })
@@ -167,7 +168,6 @@
       }
     } catch (err) {
       console.error("Fetch error:", err);
-      // alert("Connection Error. Check your internet.");
       btn.disabled = false;
       btn.innerText = "Get Link";
       loading.style.display = "none";
