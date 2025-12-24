@@ -1,0 +1,10 @@
+{
+  "rewrites": [
+    { "source": "/step1.html", "destination": "/step1.html" },
+    { "source": "/step2.html", "destination": "/step2.html" },
+    { "source": "/step3.html", "destination": "/step3.html" },
+    { "source": "/step4.html", "destination": "/step4.html" },
+    { "source": "/final.html", "destination": "/final.html" },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}
