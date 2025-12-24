@@ -48,17 +48,23 @@ export default function Dashboard({ user }) {
     // eslint-disable-next-line
   }, [user, token]);
 
-  async function loadData() {
+  // ✅ Dashboard.js kulla irukka loadData function-a ippadi mathunga:
+async function loadData() {
     try {
+      // ✅ User email-a query parameter-aa anuppuren
+      // Ippo backend indha email-a vachu filter panni, andha user links-a mattum anuppum
       const linksRes = await axios.get(
-        `${API_BASE}/api/links`,
+        `${API_BASE}/api/links?email=${user.email}`, 
         auth
       );
 
       let wdRes = { data: [] };
       try {
-        wdRes = await axios.get(`${API_BASE}/api/withdraw/my`, auth);
-      } catch { }
+        // Withdrawals-kum email filter add panniyachu
+        wdRes = await axios.get(`${API_BASE}/api/withdraw/my?email=${user.email}`, auth);
+      } catch (err) {
+        console.log("Withdraw fetch error", err);
+      }
 
       setLinks(Array.isArray(linksRes.data) ? linksRes.data : []);
       setWithdraws(Array.isArray(wdRes.data) ? wdRes.data : []);
@@ -67,6 +73,8 @@ export default function Dashboard({ user }) {
       setLinks([]);
       setWithdraws([]);
     }
+  
+
   }
 
   /* ========== GLOBAL STATS ========== */

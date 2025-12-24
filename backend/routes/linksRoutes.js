@@ -3,32 +3,25 @@ import Shortcut from "../models/Shortcut.js";
 
 const router = express.Router();
 
-/* =========================
-   USER LINKS (EMAIL BASED)
-   GET /api/links/:email
-========================= */
-router.get("/:email", async (req, res) => {
+/* =============================================
+   FETCH LINKS (USER SPECIFIC)
+   GET /api/links?email=user@example.com
+============================================= */
+router.get("/", async (req, res) => {
   try {
-    const links = await Shortcut.find({
-      ownerEmail: req.params.email,
-    }).sort({ createdAt: -1 });
+    const { email } = req.query;
 
+    // Email parameter irundha, antha user-oda links mattum filter pannum
+    // Illana (Admin case-la) ellathaiyum fetch pannum
+    let filter = {};
+    if (email) {
+      filter = { ownerEmail: email };
+    }
+
+    const links = await Shortcut.find(filter).sort({ createdAt: -1 });
     res.json(links);
   } catch (err) {
     console.error("LINKS FETCH ERROR", err);
-    res.status(500).json([]);
-  }
-});
-
-/* =========================
-   ADMIN ALL LINKS
-   GET /api/links
-========================= */
-router.get("/", async (req, res) => {
-  try {
-    const links = await Shortcut.find().sort({ createdAt: -1 });
-    res.json(links);
-  } catch (err) {
     res.status(500).json([]);
   }
 });
@@ -61,7 +54,7 @@ router.post("/shorten", async (req, res) => {
 
     res.status(201).json({
       success: true,
-      shortUrl: link.shortUrl, link,
+      shortUrl: link.shortUrl,
     });
   } catch (err) {
     console.error("SHORTEN ERROR", err);
