@@ -72,38 +72,38 @@ app.get("/create-admin", async(req, res)=>{
 app.get("/", (_req, res) => res.send("Server running 🚀"));
 
 /* ---------------- SHORTEN ---------------- */
-app.post("/api/links/shorten",userAuth, async (req, res) => {
-  try {
-    const { longUrl  } = req.body;
+// app.post("/api/links/shorten",userAuth, async (req, res) => {
+//   try {
+//     const { longUrl  } = req.body;
 
-    if (!longUrl) {
-      return res.status(400).json({ message: "URL missing" });
-    }
+//     if (!longUrl) {
+//       return res.status(400).json({ message: "URL missing" });
+//     }
 
-    const shortCode = Math.random().toString(36).substring(2, 8);
+//     const shortCode = Math.random().toString(36).substring(2, 8);
 
-    const shortUrl =
-      `${process.env.BASE_URL}/step1.html?code=${shortCode}`;
+//     const shortUrl =
+//       `${process.env.BASE_URL}/step1.html?code=${shortCode}`;
 
-    const link = await Shortcut.create({
-      fullUrl: longUrl,
-      shortCode,
-      shortUrl,
-      ownerEmail: req.user.email,
-      clicks: 0,
-      clickedIPs: [],
-    });
+//     const link = await Shortcut.create({
+//       fullUrl: longUrl,
+//       shortCode,
+//       shortUrl,
+//       ownerEmail: req.user.email,
+//       clicks: 0,
+//       clickedIPs: [],
+//     });
 
-    return res.status(201).json({
-      success: true,
-      shortUrl: link.shortUrl, // ✅ ONLY THIS
-    });
+//     return res.status(201).json({
+//       success: true,
+//       shortUrl: link.shortUrl, // ✅ ONLY THIS
+//     });
 
-  } catch (err) {
-    console.error("SHORTEN ERROR:", err);
-    res.status(500).json({ message: "Shorten failed" });
-  }
-});
+//   } catch (err) {
+//     console.error("SHORTEN ERROR:", err);
+//     res.status(500).json({ message: "Shorten failed" });
+//   }
+// });
 
 /* ---------------- STEPS ---------------- */
 
