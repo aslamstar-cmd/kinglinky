@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import {API_BASE} from "../api.js"
+import api from "../api.js"
 
 export default function AdminDashboard() {
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-       API_BASE.get("/api/admin/dashboard")
+       api.get("/api/admin/dashboard")
       .then((res) => {
         setStats(res.data);
         setLoading(false);

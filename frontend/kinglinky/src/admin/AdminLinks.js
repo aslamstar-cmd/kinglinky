@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { API_BASE } from "../api";   // 👈 correct import
+import api from "../api";   // 👈 correct import
 
 export default function AdminLinks() {
   const [links, setLinks] = useState([]);
@@ -13,7 +13,7 @@ export default function AdminLinks() {
   // 👇 async function separate-aa
   const loadLinks = async () => {
     try {
-      const res = await API_BASE.get("/api/admin/links");
+      const res = await api.get("/api/admin/links");
       setLinks(res.data || []);
     } catch (err) {
       console.error("ADMIN LINKS ERROR", err);

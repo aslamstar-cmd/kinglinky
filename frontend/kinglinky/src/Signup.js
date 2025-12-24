@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import {API_BASE} from "./api.js";
+import api from "./api.js";
 import { useNavigate, Link } from "react-router-dom";
 
 export default function Signup() {
@@ -18,7 +18,7 @@ export default function Signup() {
     try {
       setLoading(true);
 
-      const res = await API_BASE.post("/api/signup", {
+      const res = await api.post("/api/signup", {
         name: name.trim(),
         email: email.trim(),
         password,

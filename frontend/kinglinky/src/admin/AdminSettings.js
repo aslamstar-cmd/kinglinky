@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./adminSettings.css";
-import {API_BASE} from "../api.js"
+import api from "../api.js"
 
 export default function AdminSettings() {
   const [form, setForm] = useState({
@@ -16,7 +16,7 @@ export default function AdminSettings() {
 
   const loadSettings = async () => {
     try {
-      const res = await API_BASE.get("/api/admin/settings");
+      const res = await api.get("/api/admin/settings");
       setForm(res.data);
     } catch (err) {
       console.error("LOAD SETTINGS ERROR", err);

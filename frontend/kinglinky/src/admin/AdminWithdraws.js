@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {API_BASE} from "../api.js"
+import api from "../api.js"
 
 export default function AdminWithdraws() {
   const [withdraws, setWithdraws] = useState([]);
@@ -10,7 +10,7 @@ export default function AdminWithdraws() {
   // =========================
   const fetchWithdraws = async () => {
     try {
-      const res = await API_BASE.get("/api/withdraw/admin");
+      const res = await api.get("/api/withdraw/admin");
 
       // backend returns { success, data }
       const data = Array.isArray(res.data.data)
