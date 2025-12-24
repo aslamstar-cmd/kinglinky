@@ -1,5 +1,5 @@
 import express from "express";
-import admin from "../models/admin.js";
+import Admin from "../models/admin.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
@@ -9,7 +9,8 @@ router.post("/login", async (req, res) => {
   try {
     const { username, password } = req.body;
 
-    const admin = await admin.findOne({ username });
+    // 🔥 USE Admin (model)
+    const admin = await Admin.findOne({ username });
     if (!admin) {
       return res.status(400).json({
         success: false,
