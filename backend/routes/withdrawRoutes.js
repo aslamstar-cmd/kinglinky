@@ -11,16 +11,16 @@ const router = express.Router();
 ============================ */
 router.get("/admin", adminAuth, async (req, res) => {
   try {
-    const withdraws = await Withdraw.find()
+    const withdraws = await Withdraw.find({})
       .sort({ createdAt: -1 });
 
-    res.json({
+    return res.json({
       success: true,
       data: withdraws,
     });
   } catch (err) {
     console.error("WITHDRAW ADMIN GET ERROR:", err);
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       data: [],
     });
@@ -37,13 +37,13 @@ router.get("/my", userAuth, async (req, res) => {
       userId: req.user.id,
     }).sort({ createdAt: -1 });
 
-    res.json({
+    return res.json({
       success: true,
       data: withdraws,
     });
   } catch (err) {
     console.error("WITHDRAW MY ERROR:", err);
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       data: [],
     });
@@ -73,14 +73,14 @@ router.post("/", userAuth, async (req, res) => {
       status: "pending",
     });
 
-    res.json({
+    return res.json({
       success: true,
       message: "Withdraw request submitted",
-      withdraw,
+      data: withdraw,
     });
   } catch (err) {
     console.error("WITHDRAW CREATE ERROR:", err);
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       message: "Withdraw failed",
     });
@@ -93,14 +93,22 @@ router.post("/", userAuth, async (req, res) => {
 ============================ */
 router.post("/approve/:id", adminAuth, async (req, res) => {
   try {
-    await Withdraw.findByIdAndUpdate(req.params.id, {
-      status: "paid",
-    });
+    const updated = await Withdraw.findByIdAndUpdate(
+      req.params.id,
+      { status: "paid" },
+      { new: true }
+    );
 
-    res.json({ success: true });
+    return res.json({
+      success: true,
+      data: updated,
+    });
   } catch (err) {
     console.error("WITHDRAW APPROVE ERROR:", err);
-    res.status(500).json({ success: false });
+    return res.status(500).json({
+      success: false,
+      message: "Approve failed",
+    });
   }
 });
 
