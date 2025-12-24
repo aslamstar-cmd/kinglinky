@@ -120,8 +120,7 @@ export default function Dashboard({ user }) {
       const res = await axios.post(
         `${API_BASE}/api/links/shorten`,
         {
-          longUrl,
-          email: user.email,
+          longUrl
         },
         auth
       );

@@ -19,6 +19,7 @@ import trackRoutes from "./routes/trackRoutes.js";
 import path from "path";
 import { fileURLToPath } from "url";
 import stepRoutes from "./routes/stepRoutes.js";
+import userAuth from "./middleware/userAuth.js";
 
 
 dotenv.config();
@@ -71,12 +72,12 @@ app.get("/create-admin", async(req, res)=>{
 app.get("/", (_req, res) => res.send("Server running 🚀"));
 
 /* ---------------- SHORTEN ---------------- */
-app.post("/api/links/shorten", async (req, res) => {
+app.post("/api/links/shorten",userAuth, async (req, res) => {
   try {
-    const { longUrl, email } = req.body;
+    const { longUrl  } = req.body;
 
-    if (!longUrl || !email) {
-      return res.status(400).json({ message: "URL or email missing" });
+    if (!longUrl) {
+      return res.status(400).json({ message: "URL missing" });
     }
 
     const shortCode = Math.random().toString(36).substring(2, 8);
@@ -88,7 +89,7 @@ app.post("/api/links/shorten", async (req, res) => {
       fullUrl: longUrl,
       shortCode,
       shortUrl,
-      ownerEmail: email,
+      ownerEmail: req.user.email,
       clicks: 0,
       clickedIPs: [],
     });
