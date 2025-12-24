@@ -1,0 +1,10 @@
+{
+  "rewrites": [
+    { "source": "/step1.html", "destination": "/frontend/step1.html" },
+    { "source": "/step2.html", "destination": "/frontend/step2.html" },
+    { "source": "/step3.html", "destination": "/frontend/step3.html" },
+    { "source": "/step4.html", "destination": "/frontend/step4.html" },
+    { "source": "/final.html", "destination": "/frontend/final.html" },
+    { "source": "/(.*)", "destination": "/frontend/kinglinky/index.html" }
+  ]
+}
