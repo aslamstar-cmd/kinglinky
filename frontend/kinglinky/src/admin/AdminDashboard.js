@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {API_BASE} from "./api.js"
+import {API_BASE} from "../api.js"
 
 export default function AdminDashboard() {
   const [stats, setStats] = useState(null);

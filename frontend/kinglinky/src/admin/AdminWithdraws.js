@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
-import {API_BASE} from "./api.js"
+import {API_BASE} from "../api.js"
 
 export default function AdminWithdraws() {
   const [withdraws, setWithdraws] = useState([]);
@@ -40,16 +39,8 @@ export default function AdminWithdraws() {
     if (!ok) return;
 
     try {
-      await axios.post(
-        `${API_BASE}/approve/${id}`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
+      await API_BASE.post
+       (`/api/withdraw/approve/${id}`);
       fetchWithdraws();
     } catch (err) {
       console.error("Error approving withdraw:", err);

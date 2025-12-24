@@ -1,6 +1,6 @@
 // src/admin/AdminLogin.js
 import React, { useState } from "react";
-import axios from "axios";
+import {API_BASE} from "../api.js"
 import { useNavigate } from "react-router-dom";
 
 export default function AdminLogin() {

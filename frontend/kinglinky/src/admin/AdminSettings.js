@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./adminSettings.css";
-import {API_BASE} from "./api.js"
+import {API_BASE} from "../api.js"
 
 export default function AdminSettings() {
   const [form, setForm] = useState({
