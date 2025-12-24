@@ -19,7 +19,7 @@ export default function Signup() {
     try {
       setLoading(true);
 
-      const res = await axios.post(`${API_BASE}/api/signup`, {
+      const res = await API_BASE.post("/api/signup", {
         name: name.trim(),
         email: email.trim(),
         password,

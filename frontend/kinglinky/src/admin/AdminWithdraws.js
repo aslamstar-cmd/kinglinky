@@ -1,25 +1,17 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-
-const API_BASE = "https://kinglinky.onrender.com/api/withdraw";
+import {API_BASE} from "./api.js"
 
 export default function AdminWithdraws() {
   const [withdraws, setWithdraws] = useState([]);
   const [loading, setLoading] = useState(true);
-
-  // 🔑 admin token
-  const token = localStorage.getItem("adminToken");
 
   // =========================
   // FETCH WITHDRAWS
   // =========================
   const fetchWithdraws = async () => {
     try {
-      const res = await axios.get(`${API_BASE}/admin`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const res = await API_BASE.get("/api/withdraw/admin");
 
       // backend returns { success, data }
       const data = Array.isArray(res.data.data)

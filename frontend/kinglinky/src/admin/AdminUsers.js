@@ -1,13 +1,6 @@
-// src/admin/AdminUsers.js
-// ✅ FINAL FIXED VERSION – COPY & PASTE
-// ✅ Fixes: toFixed undefined crash
-// ✅ Safe defaults for wallet / earnings
-// ✅ Works with existing backend: GET /api/admin/users
 
 import React, { useEffect, useState } from "react";
-import axios from "axios";
-
-const API = "https://kinglinky.onrender.com";
+import {API_BASE} from "./api.js";
 
 export default function AdminUsers() {
   const [users, setUsers] = useState([]);
@@ -19,7 +12,7 @@ export default function AdminUsers() {
 
   async function loadUsers() {
     try {
-      const res = await axios.get(`${API}/api/admin/users`);
+      const res = await API_BASE.get("/api/admin/users");
       const data = Array.isArray(res.data) ? res.data : [];
 
       // 🔒 SAFETY NORMALIZATION (NO toFixed crash)

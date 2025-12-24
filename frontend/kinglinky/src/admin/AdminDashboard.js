@@ -1,15 +1,12 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
-
-const API = "https://kinglinky.onrender.com";
+import {API_BASE} from "./api.js"
 
 export default function AdminDashboard() {
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axios
-      .get(`${API}/api/admin/dashboard`)
+       API_BASE.get("/api/admin/dashboard")
       .then((res) => {
         setStats(res.data);
         setLoading(false);

@@ -1,25 +1,29 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import { API_BASE } from "../api";   // 👈 correct import
 
 export default function AdminLinks() {
   const [links, setLinks] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // 👇 useEffect async illa
   useEffect(() => {
-    axios
-      .get("https://kinglinky.onrender.com/api/admin/links")
-      .then((res) => {
-        setLinks(res.data || []);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error("ADMIN LINKS ERROR", err);
-        setLinks([]);
-        setLoading(false);
-      });
+    loadLinks();
   }, []);
 
-  if (loading) return <p style={{ padding: 5}}>Loading links...</p>;
+  // 👇 async function separate-aa
+  const loadLinks = async () => {
+    try {
+      const res = await API_BASE.get("/api/admin/links");
+      setLinks(res.data || []);
+    } catch (err) {
+      console.error("ADMIN LINKS ERROR", err);
+      setLinks([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) return <p style={{ padding: 10 }}>Loading links...</p>;
 
   return (
     <div style={{ padding: 10 }}>
@@ -27,31 +31,28 @@ export default function AdminLinks() {
 
       {links.length === 0 && <p>No links found</p>}
 
-      <table style={table}>
-        <thead>
-          <tr>
-            <th>Short URL</th>
-            <th>Email</th>
-            <th>Clicks</th>
-            <th>Date</th>
-          </tr>
-        </thead>
-        <tbody>
-          {links.map((l) => (
-            <tr key={l._id}>
-              <td>{l.shortUrl}</td>
-              <td>{l.ownerEmail}</td>
-              <td>{l.clicks}</td>
-              <td>{new Date(l.createdAt).toLocaleDateString()}</td>
+      {links.length > 0 && (
+        <table border="1" cellPadding="8">
+          <thead>
+            <tr>
+              <th>Short URL</th>
+              <th>Email</th>
+              <th>Clicks</th>
+              <th>Date</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {links.map((link, i) => (
+              <tr key={i}>
+                <td>{link.shortUrl}</td>
+                <td>{link.email}</td>
+                <td>{link.clicks}</td>
+                <td>{new Date(link.createdAt).toLocaleDateString()}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
     </div>
   );
 }
-
-const table = {
-  width: "80%",
-  borderCollapse: "collapse",
-};

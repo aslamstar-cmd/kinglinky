@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import "./adminSettings.css";
-
-const API = "https://kinglinky.onrender.com/api/admin/settings";
+import {API_BASE} from "./api.js"
 
 export default function AdminSettings() {
   const [form, setForm] = useState({
@@ -12,22 +10,13 @@ export default function AdminSettings() {
     currency: "USD",
   });
 
-  const token = localStorage.getItem("adminToken");
-
-  const headers = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  };
-
   useEffect(() => {
     loadSettings();
-    // eslint-disable-next-line
   }, []);
 
   const loadSettings = async () => {
     try {
-      const res = await axios.get(API, headers);
+      const res = await API_BASE.get("/api/admin/settings");
       setForm(res.data);
     } catch (err) {
       console.error("LOAD SETTINGS ERROR", err);
@@ -36,7 +25,7 @@ export default function AdminSettings() {
 
   const saveSettings = async () => {
     try {
-      await axios.post(API, form, headers);
+      await API_BASE.post("/api/admin/settings", form);
       alert("✅ Settings saved");
     } catch (err) {
       alert("❌ Failed to save");
