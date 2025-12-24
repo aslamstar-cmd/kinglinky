@@ -28,7 +28,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.resolve();
 app.use(cors({ origin:[
   "https://www.kinglinky.com",
-  "https://kinglinky.com"
+  "https://kinglinky.com",
+  "https://api.kinglinky.com"
 ],
 methods: ["GET", "POST", "PUT", "DELETE"],
 allowedHeaders: ["Content-type", "Authorization"],
