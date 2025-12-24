@@ -1,10 +1,11 @@
 {
   "rewrites": [
-    { "source": "/step1.html", "destination": "/step1.html" },
-    { "source": "/step2.html", "destination": "/step2.html" },
-    { "source": "/step3.html", "destination": "/step3.html" },
-    { "source": "/step4.html", "destination": "/step4.html" },
-    { "source": "/final.html", "destination": "/final.html" },
-    { "source": "/(.*)", "destination": "/kinglinky/build/index.html" }
+    { "source": "/step1.html", "destination": "/frontend/kinglinky/public/step1.html" },
+    { "source": "/step2.html", "destination": "/frontend/kinglinky/public/step2.html" },
+    { "source": "/step3.html", "destination": "/frontend/kinglinky/public/step3.html" },
+    { "source": "/step4.html", "destination": "/frontend/kinglinky/public/step4.html" },
+    { "source": "/final.html", "destination": "/frontend/kinglinky/public/final.html" },
+
+    { "source": "/(.*)", "destination": "/frontend/kinglinky/build/index.html" }
   ]
 }
