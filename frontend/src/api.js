@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const API_BASE = "https://kinglinky.onrender.com";
+export const API_BASE = "https://api.kinglinky.com";
 
 const api = axios.create({
   baseURL: API_BASE,

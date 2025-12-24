@@ -26,7 +26,10 @@ dotenv.config();
 const app = express();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.resolve();
-app.use(cors({ origin: "*",
+app.use(cors({ origin:[
+  "https://www.kinglinky.com",
+  "https://kinglinky.com"
+],
 methods: ["GET", "POST", "PUT", "DELETE"],
 allowedHeaders: ["Content-type", "Authorization"],
 credentials: true
