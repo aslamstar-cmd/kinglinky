@@ -1,10 +1,6 @@
 {
   "rewrites": [
     {
-      "source": "/sw.js",
-      "destination": "/sw.js"
-    },
-    {
       "source": "/step1.html",
       "destination": "/step1.html"
     },
