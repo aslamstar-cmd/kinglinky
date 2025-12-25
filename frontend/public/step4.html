@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <script src="https://quge5.com/88/tag.min.js" data-zone="195978" async data-cfasync="false"></script>
@@ -12,6 +13,7 @@
       --accent: #00ffd0;
       --text-color: #eafffa;
     }
+
     body {
       background: var(--bg-color);
       color: var(--text-color);
@@ -30,10 +32,20 @@
       padding: 15px;
       text-align: center;
       border-bottom: 2px solid var(--accent);
-      box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
     }
-    #sec { font-weight: bold; color: var(--accent); font-size: 1.4rem; }
-    .status-msg { color: var(--accent); font-weight: bold; display: none; }
+
+    #sec {
+      font-weight: bold;
+      color: var(--accent);
+      font-size: 1.4rem;
+    }
+
+    .status-msg {
+      color: var(--accent);
+      font-weight: bold;
+      display: none;
+    }
 
     .container {
       max-width: 700px;
@@ -44,21 +56,31 @@
     }
 
     /* Article Content */
-    .article-content h1 { color: var(--accent); font-size: 2rem; text-align: center; }
-    .article-content h2 { color: var(--accent); margin-top: 30px; border-left: 4px solid var(--accent); padding-left: 10px; }
-    
+    .article-content h1 {
+      color: var(--accent);
+      font-size: 2rem;
+      text-align: center;
+    }
+
+    .article-content h2 {
+      color: var(--accent);
+      margin-top: 30px;
+      border-left: 4px solid var(--accent);
+      padding-left: 10px;
+    }
+
     .tech-img {
       width: 100%;
       border-radius: 12px;
       margin: 20px 0;
       border: 1px solid rgba(0, 255, 208, 0.3);
-      box-shadow: 0 0 20px rgba(0,0,0,0.4);
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
     }
 
     /* 4 Large Ad Gaps */
     .ad-space {
-      background: rgba(0,0,0,0.4);
-      height: 250px; 
+      background: rgba(0, 0, 0, 0.4);
+      height: 250px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -76,6 +98,7 @@
       padding: 50px 0;
       border-top: 1px solid #1a4a4a;
     }
+
     #btn {
       padding: 18px 50px;
       background: var(--accent);
@@ -85,116 +108,138 @@
       font-weight: bold;
       font-size: 20px;
       cursor: pointer;
-      display: none; 
+      display: none;
       box-shadow: 0 0 25px rgba(0, 255, 208, 0.5);
       transition: 0.3s;
     }
-    #btn:hover { transform: scale(1.05); }
 
-    .denied { margin-top: 100px; font-size: 24px; color: #ff4d4d; text-align:center; }
+    #btn:hover {
+      transform: scale(1.05);
+    }
+
+    .denied {
+      margin-top: 100px;
+      font-size: 24px;
+      color: #ff4d4d;
+      text-align: center;
+    }
   </style>
 </head>
+
 <body>
 
-<script>
-  if (sessionStorage.getItem("step") !== "4") {
-    document.body.innerHTML = "<div class='denied'>❌ Access Denied: Please complete Step 3 first.</div>";
-  }
-</script>
+  <script>
+    if (sessionStorage.getItem("step") !== "4") {
+      document.body.innerHTML = "<div class='denied'>❌ Access Denied: Please complete Step 3 first.</div>";
+    }
+  </script>
 
-<div class="sticky-header">
-  <div id="timer-text">Final Step: Verification <span id="sec">15</span>s</div>
-  <div id="scroll-msg" class="status-msg">✅ FINAL CHECK COMPLETE! SCROLL TO GET LINK</div>
-</div>
-
-<div class="container">
-  
-  <div class="article-content">
-    <h1>The World in 2030: Advanced Technology and AI</h1>
-    <p>We are currently living in the fastest era of technological growth. In just a few years, the way we work, communicate, and even think will be fundamentally different.</p>
-
-    <script>
-  atOptions = {
-    'key' : '0012116427b5a4ccef598927fc9dfa89',
-    'format' : 'iframe',
-    'height' : 50,
-    'width' : 320,
-    'params' : {}
-  };
-</script>
-
-
-    <h2>1. Humanoid Robotics: Our New Co-workers</h2>
-    <p>Companies like Tesla and Boston Dynamics are perfecting humanoid robots. By 2026, these robots will not only work in factories but also help in our homes. <b>Optimus Gen 2</b> can already handle delicate tasks like sorting eggs—imagine what it will do in five years.</p>
-    <img src="https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&q=80&w=700" class="tech-img" alt="Advanced AI Robot">
-
-    <script src="https://pl28328281.effectivegatecpm.com/27/3c/53/273c5378ff0557eae1a862b03131344a.js"></script>
-
-    <h2>2. Neuralink & Brain-Computer Interfaces</h2>
-    <p>Elon Musk's <b>Neuralink</b> has successfully implanted chips in human brains, allowing paralyzed individuals to control computers with their thoughts. The next goal? Telepathic communication and the ability to download knowledge directly into the brain.</p>
-    <img src="https://images.unsplash.com/photo-1507413245164-6160d8298b31?auto=format&fit=crop&q=80&w=700" class="tech-img" alt="Brain Technology">
-
-    <div class="ad-space">-- Advertisement Slot 3 --</div>
-
-    <h2>3. Quantum Computing: Breaking the Limits</h2>
-    <p>Traditional computers use bits (0s and 1s), but Quantum computers use qubits. This allows them to solve problems in seconds that would take today's fastest supercomputers 10,000 years to calculate. This will revolutionize medicine and encryption.</p>
-    <img src="https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&q=80&w=700" class="tech-img" alt="Quantum Science">
-
-    <div class="ad-space">-- Advertisement Slot 4 --</div>
-
-    <p>As we integrate AI into every aspect of life, the question remains: How do we stay human in a world of machines? The future is bright, but it requires us to be more responsible with technology than ever before.</p>
+  <div class="sticky-header">
+    <div id="timer-text">Final Step: Verification <span id="sec">15</span>s</div>
+    <div id="scroll-msg" class="status-msg">✅ FINAL CHECK COMPLETE! SCROLL TO GET LINK</div>
   </div>
 
-  <div class="btn-container">
-    <button id="btn" onclick="finish()">Unlock Final Link</button>
-    <p id="note" style="font-size: 13px; opacity: 0.6; margin-top:10px;">Verification nearly complete...</p>
+  <div class="container">
+
+    <div class="article-content">
+      <h1>The World in 2030: Advanced Technology and AI</h1>
+      <p>We are currently living in the fastest era of technological growth. In just a few years, the way we work,
+        communicate, and even think will be fundamentally different.</p>
+
+      <script>
+        atOptions = {
+          'key': '0012116427b5a4ccef598927fc9dfa89',
+          'format': 'iframe',
+          'height': 50,
+          'width': 320,
+          'params': {}
+        };
+      </script>
+
+
+      <h2>1. Humanoid Robotics: Our New Co-workers</h2>
+      <p>Companies like Tesla and Boston Dynamics are perfecting humanoid robots. By 2026, these robots will not only
+        work in factories but also help in our homes. <b>Optimus Gen 2</b> can already handle delicate tasks like
+        sorting eggs—imagine what it will do in five years.</p>
+      <img src="https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&q=80&w=700"
+        class="tech-img" alt="Advanced AI Robot">
+
+      <script src="https://pl28328281.effectivegatecpm.com/27/3c/53/273c5378ff0557eae1a862b03131344a.js"></script>
+
+      <h2>2. Neuralink & Brain-Computer Interfaces</h2>
+      <p>Elon Musk's <b>Neuralink</b> has successfully implanted chips in human brains, allowing paralyzed individuals
+        to control computers with their thoughts. The next goal? Telepathic communication and the ability to download
+        knowledge directly into the brain.</p>
+      <img src="https://images.unsplash.com/photo-1507413245164-6160d8298b31?auto=format&fit=crop&q=80&w=700"
+        class="tech-img" alt="Brain Technology">
+
+      <div class="ad-space">-- Advertisement Slot 3 --</div>
+
+      <h2>3. Quantum Computing: Breaking the Limits</h2>
+      <p>Traditional computers use bits (0s and 1s), but Quantum computers use qubits. This allows them to solve
+        problems in seconds that would take today's fastest supercomputers 10,000 years to calculate. This will
+        revolutionize medicine and encryption.</p>
+      <img src="https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&q=80&w=700"
+        class="tech-img" alt="Quantum Science">
+      <script async="async" data-cfasync="false"
+        src="https://pl28334516.effectivegatecpm.com/cbbb337fba63c479050336665248235f/invoke.js"></script>
+      <div id="container-cbbb337fba63c479050336665248235f"></div>
+
+      <p>As we integrate AI into every aspect of life, the question remains: How do we stay human in a world of
+        machines? The future is bright, but it requires us to be more responsible with technology than ever before.</p>
+    </div>
+
+    <div class="btn-container">
+      <button id="btn" onclick="finish()">Unlock Final Link</button>
+      <p id="note" style="font-size: 13px; opacity: 0.6; margin-top:10px;">Verification nearly complete...</p>
+    </div>
+
   </div>
 
-</div>
+  <script>
+    let s = 15;
+    const sec = document.getElementById("sec");
+    const btn = document.getElementById("btn");
+    const timerText = document.getElementById("timer-text");
+    const scrollMsg = document.getElementById("scroll-msg");
 
-<script>
-let s = 15;
-const sec = document.getElementById("sec");
-const btn = document.getElementById("btn");
-const timerText = document.getElementById("timer-text");
-const scrollMsg = document.getElementById("scroll-msg");
+    let human = false;
+    window.addEventListener("scroll", () => human = true);
+    window.addEventListener("touchstart", () => human = true);
 
-let human = false;
-window.addEventListener("scroll", () => human = true);
-window.addEventListener("touchstart", () => human = true);
+    const t = setInterval(() => {
+      s--;
+      if (s >= 0) sec.innerText = s;
 
-const t = setInterval(()=>{
-  s--;
-  if(s >= 0) sec.innerText = s;
-  
-  if(s <= 0){
-    clearInterval(t);
-    if(human) {
-      timerText.style.display = "none";
-      scrollMsg.style.display = "block";
-      btn.style.display = "inline-block";
-    } else {
-      alert("Please scroll down to verify you are a human user.");
-      s = 5; 
+      if (s <= 0) {
+        clearInterval(t);
+        if (human) {
+          timerText.style.display = "none";
+          scrollMsg.style.display = "block";
+          btn.style.display = "inline-block";
+        } else {
+          alert("Please scroll down to verify you are a human user.");
+          s = 5;
+        }
+      }
+    }, 1000);
+
+    function finish() {
+      btn.disabled = true;
+      btn.innerText = "Generating Final Link...";
+
+      let wait = 5;
+      const waitInt = setInterval(() => {
+        wait--;
+        if (wait <= 0) {
+          clearInterval(waitInt);
+          const urlParams = new URLSearchParams(location.search);
+          location.href = "final.html?code=" + (urlParams.get("code") || "VerifiedUser");
+        }
+      }, 1000);
     }
-  }
-}, 1000);
-
-function finish(){
-  btn.disabled = true;
-  btn.innerText = "Generating Final Link...";
-  
-  let wait = 5;
-  const waitInt = setInterval(() => {
-    wait--;
-    if(wait <= 0) {
-        clearInterval(waitInt);
-        const urlParams = new URLSearchParams(location.search);
-        location.href = "final.html?code=" + (urlParams.get("code") || "VerifiedUser");
-    }
-  }, 1000);
-}
-</script>
+  </script>
 
 </body>
+
 </html>
