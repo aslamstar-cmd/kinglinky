@@ -3,6 +3,7 @@ import api from "./api.js";
 import { useNavigate } from "react-router-dom";
 
 function Login({ setIsLoggedIn, setUser }) {
+   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -68,6 +69,15 @@ function Login({ setIsLoggedIn, setUser }) {
           👑 Login
         </h2>
 
+        <input
+          type="name"
+          placeholder="Name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          required
+          style={inputStyle}
+        />
+        
         <input
           type="email"
           placeholder="Email"
