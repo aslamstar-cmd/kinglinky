@@ -22,25 +22,33 @@ export default function Dashboard({ user }) {
   const [withdrawAmount, setWithdrawAmount] = useState("");
   const [note, setNote] = useState("");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [loading, setLoading] = useState(true); // Data load aaguratha track panna
 
   /* ========= DYNAMIC CPM LOGIC ========= */
   const calculateCPM = (views) => (views >= 5000 ? 9.8 : 10);
 
+  // DASHBOARD LOAD AAGUMPOTHE DATA FETCH PANNA ITHU THAAN FIX
   useEffect(() => {
-    if (!token || !user?.email) return;
-    loadData();
+    if (token && user?.email) {
+      loadData();
+    }
   }, [user, token]);
 
   async function loadData() {
+    setLoading(true);
     try {
       const [linksRes, wdRes] = await Promise.all([
         axios.get(`${API_BASE}/api/links?email=${user.email}`, auth),
         axios.get(`${API_BASE}/api/withdraw/my?email=${user.email}`, auth)
       ]);
-      setLinks(Array.isArray(linksRes.data) ? linksRes.data : []);
-      setWithdraws(Array.isArray(wdRes.data) ? wdRes.data : []);
+      
+      // Data-ah correct format-la set panrom
+      setLinks(Array.isArray(linksRes.data) ? linksRes.data : (linksRes.data?.data || []));
+      setWithdraws(Array.isArray(wdRes.data) ? wdRes.data : (wdRes.data?.data || []));
     } catch (err) {
       console.error("Dashboard load error", err);
+    } finally {
+      setLoading(false); // Data vanthathum loading-ah stop pannidum
     }
   }
 
@@ -82,8 +90,8 @@ export default function Dashboard({ user }) {
     try {
       await axios.delete(`${API_BASE}/api/links/${id}`, auth);
       setLinks(prev => prev.filter(l => l._id !== id));
-      // alert("Deleted! 🗑️");
-    } catch { alert("Delete failed! Check your internet or server."); }
+      alert("Deleted! 🗑️");
+    } catch { alert("Delete failed!"); }
   }
 
   async function requestWithdraw() {
@@ -95,6 +103,15 @@ export default function Dashboard({ user }) {
       setWithdrawAmount(""); setNote("");
       loadData();
     } catch { alert("Withdraw request failed"); }
+  }
+
+  // Loading Screen
+  if (loading) {
+    return (
+      <div style={{...styles.wrap, display:'flex', justifyContent:'center', alignItems:'center'}}>
+        <h2 style={{color:'#00ffd0'}}>👑 Kinglinky Loading...</h2>
+      </div>
+    );
   }
 
   /* ================= UI ================= */
@@ -126,7 +143,7 @@ export default function Dashboard({ user }) {
       {/* USER BANNER */}
       <div style={styles.userBanner}>
         <span>👑 <b>{user?.name}</b></span>
-        <span style={styles.cpmBadge}>Current CPM: ${currentCPM}</span>
+        <span style={styles.cpmBadge}>CPM: ${currentCPM}</span>
       </div>
 
       {tab === "dashboard" && (
@@ -203,8 +220,8 @@ export default function Dashboard({ user }) {
         <div style={styles.supportBox}>
           <div style={{fontSize: 50, marginBottom: 10}}>💬</div>
           <h3>Help Center</h3>
-          <p style={{color: '#aaa', fontSize: 14}}>Feel free to contact our support team on Telegram if you face any issues.</p>
-          <button style={styles.btnTg} onClick={() => window.open("https://t.me/KinglinkySupport")}>
+          <p style={{color: '#aaa', fontSize: 14}}>Contact our support team on Telegram if you face any issues with links or withdrawals.</p>
+          <button style={styles.btnTg} onClick={() => window.open("@KingLinkySupport_Bot")}>
             Chat on Telegram
           </button>
         </div>
@@ -223,35 +240,29 @@ function Card({ title, value, color="#fff" }) {
   );
 }
 
-/* STYLES */
+/* STYLES (Old styles maintained exactly) */
 const styles = {
   wrap: { padding: "15px", minHeight: "100vh", background: "#011111", color: "#eafffa", fontFamily: "system-ui" },
   header: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 15 },
   headerRight: { display: "flex", gap: 12, alignItems: "center" },
   burger: { fontSize: 26, cursor: "pointer", color: "#00ffd0" },
   select: { background: "#053737", color: "#fff", border: "1px solid #00ffd0", borderRadius: 4, padding: "2px 5px" },
-  
   mobileMenu: { background: "#021c1c", borderRadius: 10, padding: 8, marginBottom: 15, border: "1px solid #053737" },
   menuItem: { padding: "12px", borderBottom: "1px solid #033", cursor: "pointer", fontWeight: "600", fontSize: 13 },
-  
   userBanner: { display: "flex", justifyContent: "space-between", background: "#022626", padding: "12px", borderRadius: 10, marginBottom: 15, border: "1px solid #053737" },
   cpmBadge: { color: "#00ffd0", fontSize: 11, border: "1px solid #00ffd0", padding: "2px 8px", borderRadius: 12 },
-  
   grid: { display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 10 },
   card: { background: "#053737", padding: 15, borderRadius: 12, border: "1px solid #024444" },
   chartContainer: { marginTop: 15, background: "#021c1c", padding: 15, borderRadius: 12, border: "1px solid #053737" },
-  
   section: { marginTop: 15 },
   inputRow: { display: "flex", gap: 8, marginBottom: 15 },
   input: { flex: 1, padding: 12, borderRadius: 8, border: "none", background: "#053737", color: "#fff" },
   linkBox: { background: "#053737", padding: "12px 15px", borderRadius: 10, display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 },
   iconBtn: { background: "#011111", border: "1px solid #053737", color: "#fff", padding: "6px 10px", borderRadius: 6, cursor: "pointer" },
   btnAction: { background: "#00ffd0", border: "none", padding: "0 15px", borderRadius: 8, fontWeight: "bold", cursor: "pointer" },
-  
   withdrawCard: { background: "#021c1c", padding: 20, borderRadius: 15, border: "1px solid #053737", textAlign: "center" },
   inputFull: { width: "100%", padding: 12, marginBottom: 10, borderRadius: 8, border: "none", background: "#053737", color: "#fff", boxSizing: "border-box" },
   btnWithdraw: { width: "100%", padding: 12, background: "#00ffd0", border: "none", borderRadius: 8, fontWeight: "bold", cursor: "pointer" },
-  
   supportBox: { textAlign: "center", padding: "30px 15px", background: "#021c1c", borderRadius: 15, border: "1px solid #053737" },
   btnTg: { background: "#0088cc", color: "#fff", border: "none", padding: "12px 25px", borderRadius: 25, fontWeight: "bold", cursor: "pointer" }
 };
