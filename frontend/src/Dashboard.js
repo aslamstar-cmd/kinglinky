@@ -43,7 +43,7 @@ export default function Dashboard({ user }) {
 
   /* ========= LOAD DATA ========= */
   useEffect(() => {
-    if (!user?.email || !token) return;
+    if (!token || !user || !user.email) return;
     loadData();
     // eslint-disable-next-line
   }, [user, token]);
@@ -83,13 +83,13 @@ export default function Dashboard({ user }) {
 
   const walletUSD = Math.max(allTimeUSD - paidUSD, 0);
 
-  /* ========= TODAY VIEWS (FIXED) ========= */
-  const todayStr = new Date().toISOString().slice(0, 10);
+  /* ========= TODAY VIEWS (FIXED – ONLY LOGIC CHANGE) ========= */
+  const todayKey = new Date().toISOString().slice(0, 10);
 
   const todayViews = links.reduce((sum, l) => {
     if (!l.createdAt) return sum;
-    const linkDate = new Date(l.createdAt).toISOString().slice(0, 10);
-    return linkDate === todayStr ? sum + (l.clicks || 0) : sum;
+    const d = new Date(l.createdAt).toISOString().slice(0, 10);
+    return d === todayKey ? sum + (Number(l.clicks) || 0) : sum;
   }, 0);
 
   const todayUSD = (todayViews / 1000) * CPM_USD;
@@ -113,10 +113,10 @@ export default function Dashboard({ user }) {
       day: "numeric",
       month: "short",
     }),
-    clicks: l.clicks || 0,
+    clicks: Number(l.clicks) || 0,
   }));
 
-  /* ========= MONEY FORMAT ========= */
+  /* ========= MONEY ========= */
   function money(v) {
     return currency === "USD"
       ? `$ ${v.toFixed(2)}`
@@ -141,7 +141,6 @@ export default function Dashboard({ user }) {
       }
     } catch (err) {
       alert("Shorten failed");
-      console.error(err);
     }
   }
 
@@ -188,7 +187,6 @@ export default function Dashboard({ user }) {
   /* ================= UI ================= */
   return (
     <div style={wrap}>
-      {/* HEADER */}
       <div style={header}>
         <h2>👑 Kinglinky</h2>
         <div>
@@ -200,7 +198,6 @@ export default function Dashboard({ user }) {
         </div>
       </div>
 
-      {/* MENU */}
       <div style={menu}>
         {["dashboard","manage","withdraw","history","support"].map((t) => (
           <Btn key={t} active={tab === t} onClick={() => setTab(t)}>
@@ -209,7 +206,6 @@ export default function Dashboard({ user }) {
         ))}
       </div>
 
-      {/* DASHBOARD */}
       {tab === "dashboard" && (
         <>
           <div style={grid}>
@@ -232,16 +228,10 @@ export default function Dashboard({ user }) {
         </>
       )}
 
-      {/* MANAGE */}
       {tab === "manage" && (
         <>
           <div style={row}>
-            <input
-              value={longUrl}
-              onChange={(e) => setLongUrl(e.target.value)}
-              placeholder="Paste long URL"
-              style={input}
-            />
+            <input value={longUrl} onChange={(e) => setLongUrl(e.target.value)} placeholder="Paste long URL" style={input} />
             <button onClick={shorten}>Shorten</button>
           </div>
 
@@ -257,26 +247,15 @@ export default function Dashboard({ user }) {
         </>
       )}
 
-      {/* WITHDRAW */}
       {tab === "withdraw" && (
         <div style={card}>
           <p>Wallet: {money(walletUSD)}</p>
-          <input
-            type="number"
-            value={withdrawAmount}
-            onChange={(e) => setWithdrawAmount(e.target.value)}
-            placeholder="Amount"
-          />
-          <input
-            value={note}
-            onChange={(e) => setNote(e.target.value)}
-            placeholder="UPI / Bank"
-          />
+          <input type="number" value={withdrawAmount} onChange={(e) => setWithdrawAmount(e.target.value)} placeholder="Amount" />
+          <input value={note} onChange={(e) => setNote(e.target.value)} placeholder="UPI / Bank" />
           <button onClick={requestWithdraw}>Request Withdraw</button>
         </div>
       )}
 
-      {/* HISTORY */}
       {tab === "history" &&
         withdraws.map((w) => (
           <div key={w._id} style={box}>
@@ -285,7 +264,6 @@ export default function Dashboard({ user }) {
           </div>
         ))}
 
-      {/* SUPPORT */}
       {tab === "support" && (
         <button onClick={() => window.open("https://t.me/KinglinkySupport")}>
           Telegram Support
