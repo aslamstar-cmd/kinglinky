@@ -18,9 +18,16 @@ const MIN_WITHDRAW = 1;
 
 export default function Dashboard({ user }) {
 
-  // ✅ FIX 1: token safe-ah localStorage la irundhu
+  /* ========= AUTH ========= */
   const token = localStorage.getItem("token");
 
+  const auth = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  /* ========= STATES ========= */
   const [tab, setTab] = useState("dashboard");
   const [currency, setCurrency] = useState("USD");
   const [selectedMonth, setSelectedMonth] = useState("all");
@@ -34,114 +41,107 @@ export default function Dashboard({ user }) {
   const [withdrawAmount, setWithdrawAmount] = useState("");
   const [note, setNote] = useState("");
 
-
-  const auth = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  };
-
-  /* ========== LOAD USER DATA ========== */
+  /* ========= LOAD DATA ========= */
   useEffect(() => {
     if (!user?.email || !token) return;
     loadData();
     // eslint-disable-next-line
   }, [user, token]);
 
-  // ✅ Dashboard.js kulla irukka loadData function-a ippadi mathunga:
-async function loadData() {
+  async function loadData() {
     try {
-      // ✅ User email-a query parameter-aa anuppuren
-      // Ippo backend indha email-a vachu filter panni, andha user links-a mattum anuppum
       const linksRes = await axios.get(
-        `${API_BASE}/api/links?email=${user.email}`, 
+        `${API_BASE}/api/links?email=${user.email}`,
         auth
       );
 
-      let wdRes = { data: [] };
-      try {
-        // Withdrawals-kum email filter add panniyachu
-        wdRes = await axios.get(`${API_BASE}/api/withdraw/my?email=${user.email}`, auth);
-      } catch (err) {
-        console.log("Withdraw fetch error", err);
-      }
+      const wdRes = await axios.get(
+        `${API_BASE}/api/withdraw/my?email=${user.email}`,
+        auth
+      );
 
       setLinks(Array.isArray(linksRes.data) ? linksRes.data : []);
       setWithdraws(Array.isArray(wdRes.data) ? wdRes.data : []);
     } catch (err) {
-      console.error("LOAD ERROR", err);
+      console.error("Dashboard load error", err);
       setLinks([]);
       setWithdraws([]);
     }
-  
-
   }
 
-  /* ========== GLOBAL STATS ========== */
-  const allTimeViews = links.reduce((a, b) => a + (b.clicks || 0), 0);
+  /* ========= STATS ========= */
+  const allTimeViews = links.reduce(
+    (sum, l) => sum + (Number(l.clicks) || 0),
+    0
+  );
+
   const allTimeUSD = (allTimeViews / 1000) * CPM_USD;
 
   const paidUSD = withdraws
     .filter((w) => w.status === "paid")
-    .reduce((a, b) => a + (b.amount || 0), 0);
+    .reduce((sum, w) => sum + (Number(w.amount) || 0), 0);
 
   const walletUSD = Math.max(allTimeUSD - paidUSD, 0);
 
-  /* ========== MONTH FILTER ========== */
-  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  /* ========= TODAY VIEWS (FIXED) ========= */
+  const todayStr = new Date().toISOString().slice(0, 10);
+
+  const todayViews = links.reduce((sum, l) => {
+    if (!l.createdAt) return sum;
+    const linkDate = new Date(l.createdAt).toISOString().slice(0, 10);
+    return linkDate === todayStr ? sum + (l.clicks || 0) : sum;
+  }, 0);
+
+  const todayUSD = (todayViews / 1000) * CPM_USD;
+
+  /* ========= MONTH FILTER ========= */
+  const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 
   const filteredLinks = links.filter((l) => {
     if (selectedMonth === "all") return true;
     return new Date(l.createdAt).getMonth() === Number(selectedMonth);
   });
 
-  const monthlyViews = filteredLinks.reduce((a, b) => a + (b.clicks || 0), 0);
+  const monthlyViews = filteredLinks.reduce(
+    (sum, l) => sum + (Number(l.clicks) || 0),
+    0
+  );
 
-  const todayStr = new Date().toDateString();
-  const todayViews = links.reduce((a, b) =>
-    new Date(b.createdAt).toDateString() === todayStr
-      ? a + (b.clicks || 0)
-      : a
-    , 0);
+  /* ========= CHART ========= */
+  const chartData = filteredLinks.map((l) => ({
+    date: new Date(l.createdAt).toLocaleDateString("en-IN", {
+      day: "numeric",
+      month: "short",
+    }),
+    clicks: l.clicks || 0,
+  }));
 
-  const todayUSD = (todayViews / 1000) * CPM_USD;
-
+  /* ========= MONEY FORMAT ========= */
   function money(v) {
     return currency === "USD"
       ? `$ ${v.toFixed(2)}`
       : `₹ ${(v * USD_TO_INR).toFixed(2)}`;
   }
 
-  const chartData = filteredLinks.map((l) => ({
-    date: new Date(l.createdAt).toLocaleDateString(undefined, { day: "numeric", month: "short" }),
-    clicks: l.clicks || 0,
-  }));
-
-  /* ========== SHORTEN (FIXED HERE) ========== */
+  /* ========= SHORTEN ========= */
   async function shorten() {
-    if (!longUrl) {
-      alert("Paste URL");
-      return;
-    }
+    if (!longUrl) return alert("Paste URL");
+
     try {
-      // ✅ FIX: Backend require panra 'email' field-ah add panniten
       const res = await axios.post(
         `${API_BASE}/api/links/shorten`,
-        {
-          longUrl,
-          email: user.email // Intha line thaan missing-ah irundhuchu
-        },
+        { longUrl, email: user.email },
         auth
       );
-      
-      if(res.data && res.data.shortUrl) {
+
+      if (res.data?.shortUrl) {
         setShortUrl(res.data.shortUrl);
         setLongUrl("");
-        loadData(); // Success aana udane list-ah refresh pannum
+        loadData();
       }
-    } catch (error) {
-      console.error("Shorten Error:", error.response?.data || error.message);
-      alert("Shorten failed: " + (error.response?.data?.message || "Server Error"));
+    } catch (err) {
+      alert("Shorten failed");
+      console.error(err);
     }
   }
 
@@ -150,23 +150,33 @@ async function loadData() {
     alert("Copied");
   }
 
-  /* ========== WITHDRAW ========== */
+  /* ========= DELETE LINK ========= */
+  async function deleteLink(id) {
+    if (!window.confirm("Delete this link?")) return;
+    try {
+      await axios.delete(`${API_BASE}/api/links/${id}`, auth);
+      loadData();
+    } catch {
+      alert("Delete failed");
+    }
+  }
+
+  /* ========= WITHDRAW ========= */
   async function requestWithdraw() {
     const amt = Number(withdrawAmount);
+
     if (!amt || amt < MIN_WITHDRAW || amt > walletUSD) {
-      alert("Invalid amount or insufficient balance");
+      alert("Invalid amount");
       return;
     }
+
     try {
       await axios.post(
         `${API_BASE}/api/withdraw`,
-        {
-          amount: amt,
-          note: note,
-        },
+        { amount: amt, note },
         auth
       );
-      alert("Withdraw request submitted ✅");
+      alert("Withdraw request sent ✅");
       setWithdrawAmount("");
       setNote("");
       loadData();
@@ -175,14 +185,14 @@ async function loadData() {
     }
   }
 
-  /* UI */
+  /* ================= UI ================= */
   return (
     <div style={wrap}>
       {/* HEADER */}
-      <div style={{ ...header, fontFamily: "-moz-initial" }}>
+      <div style={header}>
         <h2>👑 Kinglinky</h2>
         <div>
-          <b style={{ fontFamily: "-moz-initial" }}>👑 {user.name}</b>{" "}
+          <b>👤 {user.name}</b>{" "}
           <select value={currency} onChange={(e) => setCurrency(e.target.value)}>
             <option value="USD">USD</option>
             <option value="INR">INR</option>
@@ -192,9 +202,9 @@ async function loadData() {
 
       {/* MENU */}
       <div style={menu}>
-        {["dashboard", "manage", "withdraw", "history", "support"].map((t) => (
+        {["dashboard","manage","withdraw","history","support"].map((t) => (
           <Btn key={t} active={tab === t} onClick={() => setTab(t)}>
-            {t.charAt(0).toUpperCase() + t.slice(1)}
+            {t.toUpperCase()}
           </Btn>
         ))}
       </div>
@@ -202,66 +212,46 @@ async function loadData() {
       {/* DASHBOARD */}
       {tab === "dashboard" && (
         <>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "10px" }}>
-            <h4 style={{ margin: 0 }}>Stats Overview</h4>
-            <select
-              value={selectedMonth}
-              onChange={(e) => setSelectedMonth(e.target.value)}
-              style={{ padding: "5px", borderRadius: "5px", background: "#033", color: "#fff", border: "1px solid #00ffd0" }}
-            >
-              <option value="all">All Time</option>
-              {months.map((m, idx) => <option key={m} value={idx}>{m}</option>)}
-            </select>
-          </div>
-
           <div style={grid}>
             <Card title="Today Views" value={todayViews} />
-            <Card
-              title={selectedMonth === "all" ? "Total Views" : `${months[selectedMonth]} Views`}
-              value={monthlyViews}
-            />
+            <Card title="Total Views" value={monthlyViews} />
             <Card title="Today Earnings" value={money(todayUSD)} />
-            <Card title="Avg CPM" value={money(CPM_USD)} />
-            <Card title="Available Wallet" value={money(walletUSD)} />
-            <Card title="Withdrawn Money" value={money(paidUSD)} />
+            <Card title="Wallet" value={money(walletUSD)} />
           </div>
 
           <div style={chartBox}>
-            <h4>📈 Views Chart ({selectedMonth === "all" ? "All Time" : months[selectedMonth]})</h4>
             <ResponsiveContainer width="100%" height={250}>
               <LineChart data={chartData}>
-                <XAxis dataKey="date" stroke="#9ff" />
-                <YAxis stroke="#9ff" />
-                <Tooltip contentStyle={{ background: "#053737", border: "none" }} />
-                <Line type="monotone" dataKey="clicks" stroke="#00ffd0" strokeWidth={2} />
+                <XAxis dataKey="date" />
+                <YAxis />
+                <Tooltip />
+                <Line dataKey="clicks" stroke="#00ffd0" strokeWidth={2} />
               </LineChart>
             </ResponsiveContainer>
           </div>
         </>
       )}
 
-      {/* MANAGE LINKS */}
+      {/* MANAGE */}
       {tab === "manage" && (
         <>
-          <h3>Shorten URL</h3>
           <div style={row}>
-            <input placeholder="Paste long URL" value={longUrl} onChange={(e) => setLongUrl(e.target.value)} style={input} />
-            <button onClick={shorten} style={{ backgroundColor: "#00ffd0", color: "#000", border: "none", padding: "0 15px", borderRadius: 6, fontWeight: "bold", cursor: "pointer" }}>Shorten</button>
+            <input
+              value={longUrl}
+              onChange={(e) => setLongUrl(e.target.value)}
+              placeholder="Paste long URL"
+              style={input}
+            />
+            <button onClick={shorten}>Shorten</button>
           </div>
-          {shortUrl && (
-            <div style={box}>
-              <span style={{color: "#00ffd0", fontWeight: "bold"}}>{shortUrl}</span>
-              <button onClick={() => copy(shortUrl)} style={{ backgroundColor: "#033", color: "#fff", border: "1px solid #00ffd0", padding: "5px 10px", borderRadius: "5px" }}>Copy</button>
-            </div>
-          )}
-          <h3 style={{marginTop: "20px"}}>Your Links</h3>
-          {links.length === 0 ? <p>No links found.</p> : links.map((l) => (
+
+          {links.map((l) => (
             <div key={l._id} style={box}>
-              <div style={{display: "flex", flexDirection: "column"}}>
-                <span style={{fontSize: "14px"}}>{l.shortUrl}</span>
-                <small style={{color: "#9ff"}}>Views: {l.clicks || 0}</small>
+              <span>{l.shortUrl}</span>
+              <div>
+                <button onClick={() => copy(l.shortUrl)}>Copy</button>
+                <button onClick={() => deleteLink(l._id)}>❌</button>
               </div>
-              <button onClick={() => copy(l.shortUrl)} style={{padding: "5px 10px", borderRadius: "5px", background: "#033", color: "#fff", border: "1px solid #00ffd0"}}>Copy</button>
             </div>
           ))}
         </>
@@ -269,70 +259,56 @@ async function loadData() {
 
       {/* WITHDRAW */}
       {tab === "withdraw" && (
-        <div style={{ maxWidth: 400 }}>
-          <h3>Withdraw</h3>
-          <div style={card}>
-            <p><b>Available Wallet:</b> {money(walletUSD)}</p>
-            <p style={{ fontFamily: "monospace", fontSize: "12px", color: "#9ff" }}>Minimum Withdraw $1</p>
-            <input
-              type="number"
-              placeholder="Enter amount"
-              value={withdrawAmount}
-              onChange={(e) => setWithdrawAmount(e.target.value)}
-              style={{ padding: "8px", margin: "10px 0", width: "95%", borderRadius: "7px", border: "none" }}
-            />
-            <input
-              type="text"
-              placeholder="Enter UPI / Bank details"
-              value={note}
-              onChange={(e) => setNote(e.target.value)}
-              style={{ padding: "8px", margin: "10px 0", width: "95%", borderRadius: "7px", border: "none" }}
-            />
-
-            <button
-              style={{ width: "100%", padding: "10px", borderRadius: "7px", backgroundColor: "#00ffd0", color: "#000", fontWeight: "bold", border: "none", cursor: "pointer" }}
-              onClick={requestWithdraw}
-            >
-              Request Withdraw
-            </button>
-          </div>
+        <div style={card}>
+          <p>Wallet: {money(walletUSD)}</p>
+          <input
+            type="number"
+            value={withdrawAmount}
+            onChange={(e) => setWithdrawAmount(e.target.value)}
+            placeholder="Amount"
+          />
+          <input
+            value={note}
+            onChange={(e) => setNote(e.target.value)}
+            placeholder="UPI / Bank"
+          />
+          <button onClick={requestWithdraw}>Request Withdraw</button>
         </div>
       )}
 
       {/* HISTORY */}
-      {tab === "history" && (
-        <>
-          <h3>Withdraw History</h3>
-          {withdraws.length === 0 ? <p>No history found.</p> : withdraws.map((w) => (
-            <div key={w._id} style={box}>
-              <span>{money(w.amount)}</span>
-              <span style={{ 
-                color: w.status === "paid" ? "#00ffd0" : w.status === "pending" ? "#ffcc00" : "#ff4444",
-                textTransform: "capitalize"
-              }}>
-                {w.status}
-              </span>
-            </div>
-          ))}
-        </>
-      )}
+      {tab === "history" &&
+        withdraws.map((w) => (
+          <div key={w._id} style={box}>
+            <span>{money(w.amount)}</span>
+            <span>{w.status}</span>
+          </div>
+        ))}
 
       {/* SUPPORT */}
       {tab === "support" && (
-        <div style={{textAlign: "center", marginTop: "20px"}}>
-          <button onClick={() => window.open("https://t.me/KinglinkySupport", "_blank")} style={{ width: "100%", fontFamily: "sans-serif", padding: "12px", borderRadius: "7px", backgroundColor: "#0088cc", color: "#fff", fontWeight: "bold", border: "none", cursor: "pointer" }}>
-            Join Telegram Support
-          </button>
-        </div>
+        <button onClick={() => window.open("https://t.me/KinglinkySupport")}>
+          Telegram Support
+        </button>
       )}
     </div>
   );
 }
 
-/* ========== UI COMPONENTS ========== */
+/* ========= UI ========= */
 function Btn({ children, active, onClick }) {
   return (
-    <button onClick={onClick} style={{ padding: "8px 16px", background: active ? "#00ffd0" : "#053737", color: active ? "#000" : "#cff", border: active ? "none" : "1px solid #00ffd0", borderRadius: 6, cursor: "pointer", fontWeight: active ? "bold" : "normal" }}>
+    <button
+      onClick={onClick}
+      style={{
+        background: active ? "#00ffd0" : "#033",
+        color: active ? "#000" : "#fff",
+        padding: "8px 14px",
+        borderRadius: 6,
+        border: "none",
+        cursor: "pointer",
+      }}
+    >
       {children}
     </button>
   );
@@ -341,19 +317,19 @@ function Btn({ children, active, onClick }) {
 function Card({ title, value }) {
   return (
     <div style={card}>
-      <small style={{color: "#9ff"}}>{title}</small>
-      <h3 style={{margin: "5px 0 0 0"}}>{value}</h3>
+      <small>{title}</small>
+      <h3>{value}</h3>
     </div>
   );
 }
 
-/* ========== STYLES ========== */
+/* ========= STYLES ========= */
 const wrap = { padding: 20, minHeight: "100vh", background: "#021616", color: "#eafffa" };
-const header = { display: "flex", justifyContent: "space-between", alignItems: "center" };
-const menu = { display: "flex", gap: 8, margin: "20px 0", flexWrap: "wrap" };
-const grid = { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px,1fr))", gap: 12 };
-const card = { background: "#053737", padding: 14, borderRadius: 10, border: "1px solid #0a4a4a" };
-const box = { background: "#053737", padding: 12, borderRadius: 8, marginBottom: 8, display: "flex", justifyContent: "space-between", alignItems: "center", border: "1px solid #0a4a4a" };
-const row = { display: "flex", gap: 8, marginBottom: "15px" };
-const input = { flex: 1, padding: "10px", borderRadius: 6, border: "none", outline: "none" };
-const chartBox = { marginTop: 20, background: "#053737", padding: 15, borderRadius: 10, border: "1px solid #0a4a4a" };
+const header = { display: "flex", justifyContent: "space-between" };
+const menu = { display: "flex", gap: 8, margin: "20px 0" };
+const grid = { display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(150px,1fr))", gap: 12 };
+const card = { background: "#053737", padding: 14, borderRadius: 8 };
+const box = { background: "#053737", padding: 10, marginBottom: 8, display: "flex", justifyContent: "space-between" };
+const row = { display: "flex", gap: 8 };
+const input = { flex: 1, padding: 10 };
+const chartBox = { marginTop: 20 };
