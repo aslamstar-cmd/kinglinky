@@ -166,20 +166,32 @@ app.post("/api/signup", async (req, res) => {
 });
 
 /* ---------------- LOGIN ---------------- */
+import jwt from "jsonwebtoken";
+
 app.post("/api/login", async (req, res) => {
   try {
     const { email, password } = req.body;
 
     const user = await User.findOne({ email });
-    if (!user)
-      return res.status(400).json({ success: false });
+    if (!user) {
+      return res.status(400).json({ message: "Invalid credentials" });
+    }
 
     const ok = await bcrypt.compare(password, user.password);
-    if (!ok)
-      return res.status(400).json({ success: false });
+    if (!ok) {
+      return res.status(400).json({ message: "Invalid credentials" });
+    }
+
+    // 🔥 TOKEN CREATE
+    const token = jwt.sign(
+      { id: user._id, email: user.email },
+      process.env.JWT_SECRET || "kinglinky_secret",
+      { expiresIn: "7d" }
+    );
 
     res.json({
       success: true,
+      token, // 🔥 THIS WAS MISSING
       user: {
         _id: user._id,
         name: user.name,
@@ -187,10 +199,10 @@ app.post("/api/login", async (req, res) => {
       },
     });
   } catch (err) {
-    res.status(500).json({ success: false });
+    console.error(err);
+    res.status(500).json({ message: "Login failed" });
   }
 });
-
 /* ---------------- WALLET ---------------- */
 app.get("/api/wallet/:email", async (req, res) => {
   const user = await User.findOne({ email: req.params.email });
