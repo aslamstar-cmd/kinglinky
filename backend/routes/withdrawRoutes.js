@@ -7,46 +7,109 @@ const router = express.Router();
 
 /* ============================
    ADMIN → GET ALL WITHDRAWS
-   Endpoint: /api/withdraw/admin
+   GET /api/withdraw/admin
 ============================ */
-router.get("/admin", async (req, res) => {
+router.get("/admin", adminAuth, async (req, res) => {
   try {
-    // Note: Temporary-ah adminAuth thookiruken logic work aahuthannu paaka
-    const withdraws = await Withdraw.find({}).sort({ createdAt: -1 });
-    
-    // Direct-ah array-ah anupuna Admin table fetch panna easy-ah irukkum
-    return res.json(withdraws); 
+    const withdraws = await Withdraw.find({})
+      .sort({ createdAt: -1 });
+
+    return res.json({
+      success: true,
+      data: withdraws,
+    });
   } catch (err) {
     console.error("WITHDRAW ADMIN GET ERROR:", err);
-    return res.status(500).json([]);
+    return res.status(500).json({
+      success: false,
+      data: [],
+    });
+  }
+});
+
+/* ============================
+   USER → GET OWN WITHDRAWS
+   GET /api/withdraw/my
+============================ */
+router.get("/my", userAuth, async (req, res) => {
+  try {
+    const withdraws = await Withdraw.find({
+      userId: req.user.id,
+    }).sort({ createdAt: -1 });
+
+    return res.json({
+      success: true,
+      data: withdraws,
+    });
+  } catch (err) {
+    console.error("WITHDRAW MY ERROR:", err);
+    return res.status(500).json({
+      success: false,
+      data: [],
+    });
   }
 });
 
 /* ============================
    USER → REQUEST WITHDRAW
+   POST /api/withdraw
 ============================ */
 router.post("/", userAuth, async (req, res) => {
   try {
-    const { amount, note, email } = req.body; // email-um backend varum
+    const { amount, note } = req.body;
 
     if (!amount || Number(amount) <= 0) {
-      return res.status(400).json({ success: false, message: "Invalid amount" });
+      return res.status(400).json({
+        success: false,
+        message: "Invalid amount",
+      });
     }
 
     const withdraw = await Withdraw.create({
       userId: req.user.id,
-      userEmail: email || req.user.email, // Dashboard-la irunthu vara email
+      userEmail: req.user.email,
       amount: Number(amount),
       note: note || "",
       status: "pending",
     });
 
-    return res.json({ success: true, message: "Withdraw request submitted", data: withdraw });
+    return res.json({
+      success: true,
+      message: "Withdraw request submitted",
+      data: withdraw,
+    });
   } catch (err) {
     console.error("WITHDRAW CREATE ERROR:", err);
-    return res.status(500).json({ success: false, message: "Withdraw failed" });
+    return res.status(500).json({
+      success: false,
+      message: "Withdraw failed",
+    });
   }
 });
 
-// ... (approve route as it is)
+/* ============================
+   ADMIN → APPROVE WITHDRAW
+   POST /api/withdraw/approve/:id
+============================ */
+router.post("/approve/:id", adminAuth, async (req, res) => {
+  try {
+    const updated = await Withdraw.findByIdAndUpdate(
+      req.params.id,
+      { status: "paid" },
+      { new: true }
+    );
+
+    return res.json({
+      success: true,
+      data: updated,
+    });
+  } catch (err) {
+    console.error("WITHDRAW APPROVE ERROR:", err);
+    return res.status(500).json({
+      success: false,
+      message: "Approve failed",
+    });
+  }
+});
+
 export default router;
