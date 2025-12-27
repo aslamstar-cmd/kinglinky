@@ -82,7 +82,7 @@ export default function Dashboard({ user }) {
     try {
       await axios.delete(`${API_BASE}/api/links/${id}`, auth);
       setLinks(prev => prev.filter(l => l._id !== id));
-      alert("Deleted! 🗑️");
+      // alert("Deleted! 🗑️");
     } catch { alert("Delete failed! Check your internet or server."); }
   }
 
