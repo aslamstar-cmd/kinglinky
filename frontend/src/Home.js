@@ -66,7 +66,6 @@ export default function Home({ isLoggedIn, userEmail }) {
           </div>
 
           <nav style={styles.navLinks}>
-            <a style={styles.navLink} href="#how">How it works</a>
             <button
               onClick={() => (isLoggedIn ? navigate("/dashboard") : navigate("/login"))}
               style={styles.ghostBtn}
