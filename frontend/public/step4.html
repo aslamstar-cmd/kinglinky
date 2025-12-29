@@ -9,7 +9,7 @@
         :root {
             --bg: #030712;
             --card: #111827;
-            --accent: #10b981; /* Emerald Green */
+            --accent: #10b981;
             --text-main: #f9fafb;
             --text-dim: #9ca3af;
             --border: #374151;
@@ -55,7 +55,6 @@
             padding: 0 20px;
         }
 
-        /* Ad Styling - Total 10 Slots distribution */
         .ad-slot {
             background: #000;
             border: 1px solid var(--border);
@@ -100,8 +99,6 @@
         }
 
         .btn-final:hover { transform: scale(1.05); filter: brightness(1.2); }
-
-        @media (max-width: 768px) { h1 { font-size: 2.2rem; } }
     </style>
 </head>
 <body>
@@ -114,77 +111,35 @@
 </header>
 
 <div class="container">
-
-    <div class="ad-slot"><div class="ad-label">ADVERTISEMENT</div>
-        <script src="https://3nbf4.com/act/files/tag.min.js?z=10381339" data-cfasync="false" async></script>
-    </div>
+    <div class="ad-slot"><div class="ad-label">ADVERTISEMENT</div></div>
 
     <article>
         <h1>The Singularity: Life Beyond 2030</h1>
-        <div class="meta">Expert Analysis • Dec 29, 2025 • 20 Min Read • Future Trends</div>
+        <div class="meta">Expert Analysis • Dec 29, 2025 • 20 Min Read</div>
 
         <section>
-            <p>We are standing at the threshold of the most significant change in human history. The "Singularity"—the point where AI exceeds human intelligence—is no longer science fiction. By 2030, the fusion of biology and technology will be complete.</p>
-            
-            <h2>1. Humanoid Revolution: The End of Labor?</h2>
-            <p>Tesla's Optimus and Figure AI's latest models are now capable of end-to-end learning. They don't just follow code; they watch and learn. Within five years, every household might have a general-purpose robot capable of cooking, cleaning, and providing companionship.</p>
+            <p>We are standing at the threshold of the most significant change in human history...</p>
+            <h2>1. Humanoid Revolution</h2>
             <img src="https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&q=80&w=1000" class="blog-img" alt="Humanoid Robots">
         </section>
 
-        <div class="ad-slot"><div class="ad-label">SPONSORED</div>
-            <script>atOptions={'key':'0012116427b5a4ccef598927fc9dfa89','format':'iframe','height':50,'width':320,'params':{}};</script>
-        </div>
-        <div class="ad-slot"><div class="ad-label">ADVERTISEMENT</div>
-            <script src="https://pl28328281.effectivegatecpm.com/27/3c/53/273c5378ff0557eae1a862b03131344a.js"></script>
-        </div>
-
-        <section>
-            <h2>2. Neuralink: The Internet in Your Mind</h2>
-            <p>Neuralink’s Telepathy chip is just the beginning. The 2030 vision includes "Memory Backup." Imagine being able to upload your skills or relive memories in high definition through a brain-computer interface. It challenges the very definition of being human.</p>
-            
-
-[Image of brain computer interface diagram]
-
-            <img src="https://images.unsplash.com/photo-1507413245164-6160d8298b31?auto=format&fit=crop&q=80&w=1000" class="blog-img" alt="Neuroscience">
-        </section>
-
-        <div class="ad-slot">
-            <script async="async" data-cfasync="false" src="https://pl28334516.effectivegatecpm.com/cbbb337fba63c479050336665248235f/invoke.js"></script>
-            <div id="container-cbbb337fba63c479050336665248235f"></div>
-        </div>
-        <div class="ad-slot">
-            <script src="https://3nbf4.com/act/files/tag.min.js?z=10381339" data-cfasync="false" async></script>
-        </div>
-
-        <section>
-            <h2>3. Quantum Energy & Climate</h2>
-            <p>Quantum computers are now designing new materials that can capture carbon from the air with 99% efficiency. This technology is our best shot at reversing climate change while maintaining our modern lifestyle.</p>
-            <img src="https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&q=80&w=1000" class="blog-img" alt="Quantum Science">
-        </section>
-
-        <div class="ad-slot"><script src="https://3nbf4.com/act/files/tag.min.js?z=10381386" data-cfasync="false" async></script></div>
-        <div class="ad-slot"><script>(function(s){s.dataset.zone='10381300',s.src='https://gizokraijaw.net/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script></div>
-        <div class="ad-slot"><div class="ad-label">PROMOTED</div><script src="https://3nbf4.com/act/files/tag.min.js?z=10381339" data-cfasync="false" async></script></div>
-
-        <section>
-            <h2>4. Space Cities: Mars 2029</h2>
-            <p>With Starship becoming a weekly shuttle, the first modular city on Mars is under construction. By 2030, we expect the first "Mars-born" human, marking our status as a multi-planetary species.</p>
-        </section>
-
-        <div class="ad-slot"><script src="https://pl28328281.effectivegatecpm.com/27/3c/53/273c5378ff0557eae1a862b03131344a.js"></script></div>
-        <div class="ad-slot"><script src="https://3nbf4.com/act/files/tag.min.js?z=10381339" data-cfasync="false" async></script></div>
+        <div class="ad-slot"><div class="ad-label">ADVERTISEMENT</div></div>
 
         <div class="final-box">
-            <p id="status-msg" style="color:var(--text-dim); margin-bottom:25px;">Final security protocol in progress...</p>
-            <button class="btn-final" id="final-btn" onclick="finish()">Get Final Destination Link</button>
+            <p id="status-msg" style="color:var(--text-dim); margin-bottom:25px;">Please wait for security sync...</p>
+            <button class="btn-final" id="final-btn" onclick="handleFinalRedirect()">Get Final Destination Link</button>
         </div>
-
     </article>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fingerprintjs2/2.1.0/fingerprint2.min.js"></script>
+
 <script>
+    const API_BASE = "https://api.kinglinky.com";
     let timeLeft = 20;
     let didUserScroll = false;
+    let startTime = Date.now();
+
     const secDisp = document.getElementById("sec");
     const pBar = document.getElementById("pBar");
     const finalBtn = document.getElementById("final-btn");
@@ -203,27 +158,62 @@
         if (timeLeft <= 0) {
             clearInterval(timer);
             if (!didUserScroll) {
-                alert("Please scroll through the content to verify your session.");
-                timeLeft = 10; // Extra time if they didn't scroll
+                alert("Please scroll down to verify you are human.");
+                timeLeft = 5; 
             } else {
                 document.getElementById("timer-ui").innerHTML = "✅ VERIFIED";
-                statusMsg.innerHTML = "You have completed all steps. Your link is ready.";
+                statusMsg.innerHTML = "Security check complete. Link generated!";
                 finalBtn.style.display = "inline-block";
             }
         }
     }, 1000);
 
-    function finish() {
+    // MUKKIAMANA REDIRECT LOGIC
+    async function handleFinalRedirect() {
         finalBtn.innerText = "REDIRECTING...";
         finalBtn.disabled = true;
-        
-        setTimeout(() => {
-            const urlParams = new URLSearchParams(window.location.search);
-            // Inga dhaan unga target link irukanum (e.g., Mediafire, Drive, or another main site)
-            window.location.href = "https://your-final-destination.com/?code=" + (urlParams.get("code") || "EliteUser");
-        }, 3000);
+
+        const params = new URLSearchParams(window.location.search);
+        const code = params.get("code");
+
+        if(!code) {
+            alert("Security Error: Code missing!");
+            return;
+        }
+
+        try {
+            // Fingerprint generate panrom
+            const components = await new Promise(resolve => Fingerprint2.get(resolve));
+            const fingerprint = Fingerprint2.x64hash128(components.map(c => c.value).join(''), 31);
+            const duration = Math.floor((Date.now() - startTime) / 1000);
+
+            // Backend-ku request anupurom
+            const response = await fetch(`${API_BASE}/api/track/final`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ 
+                    code: code,
+                    fingerprint: fingerprint,
+                    duration: duration 
+                })
+            });
+
+            const data = await response.json();
+
+            if (data.success && data.redirect) {
+                // Backend-la irundhu vara real URL-ku redirect aagum
+                window.location.href = data.redirect;
+            } else {
+                alert(data.message || "Verification Failed. Try again.");
+                finalBtn.innerText = "Get Final Destination Link";
+                finalBtn.disabled = false;
+            }
+        } catch (err) {
+            console.error(err);
+            alert("Network Error. Check if your backend is running.");
+            finalBtn.disabled = false;
+        }
     }
 </script>
-
 </body>
 </html>
