@@ -221,7 +221,7 @@ export default function Dashboard({ user }) {
           <div style={{fontSize: 50, marginBottom: 10}}>💬</div>
           <h3>Help Center</h3>
           <p style={{color: '#aaa', fontSize: 14}}>Contact our support team on Telegram if you face any issues with links or withdrawals.</p>
-          <button style={styles.btnTg} onClick={() => window.open("@KingLinkySupport_Bot")}>
+          <button style={styles.btnTg} onClick={() => window.open("https://t.me/KingLinkySupport_Bot")}>
             Chat on Telegram
           </button>
         </div>
