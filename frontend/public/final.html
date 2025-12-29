@@ -1,212 +1,113 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Safe Link | Final Destination</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg: #f3f4f6;
-            --card: #ffffff;
-            --accent: #2563eb;
-            --text: #1f2937;
-            --border: #e5e7eb;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Secure Link | Final</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 
-        body {
-            background-color: var(--bg);
-            color: var(--text);
-            font-family: 'Inter', sans-serif;
-            margin: 0;
-            line-height: 1.6;
-        }
-
-        header {
-            background: #fff;
-            padding: 15px 5%;
-            border-bottom: 1px solid var(--border);
-            text-align: center;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .container {
-            max-width: 700px;
-            margin: 20px auto;
-            padding: 0 15px;
-        }
-
-        .ad-space {
-            background: #fff;
-            border: 1px solid var(--border);
-            margin: 15px 0;
-            padding: 10px;
-            text-align: center;
-            border-radius: 8px;
-            min-height: 100px;
-        }
-
-        .verify-box {
-            background: #fff;
-            padding: 30px 20px;
-            border-radius: 12px;
-            text-align: center;
-            border: 2px solid var(--accent);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-            margin-bottom: 30px;
-        }
-
-        .timer-val {
-            font-size: 2.5rem;
-            font-weight: 800;
-            color: var(--accent);
-            margin: 15px 0;
-        }
-
-        .btn-main {
-            background: var(--accent);
-            color: #fff;
-            padding: 18px 40px;
-            font-size: 1.1rem;
-            font-weight: 700;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            width: 100%;
-            display: none;
-            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
-            transition: 0.3s;
-        }
-
-        .btn-main:hover {
-            background: #1d4ed8;
-            transform: translateY(-2px);
-        }
-
-        .loading-text {
-            color: var(--accent);
-            font-weight: 600;
-            display: none;
-            margin-top: 15px;
-        }
-
-        .article {
-            background: #fff;
-            padding: 25px;
-            border-radius: 12px;
-            border: 1px solid var(--border);
-            margin-top: 20px;
-        }
-    </style>
+  <style>
+    body {
+      font-family: Inter, sans-serif;
+      background: #f3f4f6;
+      margin: 0;
+    }
+    header {
+      padding: 15px;
+      background: #fff;
+      text-align: center;
+      font-weight: 800;
+      color: #2563eb;
+    }
+    .box {
+      max-width: 600px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      border: 2px solid #2563eb;
+      text-align: center;
+    }
+    .timer {
+      font-size: 40px;
+      color: #2563eb;
+      font-weight: 800;
+    }
+    button {
+      margin-top: 20px;
+      width: 100%;
+      padding: 15px;
+      background: #2563eb;
+      color: #fff;
+      font-weight: 700;
+      border: none;
+      border-radius: 8px;
+      display: none;
+      cursor: pointer;
+    }
+  </style>
 </head>
 
 <body>
 
-    <header>
-        <div style="font-weight: 800; font-size: 1.3rem; color: var(--accent);">SECURE<span
-                style="color:#1f2937">LINK</span></div>
-    </header>
+<header>SECURE LINK</header>
 
-    <div class="container">
-        <div class="verify-box">
-            <h2 style="margin:0; font-size: 1.2rem;">Final Verification</h2>
-            <div id="countdown-ui">
-                <div class="timer-val" id="timer">8</div>
-                <p>Secure Link Generation in Progress...</p>
-            </div>
+<div class="box">
+  <h2>Final Verification</h2>
+  <div class="timer" id="timer">8</div>
+  <p>Please wait...</p>
 
-            <button class="btn-main" id="get-link-btn" onclick="handleFinalRedirect()">GET LINK</button>
-            <div id="loading" class="loading-text">Verifying Session & Redirecting...</div>
-        </div>
+  <button id="btn" onclick="go()">GET LINK</button>
+</div>
 
-        <div class="article">
-            <h2>Why Secure Links Matter?</h2>
-            <p>This process ensures that the traffic is human-verified and free from bots.</p>
-        </div>
-    </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fingerprintjs2/2.1.0/fingerprint2.min.js"></script>
+<script>
+  const API = "https://api.kinglinky.com";
+  const params = new URLSearchParams(location.search);
+  const code = params.get("code");
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/fingerprintjs2/2.1.0/fingerprint2.min.js"></script>
-    <script>
-        const API_BASE = "https://api.kinglinky.com";
-        let startTime = Date.now(); // Page load aagura time-ah track panrom
+  let time = 8;
+  const timerEl = document.getElementById("timer");
+  const btn = document.getElementById("btn");
 
-        async function getFingerprint() {
-            return new Promise(resolve => {
-                if (window.requestIdleCallback) {
-                    requestIdleCallback(function () {
-                        Fingerprint2.get(function (components) {
-                            var values = components.map(function (component) { return component.value });
-                            var murmur = Fingerprint2.x64hash128(values.join(''), 31);
-                            resolve(murmur);
-                        });
-                    });
-                } else {
-                    setTimeout(function () {
-                        Fingerprint2.get(function (components) {
-                            var values = components.map(function (component) { return component.value });
-                            var murmur = Fingerprint2.x64hash128(values.join(''), 31);
-                            resolve(murmur);
-                        });
-                    }, 500);
-                }
-            });
-        }
+  const interval = setInterval(() => {
+    time--;
+    timerEl.textContent = time;
+    if (time <= 0) {
+      clearInterval(interval);
+      btn.style.display = "block";
+    }
+  }, 1000);
 
-        async function handleFinalRedirect() {
-            const btn = document.getElementById("get-link-btn");
-            const loading = document.getElementById("loading");
-            const params = new URLSearchParams(window.location.search);
-            const code = params.get("code");
+  function getFP() {
+    return new Promise(resolve => {
+      Fingerprint2.get(c => {
+        const v = c.map(i => i.value).join("");
+        resolve(Fingerprint2.x64hash128(v, 31));
+      });
+    });
+  }
 
-            if (!code) {
-                alert("Security Code Missing!");
-                return;
-            }
+  async function go() {
+    if (!code) return alert("Code missing");
 
-            // Button-ai hide panni loading kaatuvom
-            btn.style.display = "none";
-            if (loading) loading.style.display = "block";
+    const fp = await getFP();
 
-            try {
-                // 1. Fingerprint edukkurom
-                const fp = await getFingerprint();
+    const res = await fetch(`${API}/api/track/final`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ code, fingerprint: fp })
+    });
 
-                // 2. Duration calculate panrom (seconds-la)
-                const duration = Math.floor((Date.now() - startTime) / 1000);
+    const data = await res.json();
 
-                // 3. Backend-ku request anupurom
-                const response = await fetch(`${API_BASE}/api/track/final`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        code: code,
-                        fingerprint: fp,
-                        duration: duration
-                    })
-                });
+    if (data.success && data.redirect) {
+      window.location.href = data.redirect;
+    } else {
+      alert(data.message || "Verification failed");
+    }
+  }
+</script>
 
-                const data = await response.json();
-
-                if (data.success && data.redirect) {
-                    // Success vandha direct redirect!
-                    window.location.href = data.redirect;
-                } else {
-                    // Duplicate click-o illana short duration-o irundha alert varum
-                    alert(data.message || "Verification Failed. Please wait a few seconds and try again.");
-                    btn.style.display = "block";
-                    if (loading) loading.style.display = "none";
-                }
-            } catch (error) {
-                console.error("Fetch error:", error);
-                alert("Network Error. Please check your connection.");
-                btn.style.display = "block";
-                if (loading) loading.style.display = "none";
-            }
-        }
-    </script>
 </body>
-
 </html>
