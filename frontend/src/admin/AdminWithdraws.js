@@ -5,23 +5,29 @@ export default function AdminWithdraws() {
   const [withdraws, setWithdraws] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const fetchWithdraws = async () => {
-    try {
-      const res = await api.get("/api/withdraw/admin");
-      // Backend returns { success: true, data: [...] }
-      // Direct-ah res.data.data check panrom
-      if (res.data && Array.isArray(res.data.data)) {
-        setWithdraws(res.data.data);
-      } else {
-        setWithdraws([]);
-      }
-    } catch (err) {
-      console.error("Error fetching withdraws:", err);
+// FETCH WITHDRAWS LOGIC
+const fetchWithdraws = async () => {
+  setLoading(true); // Fetch start pannum munnadi loading true
+  try {
+    const res = await api.get("/api/withdraw/admin");
+    
+    // Console-la response check pannunga:
+    console.log("API Response:", res.data);
+
+    // Backend { success: true, data: [...] } nu anupuna:
+    if (res.data && res.data.success) {
+      setWithdraws(res.data.data || []);
+    } else {
+      console.warn("Backend success: false vandhuchu");
       setWithdraws([]);
-    } finally {
-      setLoading(false);
     }
-  };
+  } catch (err) {
+    console.error("Error fetching withdraws:", err.response ? err.response.data : err.message);
+    setWithdraws([]);
+  } finally {
+    setLoading(false); // Ellam mudinja appram loading false
+  }
+};
 
   useEffect(() => {
     fetchWithdraws();
