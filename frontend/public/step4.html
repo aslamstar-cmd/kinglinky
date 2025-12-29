@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Future Tech 2030 | Final Verification</title>
+    <title>Future Tech 2030 | Deep Dive Analysis</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -21,13 +21,16 @@
             font-family: 'Plus Jakarta Sans', sans-serif;
             margin: 0;
             line-height: 1.8;
+            overflow-x: hidden;
         }
 
+        /* Progress Bar */
         #pBar {
             position: fixed;
             top: 0; left: 0; height: 5px;
             background: linear-gradient(to right, var(--accent), #3b82f6);
             width: 0%; z-index: 10000;
+            transition: width 0.3s;
         }
 
         header {
@@ -47,18 +50,20 @@
             border: 1px solid var(--accent);
             font-weight: 700;
             font-size: 0.85rem;
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.2);
         }
 
         .container {
-            max-width: 850px;
+            max-width: 800px;
             margin: 40px auto;
             padding: 0 20px;
         }
 
+        /* ADS Styling */
         .ad-slot {
-            background: #000;
-            border: 1px solid var(--border);
-            margin: 35px 0;
+            background: #0a0f1a;
+            border: 1px dashed var(--border);
+            margin: 40px 0;
             padding: 20px;
             text-align: center;
             border-radius: 12px;
@@ -66,39 +71,63 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
+            position: relative;
         }
-        .ad-label { font-size: 10px; color: #4b5563; margin-bottom: 10px; letter-spacing: 2px; }
+        .ad-label { 
+            position: absolute; top: -10px; left: 20px;
+            background: var(--bg); padding: 0 10px;
+            font-size: 10px; color: var(--text-dim); letter-spacing: 2px; 
+        }
 
-        h1 { font-size: 3.2rem; font-weight: 800; line-height: 1.1; margin-bottom: 20px; }
-        .meta { color: var(--text-dim); margin-bottom: 50px; font-size: 0.9rem; border-bottom: 1px solid var(--border); padding-bottom: 20px;}
+        h1 { font-size: 3.5rem; font-weight: 800; line-height: 1.1; margin-bottom: 15px; letter-spacing: -2px; }
+        .meta { color: var(--text-dim); margin-bottom: 40px; font-size: 0.9rem; display: flex; gap: 15px; border-bottom: 1px solid var(--border); padding-bottom: 20px;}
 
-        h2 { font-size: 1.8rem; color: var(--accent); margin-top: 50px; }
-        .blog-img { width: 100%; border-radius: 16px; margin: 25px 0; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+        h2 { font-size: 2rem; color: var(--accent); margin-top: 60px; font-weight: 700; }
+        p { font-size: 1.15rem; margin-bottom: 25px; color: #d1d5db; }
+        
+        .blog-img { width: 100%; border-radius: 20px; margin: 30px 0; border: 1px solid var(--border); transition: 0.3s; }
+        .blog-img:hover { transform: translateY(-5px); border-color: var(--accent); }
 
         .final-box {
-            background: var(--card);
-            padding: 50px;
-            border-radius: 24px;
+            background: linear-gradient(145deg, #111827, #1f2937);
+            padding: 60px 40px;
+            border-radius: 30px;
             text-align: center;
-            margin: 60px 0;
+            margin: 80px 0;
             border: 1px solid var(--border);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
         }
 
         .btn-final {
             background: var(--accent);
-            color: #000;
-            padding: 22px 60px;
-            font-size: 1.3rem;
+            color: #030712;
+            padding: 24px 60px;
+            font-size: 1.4rem;
             font-weight: 800;
             border: none;
-            border-radius: 12px;
+            border-radius: 16px;
             cursor: pointer;
             display: none;
-            transition: 0.3s;
-            box-shadow: 0 0 30px rgba(16, 185, 129, 0.4);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 10px 40px rgba(16, 185, 129, 0.4);
         }
 
-        .btn-final:hover { transform: scale(1.05); filter: brightness(1.2); }
+        .btn-final:hover { transform: scale(1.05) translateY(-5px); box-shadow: 0 20px 50px rgba(16, 185, 129, 0.6); }
+        .btn-final:disabled { background: #4b5563; cursor: not-allowed; transform: none; }
+
+        .highlight-box {
+            border-left: 4px solid var(--accent);
+            background: rgba(16, 185, 129, 0.05);
+            padding: 25px;
+            margin: 30px 0;
+            font-style: italic;
+            border-radius: 0 15px 15px 0;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem; }
+            .final-box { padding: 40px 20px; }
+        }
     </style>
 </head>
 <body>
@@ -106,29 +135,99 @@
 <div id="pBar"></div>
 
 <header>
-    <div style="font-weight: 800; font-size: 1.5rem;">TECH<span style="color:var(--accent)">2030</span></div>
-    <div class="timer-badge" id="timer-ui">FINAL SYNC: <span id="sec">20</span>s</div>
+    <div style="font-weight: 800; font-size: 1.5rem; letter-spacing: -1px;">TECH<span style="color:var(--accent)">2030</span></div>
+    <div class="timer-badge" id="timer-ui">SECURITY SYNC: <span id="sec">20</span>s</div>
 </header>
 
 <div class="container">
-    <div class="ad-slot"><div class="ad-label">ADVERTISEMENT</div></div>
+    <div class="ad-slot"><div class="ad-label">ADVERTISEMENT</div>
+        <script type="text/javascript">
+            atOptions = { 'key' : 'YOUR_AD_KEY_HERE', 'format' : 'iframe', 'height' : 250, 'width' : 300, 'params' : {} };
+        </script>
+        <p style="font-size: 12px; color: #4b5563;">Ad Content Loading...</p>
+    </div>
 
     <article>
-        <h1>The Singularity: Life Beyond 2030</h1>
-        <div class="meta">Expert Analysis • Dec 29, 2025 • 20 Min Read</div>
+        <h1>The Great Convergence: How AI and Bio-Tech Will Redefine Humanity by 2030</h1>
+        <div class="meta">
+            <span>By Dr. Arvin Tech</span>
+            <span>•</span>
+            <span>25 Min Read</span>
+            <span>•</span>
+            <span>Update: Dec 2025</span>
+        </div>
 
         <section>
-            <p>We are standing at the threshold of the most significant change in human history...</p>
-            <h2>1. Humanoid Revolution</h2>
-            <img src="https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&q=80&w=1000" class="blog-img" alt="Humanoid Robots">
+            <p>The dawn of 2030 isn't just another decade on the calendar; it's the finish line for the world as we know it. We are currently witnessing the "Great Convergence"—a period where the boundaries between digital intelligence, biological life, and physical reality are dissolving at an exponential rate.</p>
+            
+            <div class="highlight-box">
+                "The next ten years will contain more technological progress than the entire 20th century combined." - Ray Kurzweil
+            </div>
+
+            <h2>1. The Rise of Sentient Infrastructure</h2>
+            <p>By 2030, our cities will no longer be "dumb" collections of steel and concrete. Through the integration of 6G networks and trillion-sensor arrays, urban environments will become sentient. Traffic flows will self-optimize in real-time, and buildings will "breathe" by adjusting their skin to thermal conditions, reducing energy waste to near zero.</p>
+            
+            
+
+            <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=1000" class="blog-img" alt="Digital Infrastructure">
+        </section>
+
+        <div class="ad-slot"><div class="ad-label">SPONSORED CONTENT</div></div>
+
+        <section>
+            <h2>2. Bio-Digital Integration: Beyond Neuralink</h2>
+            <p>While early interfaces focused on medical recovery, 2030 will see the rise of elective cognitive enhancement. Nano-bots in our bloodstream will monitor cellular health in real-time, capable of repairing DNA damage before it leads to disease. The concept of "ageing" will shift from an inevitability to a manageable biological condition.</p>
+            
+            <p>Imagine learning a new language not through years of study, but through direct synaptic data transfer. This isn't just theory; early trials of "Neural-Lace" have already shown successful knowledge mapping in mammalian subjects.</p>
+            
+            
+            
+            <img src="https://images.unsplash.com/photo-1507413245164-6160d8298b31?auto=format&fit=crop&q=80&w=1000" class="blog-img" alt="Biotechnology">
         </section>
 
         <div class="ad-slot"><div class="ad-label">ADVERTISEMENT</div></div>
 
+        <section>
+            <h2>3. The Quantum Economy</h2>
+            <p>Traditional encryption will be obsolete by 2030. Quantum computers will have reached "Utility Phase," solving problems in seconds that would take current supercomputers millennia. This will revolutionize drug discovery, allowing us to simulate human reactions to medicine without a single clinical trial, potentially curing most cancers within the decade.</p>
+        </section>
+
+        <div class="ad-slot"><div class="ad-label">ADVERTISEMENT</div></div>
+
+        <section>
+            <h2>4. Energy Abundance: The Fusion Era</h2>
+            <p>After decades of being "30 years away," commercial nuclear fusion will finally enter the grid. This means limitless, clean energy. The cost of desalination will plummet, turning deserts into lush agricultural hubs and ending the global water crisis forever.</p>
+            <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=1000" class="blog-img" alt="Energy Technology">
+        </section>
+
+        <div class="ad-slot"><div class="ad-label">ADVERTISEMENT</div></div>
+
+        <section>
+            <h2>5. Multi-Planetary Governance</h2>
+            <p>With a permanent base on the Lunar South Pole and the first humans landing on Mars, the 2030s will require new laws. We are no longer just citizens of Earth, but pioneers of the solar system. Space-based manufacturing will become a multi-trillion dollar industry, mining asteroids for rare earth metals that are scarce on our home planet.</p>
+        </section>
+
+        <div class="ad-slot"><div class="ad-label">ADVERTISEMENT</div></div>
+        <div class="ad-slot"><div class="ad-label">ADVERTISEMENT</div></div>
+
+        <section>
+            <h2>Summary: Preparing for the Unknown</h2>
+            <p>As we approach the Singularity, the most important skill won't be coding or mathematics—it will be adaptability. The world is changing faster than our biological brains were designed to handle. We must embrace the tools of the future to ensure that technology serves humanity, rather than replaces it.</p>
+        </section>
+
+        <div class="ad-slot"><div class="ad-label">ADVERTISEMENT</div></div>
+        <div class="ad-slot"><div class="ad-label">ADVERTISEMENT</div></div>
+        <div class="ad-slot"><div class="ad-label">FINAL SPONSOR</div></div>
+
         <div class="final-box">
-            <p id="status-msg" style="color:var(--text-dim); margin-bottom:25px;">Please wait for security sync...</p>
-            <button class="btn-final" id="final-btn" onclick="handleFinalRedirect()">Get Final Destination Link</button>
+            <h3 style="font-size: 1.8rem; margin-bottom: 10px;">Verification Complete?</h3>
+            <p id="status-msg" style="color:var(--text-dim); margin-bottom:30px;">Analyzing user interaction patterns... please scroll to bottom.</p>
+            
+            <button class="btn-final" id="final-btn" onclick="handleFinalRedirect()">
+                GET FINAL LINK
+            </button>
         </div>
+
     </article>
 </div>
 
@@ -145,49 +244,74 @@
     const finalBtn = document.getElementById("final-btn");
     const statusMsg = document.getElementById("status-msg");
 
-    window.addEventListener("scroll", () => didUserScroll = true);
-    window.addEventListener("touchstart", () => didUserScroll = true);
+    // Scroll Detection
+    window.addEventListener("scroll", () => {
+        if (window.scrollY > 1500) { // User nalla scroll panna thaan verify aagum
+            didUserScroll = true;
+        }
+    });
 
+    // Timer Logic
     const timer = setInterval(() => {
         timeLeft--;
         if(timeLeft >= 0) secDisp.innerText = timeLeft;
         
+        // Progress Bar
         let progress = ((20 - timeLeft) / 20) * 100;
         pBar.style.width = progress + "%";
 
         if (timeLeft <= 0) {
             clearInterval(timer);
-            if (!didUserScroll) {
-                alert("Please scroll down to verify you are human.");
-                timeLeft = 5; 
-            } else {
-                document.getElementById("timer-ui").innerHTML = "✅ VERIFIED";
-                statusMsg.innerHTML = "Security check complete. Link generated!";
-                finalBtn.style.display = "inline-block";
-            }
+            checkVerification();
         }
     }, 1000);
 
-    // MUKKIAMANA REDIRECT LOGIC
+    function checkVerification() {
+        if (!didUserScroll) {
+            statusMsg.innerHTML = "⚠️ Please scroll through the article to verify you're human.";
+            statusMsg.style.color = "#ef4444";
+            // Extra 5 seconds wait panna solluvom
+            setTimeout(() => {
+                if (window.scrollY > 1000) {
+                    didUserScroll = true;
+                    showButton();
+                } else {
+                    checkVerification();
+                }
+            }, 3000);
+        } else {
+            showButton();
+        }
+    }
+
+    function showButton() {
+        document.getElementById("timer-ui").innerHTML = "✅ SYNCED";
+        statusMsg.innerHTML = "Security check passed. Your destination is ready.";
+        statusMsg.style.color = "#10b981";
+        finalBtn.style.display = "inline-block";
+    }
+
     async function handleFinalRedirect() {
-        finalBtn.innerText = "REDIRECTING...";
+        finalBtn.innerText = "VERIFYING...";
         finalBtn.disabled = true;
 
         const params = new URLSearchParams(window.location.search);
         const code = params.get("code");
 
         if(!code) {
-            alert("Security Error: Code missing!");
+            alert("Error: Security Token Expired. Refresh page.");
             return;
         }
 
         try {
-            // Fingerprint generate panrom
+            // Generate Fingerprint
             const components = await new Promise(resolve => Fingerprint2.get(resolve));
             const fingerprint = Fingerprint2.x64hash128(components.map(c => c.value).join(''), 31);
+            
+            // Time on page calculate
             const duration = Math.floor((Date.now() - startTime) / 1000);
 
-            // Backend-ku request anupurom
+            // Backend API Call
             const response = await fetch(`${API_BASE}/api/track/final`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -201,19 +325,22 @@
             const data = await response.json();
 
             if (data.success && data.redirect) {
-                // Backend-la irundhu vara real URL-ku redirect aagum
-                window.location.href = data.redirect;
+                finalBtn.innerText = "SUCCESS! REDIRECTING...";
+                setTimeout(() => {
+                    window.location.href = data.redirect;
+                }, 1000);
             } else {
-                alert(data.message || "Verification Failed. Try again.");
-                finalBtn.innerText = "Get Final Destination Link";
+                alert(data.message || "Anti-Bot Triggered. Please stay on page longer.");
                 finalBtn.disabled = false;
+                finalBtn.innerText = "GET FINAL LINK";
             }
         } catch (err) {
             console.error(err);
-            alert("Network Error. Check if your backend is running.");
+            alert("Server Sync Error. Please try again later.");
             finalBtn.disabled = false;
         }
     }
 </script>
+
 </body>
 </html>
