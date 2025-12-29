@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Future Tech 2030 | Deep Dive Analysis</title>
+    <title>Future Tech 2030 | Deep Dive Analysis & Verification</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -24,18 +24,17 @@
             overflow-x: hidden;
         }
 
-        /* Progress Bar */
         #pBar {
             position: fixed;
-            top: 0; left: 0; height: 5px;
+            top: 0; left: 0; height: 6px;
             background: linear-gradient(to right, var(--accent), #3b82f6);
             width: 0%; z-index: 10000;
-            transition: width 0.3s;
+            transition: width 0.3s ease;
         }
 
         header {
-            background: rgba(3, 7, 18, 0.95);
-            backdrop-filter: blur(10px);
+            background: rgba(3, 7, 18, 0.9);
+            backdrop-filter: blur(12px);
             padding: 15px 5%;
             border-bottom: 1px solid var(--border);
             position: sticky; top: 0; z-index: 999;
@@ -45,88 +44,96 @@
         .timer-badge {
             background: rgba(16, 185, 129, 0.1);
             color: var(--accent);
-            padding: 8px 16px;
+            padding: 10px 20px;
             border-radius: 50px;
             border: 1px solid var(--accent);
-            font-weight: 700;
-            font-size: 0.85rem;
-            box-shadow: 0 0 15px rgba(16, 185, 129, 0.2);
+            font-weight: 800;
+            font-size: 0.9rem;
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.2);
         }
 
         .container {
-            max-width: 800px;
+            max-width: 850px;
             margin: 40px auto;
             padding: 0 20px;
         }
 
-        /* ADS Styling */
+        /* ADS Section */
         .ad-slot {
             background: #0a0f1a;
             border: 1px dashed var(--border);
-            margin: 40px 0;
-            padding: 20px;
+            margin: 45px 0;
+            padding: 30px;
             text-align: center;
-            border-radius: 12px;
-            min-height: 250px;
+            border-radius: 16px;
+            min-height: 280px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             position: relative;
         }
         .ad-label { 
-            position: absolute; top: -10px; left: 20px;
-            background: var(--bg); padding: 0 10px;
-            font-size: 10px; color: var(--text-dim); letter-spacing: 2px; 
+            position: absolute; top: -12px; left: 20px;
+            background: var(--bg); padding: 0 12px;
+            font-size: 11px; color: var(--text-dim); letter-spacing: 2px; 
         }
 
-        h1 { font-size: 3.5rem; font-weight: 800; line-height: 1.1; margin-bottom: 15px; letter-spacing: -2px; }
-        .meta { color: var(--text-dim); margin-bottom: 40px; font-size: 0.9rem; display: flex; gap: 15px; border-bottom: 1px solid var(--border); padding-bottom: 20px;}
-
-        h2 { font-size: 2rem; color: var(--accent); margin-top: 60px; font-weight: 700; }
-        p { font-size: 1.15rem; margin-bottom: 25px; color: #d1d5db; }
+        h1 { font-size: 3.8rem; font-weight: 800; line-height: 1.1; margin-bottom: 20px; letter-spacing: -2px; }
+        h2 { font-size: 2.2rem; color: var(--accent); margin-top: 60px; font-weight: 700; border-left: 5px solid var(--accent); padding-left: 20px; }
         
-        .blog-img { width: 100%; border-radius: 20px; margin: 30px 0; border: 1px solid var(--border); transition: 0.3s; }
-        .blog-img:hover { transform: translateY(-5px); border-color: var(--accent); }
+        .meta-info { color: var(--text-dim); margin-bottom: 40px; font-size: 0.95rem; border-bottom: 1px solid var(--border); padding-bottom: 25px; display: flex; gap: 20px; }
+
+        p { font-size: 1.2rem; margin-bottom: 30px; color: #d1d5db; text-align: justify; }
+
+        .blog-img { 
+            width: 100%; border-radius: 24px; margin: 40px 0; 
+            border: 1px solid var(--border);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+        }
+
+        .highlight-quote {
+            background: rgba(59, 130, 246, 0.1);
+            border-left: 4px solid #3b82f6;
+            padding: 30px;
+            margin: 40px 0;
+            font-style: italic;
+            font-size: 1.4rem;
+            border-radius: 0 16px 16px 0;
+        }
 
         .final-box {
-            background: linear-gradient(145deg, #111827, #1f2937);
-            padding: 60px 40px;
-            border-radius: 30px;
+            background: linear-gradient(145deg, #111827, #0f172a);
+            padding: 70px 40px;
+            border-radius: 35px;
             text-align: center;
-            margin: 80px 0;
+            margin: 100px 0;
             border: 1px solid var(--border);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.6);
         }
 
         .btn-final {
             background: var(--accent);
             color: #030712;
-            padding: 24px 60px;
-            font-size: 1.4rem;
+            padding: 24px 70px;
+            font-size: 1.5rem;
             font-weight: 800;
             border: none;
-            border-radius: 16px;
+            border-radius: 18px;
             cursor: pointer;
             display: none;
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 10px 40px rgba(16, 185, 129, 0.4);
+            box-shadow: 0 15px 45px rgba(16, 185, 129, 0.4);
+            text-transform: uppercase;
         }
 
-        .btn-final:hover { transform: scale(1.05) translateY(-5px); box-shadow: 0 20px 50px rgba(16, 185, 129, 0.6); }
-        .btn-final:disabled { background: #4b5563; cursor: not-allowed; transform: none; }
-
-        .highlight-box {
-            border-left: 4px solid var(--accent);
-            background: rgba(16, 185, 129, 0.05);
-            padding: 25px;
-            margin: 30px 0;
-            font-style: italic;
-            border-radius: 0 15px 15px 0;
+        .btn-final:hover { 
+            transform: scale(1.05) translateY(-8px); 
+            box-shadow: 0 25px 60px rgba(16, 185, 129, 0.6); 
         }
 
         @media (max-width: 768px) {
             h1 { font-size: 2.5rem; }
-            .final-box { padding: 40px 20px; }
+            .container { padding: 0 15px; }
         }
     </style>
 </head>
@@ -135,129 +142,102 @@
 <div id="pBar"></div>
 
 <header>
-    <div style="font-weight: 800; font-size: 1.5rem; letter-spacing: -1px;">TECH<span style="color:var(--accent)">2030</span></div>
-    <div class="timer-badge" id="timer-ui">SECURITY SYNC: <span id="sec">20</span>s</div>
+    <div style="font-weight: 800; font-size: 1.6rem; letter-spacing: -1px;">TECH<span style="color:var(--accent)">2030</span></div>
+    <div class="timer-badge" id="timer-ui">SECURITY SYNC: <span id="sec">15</span>s</div>
 </header>
 
 <div class="container">
-    <div class="ad-slot"><div class="ad-label">ADVERTISEMENT</div>
-        <script type="text/javascript">
-            atOptions = { 'key' : 'YOUR_AD_KEY_HERE', 'format' : 'iframe', 'height' : 250, 'width' : 300, 'params' : {} };
-        </script>
-        <p style="font-size: 12px; color: #4b5563;">Ad Content Loading...</p>
+    <div class="ad-slot">
+        <div class="ad-label">SPONSORED AD</div>
+        <p style="color:#4b5563">Your Ad Code Here (Header)</p>
     </div>
 
     <article>
-        <h1>The Great Convergence: How AI and Bio-Tech Will Redefine Humanity by 2030</h1>
-        <div class="meta">
-            <span>By Dr. Arvin Tech</span>
+        <h1>The Great Convergence: Beyond the 2030 Digital Horizon</h1>
+        <div class="meta-info">
+            <span>By Tech Analysis Lab</span>
             <span>•</span>
-            <span>25 Min Read</span>
+            <span>30 Min Read</span>
             <span>•</span>
-            <span>Update: Dec 2025</span>
+            <span>Dec 2025 Edition</span>
         </div>
 
-        <section>
-            <p>The dawn of 2030 isn't just another decade on the calendar; it's the finish line for the world as we know it. We are currently witnessing the "Great Convergence"—a period where the boundaries between digital intelligence, biological life, and physical reality are dissolving at an exponential rate.</p>
-            
-            <div class="highlight-box">
-                "The next ten years will contain more technological progress than the entire 20th century combined." - Ray Kurzweil
-            </div>
+        <p>As we edge closer to the end of the decade, the speed of technological evolution is no longer linear; it has become exponential. We are standing at the precipice of the "Singularity"—a moment where machine intelligence surpasses collective human intelligence. But what does that actually mean for the average person in 2030?</p>
 
-            <h2>1. The Rise of Sentient Infrastructure</h2>
-            <p>By 2030, our cities will no longer be "dumb" collections of steel and concrete. Through the integration of 6G networks and trillion-sensor arrays, urban environments will become sentient. Traffic flows will self-optimize in real-time, and buildings will "breathe" by adjusting their skin to thermal conditions, reducing energy waste to near zero.</p>
-            
-            
+        <img src="https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&q=80&w=1200" class="blog-img" alt="Advanced Robotics">
 
-            <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=1000" class="blog-img" alt="Digital Infrastructure">
-        </section>
-
-        <div class="ad-slot"><div class="ad-label">SPONSORED CONTENT</div></div>
-
-        <section>
-            <h2>2. Bio-Digital Integration: Beyond Neuralink</h2>
-            <p>While early interfaces focused on medical recovery, 2030 will see the rise of elective cognitive enhancement. Nano-bots in our bloodstream will monitor cellular health in real-time, capable of repairing DNA damage before it leads to disease. The concept of "ageing" will shift from an inevitability to a manageable biological condition.</p>
-            
-            <p>Imagine learning a new language not through years of study, but through direct synaptic data transfer. This isn't just theory; early trials of "Neural-Lace" have already shown successful knowledge mapping in mammalian subjects.</p>
-            
-            
-            
-            <img src="https://images.unsplash.com/photo-1507413245164-6160d8298b31?auto=format&fit=crop&q=80&w=1000" class="blog-img" alt="Biotechnology">
-        </section>
+        <h2>1. The Autonomous Labor Revolution</h2>
+        <p>By 2030, the concept of "manual labor" will have undergone a total metamorphosis. Humanoid robots, powered by localized large language models, will be common sights in logistics, construction, and even elderly care. These aren't just machines; they are collaborative partners capable of understanding nuanced human emotions and complex instructions.</p>
+        
+        <div class="highlight-quote">
+            "We are moving from a world where we tell computers what to do, to a world where computers understand what we need."
+        </div>
 
         <div class="ad-slot"><div class="ad-label">ADVERTISEMENT</div></div>
 
-        <section>
-            <h2>3. The Quantum Economy</h2>
-            <p>Traditional encryption will be obsolete by 2030. Quantum computers will have reached "Utility Phase," solving problems in seconds that would take current supercomputers millennia. This will revolutionize drug discovery, allowing us to simulate human reactions to medicine without a single clinical trial, potentially curing most cancers within the decade.</p>
-        </section>
+        <h2>2. Quantum Supremacy in Daily Life</h2>
+        <p>Quantum computing will move from laboratory experiments to cloud-based utility. This will allow for "Perfect Cryptography" and the ability to simulate molecular structures in seconds. For medicine, this means we can design personalized vaccines and cures based on an individual's unique DNA within hours, effectively ending the era of 'one-size-fits-all' medicine.</p>
+
+        <img src="https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&q=80&w=1200" class="blog-img" alt="Quantum Computing">
 
         <div class="ad-slot"><div class="ad-label">ADVERTISEMENT</div></div>
 
-        <section>
-            <h2>4. Energy Abundance: The Fusion Era</h2>
-            <p>After decades of being "30 years away," commercial nuclear fusion will finally enter the grid. This means limitless, clean energy. The cost of desalination will plummet, turning deserts into lush agricultural hubs and ending the global water crisis forever.</p>
-            <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=1000" class="blog-img" alt="Energy Technology">
-        </section>
+        <h2>3. The Decentralized Energy Grid</h2>
+        <p>The 2030s will mark the true death of the fossil fuel era. With breakthroughs in solid-state batteries and small-scale fusion reactors, every home will effectively become its own power plant. Excess energy will be traded autonomously on blockchain-based microgrids, allowing neighbors to sell power to each other without a central utility company.</p>
 
         <div class="ad-slot"><div class="ad-label">ADVERTISEMENT</div></div>
 
-        <section>
-            <h2>5. Multi-Planetary Governance</h2>
-            <p>With a permanent base on the Lunar South Pole and the first humans landing on Mars, the 2030s will require new laws. We are no longer just citizens of Earth, but pioneers of the solar system. Space-based manufacturing will become a multi-trillion dollar industry, mining asteroids for rare earth metals that are scarce on our home planet.</p>
-        </section>
+        <h2>4. Brain-Computer Interfaces (BCI)</h2>
+        <p>Direct neural links will have transitioned from medical prosthetics to consumer electronics. While not everyone will have a chip in their brain, high-fidelity non-invasive BCI headbands will allow us to control our smart homes, type messages, and even experience virtual reality with all five senses, bypassing traditional screens and speakers entirely.</p>
+        
+        <img src="https://images.unsplash.com/photo-1507413245164-6160d8298b31?auto=format&fit=crop&q=80&w=1200" class="blog-img" alt="Bio Tech">
 
         <div class="ad-slot"><div class="ad-label">ADVERTISEMENT</div></div>
-        <div class="ad-slot"><div class="ad-label">ADVERTISEMENT</div></div>
-
-        <section>
-            <h2>Summary: Preparing for the Unknown</h2>
-            <p>As we approach the Singularity, the most important skill won't be coding or mathematics—it will be adaptability. The world is changing faster than our biological brains were designed to handle. We must embrace the tools of the future to ensure that technology serves humanity, rather than replaces it.</p>
-        </section>
+        
+        <h2>5. The Metaverse to Omni-verse</h2>
+        <p>The "Metaverse" as we imagined it in 2022 will seem primitive. By 2030, Augmented Reality (AR) will be so seamless that the digital and physical worlds will be indistinguishable. Digital "twins" of every city will exist, allowing for perfect urban planning and immersive remote work experiences that feel more real than a Zoom call ever could.</p>
 
         <div class="ad-slot"><div class="ad-label">ADVERTISEMENT</div></div>
+
+        <p>Conclusion: As we prepare for this shift, the priority must be ethics. How we govern these technologies today will determine the survival of our species tomorrow. The future is bright, but it requires a human heart to guide the machine mind.</p>
+
         <div class="ad-slot"><div class="ad-label">ADVERTISEMENT</div></div>
-        <div class="ad-slot"><div class="ad-label">FINAL SPONSOR</div></div>
 
         <div class="final-box">
-            <h3 style="font-size: 1.8rem; margin-bottom: 10px;">Verification Complete?</h3>
-            <p id="status-msg" style="color:var(--text-dim); margin-bottom:30px;">Analyzing user interaction patterns... please scroll to bottom.</p>
+            <h3 style="font-size: 2rem; margin-bottom: 15px;">System Synchronization</h3>
+            <p id="status-msg" style="color:var(--text-dim); margin-bottom:35px;">Scanning for human interaction... please scroll to the end.</p>
             
-            <button class="btn-final" id="final-btn" onclick="handleFinalRedirect()">
-                GET FINAL LINK
+            <button class="btn-final" id="final-btn" onclick="goToFinalPage()">
+                Proceed to Final Destination
             </button>
         </div>
+
+        <div class="ad-slot"><div class="ad-label">BOTTOM SPONSOR</div></div>
 
     </article>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/fingerprintjs2/2.1.0/fingerprint2.min.js"></script>
-
 <script>
-    const API_BASE = "https://api.kinglinky.com";
-    let timeLeft = 20;
+    let timeLeft = 15;
     let didUserScroll = false;
-    let startTime = Date.now();
-
     const secDisp = document.getElementById("sec");
     const pBar = document.getElementById("pBar");
     const finalBtn = document.getElementById("final-btn");
     const statusMsg = document.getElementById("status-msg");
 
-    // Scroll Detection
+    // Require user to scroll deep into the article (at least 1800 pixels)
     window.addEventListener("scroll", () => {
-        if (window.scrollY > 1500) { // User nalla scroll panna thaan verify aagum
+        if (window.scrollY > 1800) {
             didUserScroll = true;
         }
     });
 
-    // Timer Logic
     const timer = setInterval(() => {
         timeLeft--;
         if(timeLeft >= 0) secDisp.innerText = timeLeft;
         
-        // Progress Bar
-        let progress = ((20 - timeLeft) / 20) * 100;
+        // Update Progress Bar
+        let progress = ((15 - timeLeft) / 15) * 100;
         pBar.style.width = progress + "%";
 
         if (timeLeft <= 0) {
@@ -268,77 +248,36 @@
 
     function checkVerification() {
         if (!didUserScroll) {
-            statusMsg.innerHTML = "⚠️ Please scroll through the article to verify you're human.";
+            statusMsg.innerHTML = "⚠️ Please read the full article to verify security.";
             statusMsg.style.color = "#ef4444";
-            // Extra 5 seconds wait panna solluvom
-            setTimeout(() => {
-                if (window.scrollY > 1000) {
-                    didUserScroll = true;
-                    showButton();
-                } else {
-                    checkVerification();
+            
+            // Re-check every 2 seconds if they scrolled
+            const scrollCheck = setInterval(() => {
+                if (window.scrollY > 1800) {
+                    clearInterval(scrollCheck);
+                    showFinalAction();
                 }
-            }, 3000);
+            }, 2000);
         } else {
-            showButton();
+            showFinalAction();
         }
     }
 
-    function showButton() {
-        document.getElementById("timer-ui").innerHTML = "✅ SYNCED";
-        statusMsg.innerHTML = "Security check passed. Your destination is ready.";
+    function showFinalAction() {
+        document.getElementById("timer-ui").innerHTML = "✅ VERIFIED";
+        statusMsg.innerHTML = "Identity confirmed. Click below to get your link.";
         statusMsg.style.color = "#10b981";
         finalBtn.style.display = "inline-block";
     }
 
-    async function handleFinalRedirect() {
-        finalBtn.innerText = "VERIFYING...";
-        finalBtn.disabled = true;
-
-        const params = new URLSearchParams(window.location.search);
-        const code = params.get("code");
-
+    function goToFinalPage() {
+        const code = new URLSearchParams(window.location.search).get("code");
         if(!code) {
-            alert("Error: Security Token Expired. Refresh page.");
+            alert("Security Error: Code missing. Please go back to Step 1.");
             return;
         }
-
-        try {
-            // Generate Fingerprint
-            const components = await new Promise(resolve => Fingerprint2.get(resolve));
-            const fingerprint = Fingerprint2.x64hash128(components.map(c => c.value).join(''), 31);
-            
-            // Time on page calculate
-            const duration = Math.floor((Date.now() - startTime) / 1000);
-
-            // Backend API Call
-            const response = await fetch(`${API_BASE}/api/track/final`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ 
-                    code: code,
-                    fingerprint: fingerprint,
-                    duration: duration 
-                })
-            });
-
-            const data = await response.json();
-
-            if (data.success && data.redirect) {
-                finalBtn.innerText = "SUCCESS! REDIRECTING...";
-                setTimeout(() => {
-                    window.location.href = data.redirect;
-                }, 1000);
-            } else {
-                alert(data.message || "Anti-Bot Triggered. Please stay on page longer.");
-                finalBtn.disabled = false;
-                finalBtn.innerText = "GET FINAL LINK";
-            }
-        } catch (err) {
-            console.error(err);
-            alert("Server Sync Error. Please try again later.");
-            finalBtn.disabled = false;
-        }
+        // REDIRECT TO final.html
+        window.location.href = "final.html?code=" + code;
     }
 </script>
 
