@@ -66,9 +66,7 @@ export default function Home({ isLoggedIn, userEmail }) {
           </div>
 
           <nav style={styles.navLinks}>
-            <a style={styles.navLink} href="#features">Features</a>
             <a style={styles.navLink} href="#how">How it works</a>
-            <a style={styles.navLink} href="#pricing">Pricing</a>
             <button
               onClick={() => (isLoggedIn ? navigate("/dashboard") : navigate("/login"))}
               style={styles.ghostBtn}
@@ -135,8 +133,8 @@ export default function Home({ isLoggedIn, userEmail }) {
           <div style={styles.heroRight}>
             <div style={styles.heroCard}>
               <h4 style={{ margin: 0 }}>Total Clicks</h4>
-              <div style={styles.statLarge}>{nf(demoStats.totalClicks)}</div>
-              <div style={styles.statSmall}>Total URLs: {nf(demoStats.totalUrls)}</div>
+              <div style={styles.statLarge}>100000</div>
+              <div style={styles.statSmall}>Total URLs: 10000</div>
             </div>
 
             <div style={styles.featuresBox}>
@@ -172,19 +170,19 @@ export default function Home({ isLoggedIn, userEmail }) {
       <section style={styles.statsRow}>
         <div style={styles.statCard}>
           <div style={styles.statLabel}>Total Clicks</div>
-          <div style={styles.statValue}>{nf(demoStats.totalClicks)}</div>
+          <div style={styles.statValue}>100000</div>
         </div>
         <div style={styles.statCard}>
           <div style={styles.statLabel}>Registered Users</div>
-          <div style={styles.statValue}>{nf(demoStats.registeredUsers)}</div>
+          <div style={styles.statValue}>5000</div>
         </div>
         <div style={styles.statCard}>
           <div style={styles.statLabel}>Total Paid</div>
-          <div style={styles.statValue}>${nf(demoStats.totalPaid)}</div>
+          <div style={styles.statValue}>$1000</div>
         </div>
         <div style={styles.statCard}>
           <div style={styles.statLabel}>Total URLs</div>
-          <div style={styles.statValue}>{nf(demoStats.totalUrls)}</div>
+          <div style={styles.statValue}>10000</div>
         </div>
       </section>
 
