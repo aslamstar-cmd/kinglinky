@@ -109,7 +109,7 @@ export default function Dashboard({ user }) {
   if (loading) {
     return (
       <div style={{...styles.wrap, display:'flex', justifyContent:'center', alignItems:'center'}}>
-        <h2 style={{color:'#00ffd0'}}>👑 Kinglinky Loading...</h2>
+        <h2 style={{color:'#00ffd0'}}>👑 {user?.name} Loading...</h2>
       </div>
     );
   }
