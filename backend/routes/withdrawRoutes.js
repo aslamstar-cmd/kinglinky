@@ -9,20 +9,30 @@ const router = express.Router();
    ADMIN → GET ALL WITHDRAWS
    GET /api/withdraw/admin
 ============================ */
+/* ============================
+   ADMIN → GET ALL WITHDRAWS
+   GET /api/withdraw/admin
+============================ */
 router.get("/admin", adminAuth, async (req, res) => {
   try {
+    // Database-la irundhu data-vai fetch pannuvom
     const withdraws = await Withdraw.find({})
       .sort({ createdAt: -1 });
 
-    return res.json({
+    // Enna data varudhu nu console-la check panna:
+    console.log("Admin Fetching Withdraws count:", withdraws.length);
+
+    // KANDIPPA structure success: true and data: [array] - nu irukanum
+    return res.status(200).json({
       success: true,
-      data: withdraws,
+      data: withdraws, // Ithu thaan frontend state-ku pogum
     });
   } catch (err) {
     console.error("WITHDRAW ADMIN GET ERROR:", err);
     return res.status(500).json({
       success: false,
-      data: [],
+      message: "Server error",
+      data: [], // Error vandha empty array anupa nalladhu
     });
   }
 });
