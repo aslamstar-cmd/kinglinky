@@ -1,199 +1,241 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
- 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Aviation Elite | Step 3</title>
-  <style>
-    :root {
-      --bg-color: #061c1c;
-      --card-bg: #0b3d3d;
-      --accent: #00ffd0;
-      --text-color: #eafffa;
-    }
-    body {
-      background: var(--bg-color);
-      color: var(--text-color);
-      font-family: 'Segoe UI', Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      line-height: 1.6;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aviation Elite | Aerospace Frontiers</title>
+    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #050505;
+            --card-bg: #0f1215;
+            --accent: #00ffd0;
+            --text-main: #f0f0f0;
+            --text-dim: #8a949d;
+            --border: #1a2026;
+        }
 
-    /* Sticky Header */
-    .sticky-header {
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      background: var(--card-bg);
-      padding: 15px;
-      text-align: center;
-      border-bottom: 2px solid var(--accent);
-      box-shadow: 0 5px 15px rgba(0,0,0,0.5);
-    }
-    #sec { font-weight: bold; color: var(--accent); font-size: 1.4rem; }
-    .status-msg { color: var(--accent); font-weight: bold; display: none; }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Chakra Petch', sans-serif;
+            margin: 0;
+            line-height: 1.8;
+        }
 
-    .container {
-      max-width: 700px;
-      margin: 20px auto;
-      background: var(--card-bg);
-      padding: 25px;
-      border-radius: 15px;
-    }
+        /* Top Progress */
+        #pBar {
+            position: fixed;
+            top: 0; left: 0; height: 4px;
+            background: linear-gradient(to right, var(--accent), #008cff);
+            width: 0%; z-index: 10000;
+        }
 
-    /* Article Content */
-    .article-content h1 { color: var(--accent); font-size: 1.8rem; text-align: center; text-transform: uppercase; }
-    .article-content h2 { color: var(--accent); margin-top: 35px; border-bottom: 1px solid #1a4a4a; }
-    
-    .jet-img {
-      width: 100%;
-      border-radius: 12px;
-      margin: 20px 0;
-      border: 1px solid rgba(0, 255, 208, 0.4);
-      box-shadow: 0 0 20px rgba(0,0,0,0.5);
-    }
+        /* Cyberpunk Header */
+        header {
+            background: rgba(15, 18, 21, 0.95);
+            padding: 15px 5%;
+            border-bottom: 2px solid var(--border);
+            position: sticky; top: 0; z-index: 999;
+            display: flex; justify-content: space-between; align-items: center;
+            box-shadow: 0 4px 20px rgba(0,255,208,0.1);
+        }
 
-    /* 4 Ad Slots */
-    .ad-space {
-      background: rgba(0,0,0,0.3);
-      height: 250px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 10px;
-      margin: 40px 0;
-      font-size: 12px;
-      color: #555;
-      border: 1px dashed #1a4a4a;
-      letter-spacing: 2px;
-    }
+        .timer-unit {
+            background: #161b22;
+            padding: 8px 18px;
+            border-radius: 4px;
+            border-right: 3px solid var(--accent);
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
 
-    /* Button Styling */
-    .btn-container {
-      text-align: center;
-      padding: 40px 0;
-      border-top: 1px solid #1a4a4a;
-    }
-    #btn {
-      padding: 15px 45px;
-      background: var(--accent);
-      color: #061c1c;
-      border: none;
-      border-radius: 50px;
-      font-weight: bold;
-      font-size: 18px;
-      cursor: pointer;
-      display: none; 
-      box-shadow: 0 0 15px rgba(0, 255, 208, 0.4);
-    }
-    #btn:disabled { opacity: 0.5; }
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
 
-    .note { font-size: 13px; opacity: .7; margin-top: 10px; }
-  </style>
+        /* Article Styling */
+        h1 { font-size: 2.8rem; font-weight: 700; color: var(--accent); text-transform: uppercase; margin-bottom: 10px; }
+        .article-meta { color: var(--text-dim); font-size: 0.9rem; margin-bottom: 40px; border-left: 2px solid #333; padding-left: 15px; }
+
+        .section-header { font-size: 1.8rem; margin-top: 50px; color: #fff; background: rgba(0,255,208,0.05); padding: 10px; border-radius: 4px; }
+        
+        .jet-display {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin: 30px 0;
+            border: 1px solid var(--border);
+            filter: grayscale(20%);
+            transition: 0.5s;
+        }
+        .jet-display:hover { filter: grayscale(0%); border-color: var(--accent); }
+
+        /* Optimized Ad Slots */
+        .ad-box {
+            background: #0a0c0e;
+            border: 1px dashed #2d3640;
+            margin: 40px 0;
+            padding: 25px;
+            text-align: center;
+            border-radius: 8px;
+            min-height: 250px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .ad-tag { font-size: 10px; color: #444; margin-bottom: 15px; letter-spacing: 3px; }
+
+        /* Footer Section */
+        .action-gate {
+            margin-top: 60px;
+            padding: 50px;
+            background: linear-gradient(145deg, #0f1215, #050505);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .btn-launch {
+            background: var(--accent);
+            color: #050505;
+            padding: 20px 50px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            display: none;
+            text-transform: uppercase;
+            box-shadow: 0 0 25px rgba(0,255,208,0.3);
+        }
+
+        .btn-launch:hover { background: #fff; box-shadow: 0 0 40px rgba(255,255,255,0.4); }
+
+        @media (max-width: 600px) {
+            h1 { font-size: 1.8rem; }
+            .action-gate { padding: 30px 15px; }
+        }
+    </style>
 </head>
 <body>
 
-<script>
-  if (sessionStorage.getItem("step") !== "3") {
-    document.body.innerHTML = "<div style='text-align:center; margin-top:100px; color:#ff4d4d;'>❌ Access Denied: Step 2 not completed</div>";
-  }
-</script>
+<div id="pBar"></div>
 
-<div class="sticky-header">
-  <div id="timer-text">Step 3: Verification <span id="sec">15</span>s</div>
-  <script>(function(s){s.dataset.zone='10381300',s.src='https://gizokraijaw.net/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
-  <div id="scroll-msg" class="status-msg">✅ JET FUEL READY! SCROLL DOWN</div>
-</div>
+<header>
+    <div style="font-weight: 700; font-size: 1.5rem; letter-spacing: 2px;">AVIA<span style="color:var(--accent)">ELITE</span></div>
+    <div class="timer-unit" id="timer-display">SYNCING: <span id="sec">20</span>s</div>
+</header>
 
 <div class="container">
-  <script>(function(s){s.dataset.zone='10381300',s.src='https://gizokraijaw.net/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
-  
-  <div class="article-content">
-    <h1>Supersonic Giants: The Fastest Fighter Jets of 2025</h1>
-    <p>Aviation technology has reached a point where pilots are now assisted by AI "Co-pilots" to handle extreme G-forces. Let's look at the titans of the sky.</p>
 
-    <script>
-  atOptions = {
-    'key' : '0012116427b5a4ccef598927fc9dfa89',
-    'format' : 'iframe',
-    'height' : 50,
-    'width' : 320,
-    'params' : {}
-  };
-</script>
+    <div class="ad-box">
+        <div class="ad-tag">SYSTEM_AD_01</div>
+        <script src="https://3nbf4.com/act/files/tag.min.js?z=10381339" data-cfasync="false" async></script>
+    </div>
 
-    <script src="https://3nbf4.com/act/files/tag.min.js?z=10381339" data-cfasync="false" async></script>
-    <h2>1. F-35 Lightning II: The Stealth Master</h2>
-    <p>The <b>F-35 Lightning II</b> is not just a jet; it's a flying supercomputer. In 2025, its Block 4 upgrade allows it to control a fleet of "Loyal Wingman" drones simultaneously. Its stealth capabilities make it nearly invisible to enemy radar.</p>
-    <img src="https://images.unsplash.com/photo-1517976384346-3136801d605d?auto=format&fit=crop&q=80&w=700" class="jet-img" alt="F-35 Jet">
+    <article>
+        <h1>Mach 5 & Beyond: The Hypersonic Era</h1>
+        <div class="article-meta">Aviation Intelligence Report • Dec 2025 • 18 Min Read</div>
 
-  <script>(function(s){s.dataset.zone='10381300',s.src='https://gizokraijaw.net/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
-    <h2>2. Sukhoi Su-57: The Agile Predator</h2>
-    <p>Russia's <b>Su-57 Felon</b> is known for its extreme maneuverability. With 3D thrust vectoring, it can perform maneuvers that defy gravity. The 2025 model features new Izdelie 30 engines, pushing it to Mach 2.0 without using afterburners.</p>
-    <img src="https://th.bing.com/th/id/OIP.0b6D7dZDS5uiB0b1HIou0wHaE8?w=245&h=180&c=7&r=0&o=5&cb=ucfimg2&pid=1.7&ucfimg=1" class="jet-img" alt="Fighter Jet">
-<script src="https://3nbf4.com/act/files/tag.min.js?z=10381339" data-cfasync="false" async></script>
-    <script src="https://pl28328281.effectivegatecpm.com/27/3c/53/273c5378ff0557eae1a862b03131344a.js"></script>
+        <div class="content">
+            <p>Traditional flight is becoming a thing of the past. As we enter 2025, the focus has shifted from "Super" sonic to "Hyper" sonic. This means traveling at five times the speed of sound, effectively crossing the Atlantic in under an hour.</p>
 
-    <h2>3. The 6th Generation: NGAD</h2>
-    <p>The <b>Next Generation Air Dominance (NGAD)</b> program is the hottest topic in aviation. These jets will eliminate traditional cockpits in favor of full VR-integrated helmets, giving pilots a 360-degree view of the battlefield through the aircraft's skin.</p>
-    <img src="https://th.bing.com/th/id/OIP.PpwY2jAlB8HPFnRod7gG9gHaD3?w=271&h=180&c=7&r=0&o=5&cb=ucfimg2&pid=1.7&ucfimg=1" class="jet-img" alt="Aviation Tech">
-<script src="https://3nbf4.com/act/files/tag.min.js?z=10381339" data-cfasync="false" async></script>
-   <script async="async" data-cfasync="false" src="https://pl28334516.effectivegatecpm.com/cbbb337fba63c479050336665248235f/invoke.js"></script>
-<div id="container-cbbb337fba63c479050336665248235f"></div>
+            <h2 class="section-header">1. Lockheed Martin's Darkstar Heritage</h2>
+            <p>The lessons learned from experimental aircraft like the Darkstar have finally been integrated into the next-gen reconnaissance drones. These UAVs can operate at the edge of space, providing real-time data without ever being detected by traditional ground-based defense systems.</p>
+            <img src="https://images.unsplash.com/photo-1517976384346-3136801d605d?auto=format&fit=crop&q=80&w=1000" class="jet-display" alt="Stealth UAV">
+        </div>
 
-    <p>Modern air combat is shifting from "who has the fastest jet" to "who has the best data link." As we look towards 2026, the sky is no longer the limit—it's the playground of advanced AI.</p>
-  </div>
-<script src="https://3nbf4.com/act/files/tag.min.js?z=10381339" data-cfasync="false" async></script>
-  <div class="btn-container">
-    <script src="https://3nbf4.com/act/files/tag.min.js?z=10381386" data-cfasync="false" async></script>
-    <button id="btn" onclick="next()">Continue to Step4 </button>
-    <div class="note" id="note">Read the full article to proceed</div>
-    <script src="https://3nbf4.com/act/files/tag.min.js?z=10381339" data-cfasync="false" async></script>
-  </div>
-  <script>(function(s){s.dataset.zone='10381300',s.src='https://gizokraijaw.net/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
+        <div class="ad-box">
+            <div class="ad-tag">SPONSORED_TRANSMISSION</div>
+            <script>atOptions={'key':'0012116427b5a4ccef598927fc9dfa89','format':'iframe','height':50,'width':320,'params':{}};</script>
+        </div>
 
+        <div class="content">
+            <h2 class="section-header">2. The Su-57 Felon: AI Dogfighting</h2>
+            <p>Russia's Su-57 has received its most significant software patch in 2025. The aircraft's computer can now handle 90% of the landing and combat maneuvers, allowing the pilot to focus solely on high-level strategy and electronic warfare. It is the perfect symbiosis of man and machine.</p>
+            <img src="https://images.unsplash.com/photo-1527482937786-6608f6764615?auto=format&fit=crop&q=80&w=1000" class="jet-display" alt="Fighter Tech">
+        </div>
+
+        <div class="ad-box">
+            <div class="ad-tag">ADVERTISEMENT</div>
+            <script src="https://pl28328281.effectivegatecpm.com/27/3c/53/273c5378ff0557eae1a862b03131344a.js"></script>
+        </div>
+
+        <div class="content">
+            <h2 class="section-header">3. NGAD: 6th Gen Combat</h2>
+            <p>The Next Generation Air Dominance (NGAD) isn't just one plane; it's a family of systems. In 2025, the first manned flight of the technology demonstrator proved that "Collaborative Combat Aircraft" (CCA) can fly as wingmen, making a single pilot as effective as a whole squadron.</p>
+            <img src="https://images.unsplash.com/photo-1460186136353-977e9d6085a1?auto=format&fit=crop&q=80&w=1000" class="jet-display" alt="NGAD Future">
+        </div>
+
+        <div class="ad-box">
+            <div class="ad-tag">ADVERTISEMENT</div>
+            <script async="async" data-cfasync="false" src="https://pl28334516.effectivegatecpm.com/cbbb337fba63c479050336665248235f/invoke.js"></script>
+            <div id="container-cbbb337fba63c479050336665248235f"></div>
+        </div>
+
+        <div class="content">
+            <h2 class="section-header">4. Space Tourism: The New Horizon</h2>
+            <p>Beyond the military, companies like SpaceX and Blue Origin are finalizing the "2026 Orbital Tours." By December 2025, the first civilian-ready Starship cabin has been certified, opening the door for non-astronauts to experience zero-G for extended periods.</p>
+        </div>
+
+        <div class="ad-box">
+             <div class="ad-tag">FINAL_SPONSOR</div>
+             <script src="https://3nbf4.com/act/files/tag.min.js?z=10381386" data-cfasync="false" async></script>
+        </div>
+
+        <div class="action-gate">
+            <p id="status-text" style="color:var(--text-dim); margin-bottom:20px;">Verification in progress... Please scroll to bottom.</p>
+            <button class="btn-launch" id="launch-btn" onclick="goNext()">Initiate Step 4</button>
+        </div>
+
+    </article>
+</div>
+
+<div style="text-align:center; padding:20px;">
+    <script src="https://gizokraijaw.net/vignette.min.js" data-zone="10381300"></script>
 </div>
 
 <script>
-let s = 15;
-const sec = document.getElementById("sec");
-const btn = document.getElementById("btn");
-const timerText = document.getElementById("timer-text");
-const scrollMsg = document.getElementById("scroll-msg");
+    let seconds = 20;
+    let didScroll = false;
+    const secEl = document.getElementById("sec");
+    const bar = document.getElementById("pBar");
+    const launchBtn = document.getElementById("launch-btn");
+    const statusTxt = document.getElementById("status-text");
 
-let human = false;
-window.addEventListener("scroll", () => human = true);
-window.addEventListener("touchstart", () => human = true);
+    window.addEventListener("scroll", () => didScroll = true);
 
-const t = setInterval(()=>{
-  s--;
-  if(s >= 0) sec.innerText = s;
-  
-  if(s <= 0){
-    clearInterval(t);
-    if(human) {
-      timerText.style.display = "none";
-      scrollMsg.style.display = "block";
-      btn.style.display = "inline-block";
-    } else {
-      alert("Please scroll through the article to verify.");
-      s = 5; 
+    const timer = setInterval(() => {
+        seconds--;
+        if(seconds >= 0) secEl.innerText = seconds;
+        
+        let pPercent = ((20 - seconds) / 20) * 100;
+        bar.style.width = pPercent + "%";
+
+        if (seconds <= 0) {
+            clearInterval(timer);
+            if (!didScroll) {
+                document.body.innerHTML = "<div style='color:white; text-align:center; padding-top:100px;'><h1>HUMAN VERIFICATION FAILED</h1><p>Please interact with the page content.</p><button onclick='location.reload()'>RETRY</button></div>";
+            } else {
+                document.getElementById("timer-display").innerHTML = "✅ READY";
+                statusTxt.innerHTML = "Flight verification complete. You may proceed.";
+                launchBtn.style.display = "inline-block";
+            }
+        }
+    }, 1000);
+
+    function goNext() {
+        launchBtn.innerText = "CALIBRATING...";
+        launchBtn.disabled = true;
+        
+        setTimeout(() => {
+            const urlParams = new URLSearchParams(window.location.search);
+            window.location.href = "step4.html?code=" + (urlParams.get("code") || "MachVelocity");
+        }, 3000);
     }
-  }
-}, 1000); // 1 sec logic
-
-function next(){
-  btn.disabled = true;
-  btn.innerText = "Finalizing Check...";
-  
-  setTimeout(()=>{
-    sessionStorage.setItem("step","4");
-    const urlParams = new URLSearchParams(location.search);
-    location.href = "step4.html?code=" + (urlParams.get("code") || "JetSpeed");
-  }, 4000);
-}
 </script>
 
 </body>

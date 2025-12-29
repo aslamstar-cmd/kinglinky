@@ -1,23 +1,20 @@
 import React, { useEffect, useState } from "react";
-import api from "../api.js"
+import api from "../api.js";
 
 export default function AdminWithdraws() {
   const [withdraws, setWithdraws] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // =========================
-  // FETCH WITHDRAWS
-  // =========================
   const fetchWithdraws = async () => {
     try {
       const res = await api.get("/api/withdraw/admin");
-
-      // backend returns { success, data }
-      const data = Array.isArray(res.data.data)
-        ? res.data.data
-        : [];
-
-      setWithdraws(data);
+      // Backend returns { success: true, data: [...] }
+      // Direct-ah res.data.data check panrom
+      if (res.data && Array.isArray(res.data.data)) {
+        setWithdraws(res.data.data);
+      } else {
+        setWithdraws([]);
+      }
     } catch (err) {
       console.error("Error fetching withdraws:", err);
       setWithdraws([]);
@@ -28,20 +25,15 @@ export default function AdminWithdraws() {
 
   useEffect(() => {
     fetchWithdraws();
-    // eslint-disable-next-line
   }, []);
 
-  // =========================
-  // APPROVE WITHDRAW
-  // =========================
   const approveWithdraw = async (id) => {
     const ok = window.confirm("Mark this withdraw as PAID?");
     if (!ok) return;
 
     try {
-      await api.post
-       (`/api/withdraw/approve/${id}`);
-      fetchWithdraws();
+      await api.post(`/api/withdraw/approve/${id}`);
+      fetchWithdraws(); // Refresh the list
     } catch (err) {
       console.error("Error approving withdraw:", err);
       alert("Approve failed");
@@ -55,8 +47,7 @@ export default function AdminWithdraws() {
       <div style={{ overflowX: "auto" }}>
         <table
           style={{
-            width: "100px",
-            height:"200px",
+            width: "100%", // Fix: changed from 100px to 100%
             borderCollapse: "collapse",
             background: "#fff",
             borderRadius: 12,
@@ -66,12 +57,12 @@ export default function AdminWithdraws() {
         >
           <thead style={{ background: "#0b7a46", color: "white" }}>
             <tr>
-              <th style={{ padding: 10, textAlign: "left" }}>Email</th>
-              <th style={{ padding: 10 }}>Amount</th>
-              <th style={{ padding: 10 }}>Note</th>
-              <th style={{ padding: 10 }}>Date</th>
-              <th style={{ padding: 10 }}>Status</th>
-              <th style={{ padding: 10 }}>Action</th>
+              <th style={{ padding: 12, textAlign: "left" }}>Email</th>
+              <th style={{ padding: 12 }}>Amount</th>
+              <th style={{ padding: 12 }}>Note</th>
+              <th style={{ padding: 12 }}>Date</th>
+              <th style={{ padding: 12 }}>Status</th>
+              <th style={{ padding: 12 }}>Action</th>
             </tr>
           </thead>
 
@@ -90,17 +81,26 @@ export default function AdminWithdraws() {
               </tr>
             ) : (
               withdraws.map((w) => (
-                <tr key={w._id} style={{ borderBottom: "1px solid #eee" }}>
-                  <td style={{ padding: 10 }}>{w.userEmail}</td>
-                  <td style={{ padding: 10 }}>₹ {w.amount}</td>
-                  <td style={{ padding: 10 }}>{w.note || "-"}</td>
-                  <td style={{ padding: 10 }}>
+                <tr key={w._id} style={{ borderBottom: "1px solid #eee", textAlign: "center" }}>
+                  <td style={{ padding: 12, textAlign: "left" }}>{w.userEmail}</td>
+                  <td style={{ padding: 12 }}>₹ {w.amount}</td>
+                  <td style={{ padding: 12 }}>{w.note || "-"}</td>
+                  <td style={{ padding: 12 }}>
                     {new Date(w.createdAt).toLocaleString()}
                   </td>
-                  <td style={{ padding: 10, textTransform: "capitalize" }}>
-                    {w.status}
+                  <td style={{ padding: 12 }}>
+                    <span style={{ 
+                      padding: "4px 8px", 
+                      borderRadius: 4, 
+                      background: w.status === "paid" ? "#dcfce7" : "#fef9c3",
+                      color: w.status === "paid" ? "#166534" : "#854d0e",
+                      fontSize: "12px",
+                      textTransform: "capitalize"
+                    }}>
+                      {w.status}
+                    </span>
                   </td>
-                  <td style={{ padding: 10 }}>
+                  <td style={{ padding: 12 }}>
                     {w.status === "pending" ? (
                       <button
                         onClick={() => approveWithdraw(w._id)}
@@ -116,7 +116,7 @@ export default function AdminWithdraws() {
                         Mark Paid
                       </button>
                     ) : (
-                      "✅ Paid"
+                      <span style={{ color: "#0b7a46", fontWeight: "bold" }}>✅ Paid</span>
                     )}
                   </td>
                 </tr>

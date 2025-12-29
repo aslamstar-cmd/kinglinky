@@ -1,202 +1,233 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <script src="https://quge5.com/88/tag.min.js" data-zone="195978" async data-cfasync="false"></script>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Final Step | Verification</title>
-  <style>
-    :root {
-      --bg-color: #061c1c;
-      --card-bg: #0b3d3d;
-      --accent: #00ffd0;
-      --text-color: #eafffa;
-    }
-    body {
-      background: var(--bg-color);
-      color: var(--text-color);
-      font-family: 'Segoe UI', Arial, sans-serif;
-      margin: 0;
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      min-height: 100vh;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Safe Link | Final Destination</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #f3f4f6;
+            --card: #ffffff;
+            --accent: #2563eb;
+            --text: #1f2937;
+            --border: #e5e7eb;
+        }
 
-    .box {
-      max-width: 500px;
-      width: 100%;
-      background: var(--card-bg);
-      padding: 30px;
-      border-radius: 15px;
-      text-align: center;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-      border: 1px solid rgba(0, 255, 208, 0.2);
-    }
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
 
-    h2 { color: var(--accent); margin-bottom: 10px; }
-    p { font-size: 15px; opacity: 0.9; }
+        header {
+            background: #fff;
+            padding: 15px 5%;
+            border-bottom: 1px solid var(--border);
+            text-align: center;
+            position: sticky; top: 0; z-index: 100;
+        }
 
-    #wait-timer {
-      font-size: 24px;
-      font-weight: bold;
-      color: var(--accent);
-      margin: 20px 0;
-    }
+        .container {
+            max-width: 700px;
+            margin: 20px auto;
+            padding: 0 15px;
+        }
 
-    .ad-slot {
-      background: rgba(0,0,0,0.3);
-      height: 200px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 8px;
-      margin: 20px 0;
-      border: 1px dashed #1a4a4a;
-      font-size: 12px;
-      color: #4a7a7a;
-      text-transform: uppercase;
-    }
+        /* Ad Slots Layout */
+        .ad-space {
+            background: #fff;
+            border: 1px solid var(--border);
+            margin: 15px 0;
+            padding: 10px;
+            text-align: center;
+            border-radius: 8px;
+            min-height: 100px;
+        }
 
-    #final-btn {
-      padding: 15px 40px;
-      background: var(--accent);
-      color: #061c1c;
-      border: none;
-      border-radius: 50px;
-      font-weight: bold;
-      font-size: 18px;
-      cursor: pointer;
-      width: 100%;
-      box-shadow: 0 5px 15px rgba(0, 255, 208, 0.3);
-      transition: 0.3s;
-      display: none;
-    }
-    #final-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0, 255, 208, 0.5); }
-    #final-btn:disabled { background: #334e4e; color: #777; cursor: not-allowed; }
+        /* Main Verification Box */
+        .verify-box {
+            background: #fff;
+            padding: 30px 20px;
+            border-radius: 12px;
+            text-align: center;
+            border: 2px solid var(--accent);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+        }
 
-    .loading-msg { display: none; color: var(--accent); margin-top: 15px; font-weight: bold; }
-    .denied { color: #ff4d4d; font-weight: bold; margin-top: 50px; text-align: center; }
-  </style>
+        .timer-val {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--accent);
+            margin: 15px 0;
+        }
+
+        .btn-main {
+            background: var(--accent);
+            color: #fff;
+            padding: 18px 40px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            display: none;
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+            transition: 0.3s;
+        }
+
+        .btn-main:hover { background: #1d4ed8; transform: translateY(-2px); }
+        .btn-main:disabled { background: #94a3b8; cursor: not-allowed; }
+
+        /* Article Content for SEO/Ads */
+        .article { background: #fff; padding: 25px; border-radius: 12px; border: 1px solid var(--border); margin-top: 20px; }
+        .article h2 { color: var(--accent); font-size: 1.4rem; }
+        .article p { font-size: 0.95rem; color: #4b5563; }
+
+        .loading-text { color: var(--accent); font-weight: 600; display: none; margin-top: 15px; }
+
+        @media (max-width: 480px) {
+            h1 { font-size: 1.5rem; }
+            .verify-box { padding: 20px 15px; }
+        }
+    </style>
 </head>
 <body>
-<script src="https://3nbf4.com/act/files/tag.min.js?z=10381339" data-cfasync="false" async></script>
+
 <script>
-  if (sessionStorage.getItem("step") !== "4") {
-    document.body.innerHTML = "<div class='denied'>❌ Access Denied: Please complete the previous steps.</div>";
-  }
-</script>
-<script>(function(s){s.dataset.zone='10381300',s.src='https://gizokraijaw.net/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
-
-<div class="box">
-  <h2>Final Step</h2>
-<script src="https://3nbf4.com/act/files/tag.min.js?z=10381386" data-cfasync="false" async></script>
-
-  <script>
-  atOptions = {
-    'key' : '666b2474ed4c3364af3ed998b397cf46',
-    'format' : 'iframe',
-    'height' : 100,
-    'width' : 400,
-    'params' : {}
-  };
+    if (sessionStorage.getItem("step") !== "4") {
+        document.body.innerHTML = "<div style='text-align:center; padding-top:100px; font-family:sans-serif;'><h2>❌ Access Denied</h2><p>Please complete previous steps.</p></div>";
+    }
 </script>
 
+<header>
+    <div style="font-weight: 800; font-size: 1.3rem; color: var(--accent);">SECURE<span style="color:#1f2937">LINK</span></div>
+</header>
 
-  <div id="timer-container">
-    <p>Please wait, preparing your secure link...</p>
-    <div id="wait-timer">5</div>
-  </div>
-  <script src="https://3nbf4.com/act/files/tag.min.js?z=10381339" data-cfasync="false" async></script>
+<div class="container">
 
+    <div class="ad-space">
+        <script src="https://3nbf4.com/act/files/tag.min.js?z=10381339" data-cfasync="false" async></script>
+    </div>
 
-  <button id="final-btn" onclick="finish()">GET LINK</button>
+    <div class="verify-box">
+        <h2 style="margin:0; font-size: 1.2rem;">Final Verification</h2>
+        <p style="margin: 5px 0 15px; font-size: 0.9rem;">Your link is being encrypted. Please wait...</p>
 
-  <script src="https://3nbf4.com/act/files/tag.min.js?z=10381339" data-cfasync="false" async></script>
-  <div id="loading" class="loading-msg">Redirecting to destination...</div>
-<script src="https://3nbf4.com/act/files/tag.min.js?z=10381339" data-cfasync="false" async></script>
-  <script>
-  atOptions = {
-    'key' : '666b2474ed4c3364af3ed998b397cf46',
-    'format' : 'iframe',
-    'height' : 100,
-    'width' : 400,
-    'params' : {}
-  };
-</script>
-<script src="https://www.highperformanceformat.com/666b2474ed4c3364af3ed998b397cf46/invoke.js"></script>
+        <div id="countdown-ui">
+            <div class="timer-val" id="timer">8</div>
+            <p style="font-size: 12px; color: #6b7280;">Secure Link Generation in Progress</p>
+        </div>
 
-  <p style="font-size: 11px; opacity: 0.5; margin-top: 10px;">
-    Verification complete. You can now access your content.
-  </p>
+        <div style="margin: 15px 0;">
+            <script>atOptions={'key':'666b2474ed4c3364af3ed998b397cf46','format':'iframe','height':100,'width':400,'params':{}};</script>
+            <script src="https://www.highperformanceformat.com/666b2474ed4c3364af3ed998b397cf46/invoke.js"></script>
+        </div>
+
+        <button class="btn-main" id="get-link-btn" onclick="handleFinalRedirect()">GET LINK</button>
+        <div id="loading" class="loading-text">Verifying Session & Redirecting...</div>
+    </div>
+
+    <div class="ad-space"><script src="https://3nbf4.com/act/files/tag.min.js?z=10381386" data-cfasync="false" async></script></div>
+
+    <div class="article">
+        <h2>Why Secure Links Matter?</h2>
+        <p>In the digital age, protecting your data is paramount. Secure link generators ensure that the traffic is human-verified and free from malicious bots. This process helps maintain the quality of the content you are about to access.</p>
+        
+        <div class="ad-space"><script>(function(s){s.dataset.zone='10381300',s.src='https://gizokraijaw.net/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script></div>
+
+        <h2>Cloud Technology 2026</h2>
+        <p>Most files are now hosted on decentralized servers. This ensures 99.9% uptime and faster download speeds regardless of your global location. The final link you will receive is optimized for your local server nodes.</p>
+
+        <div class="ad-space"><script src="https://3nbf4.com/act/files/tag.min.js?z=10381339" data-cfasync="false" async></script></div>
+        <div class="ad-space">
+            <script async="async" data-cfasync="false" src="https://pl28334516.effectivegatecpm.com/cbbb337fba63c479050336665248235f/invoke.js"></script>
+            <div id="container-cbbb337fba63c479050336665248235f"></div>
+        </div>
+
+        <h2>Final Guidelines</h2>
+        <p>Once you click the 'Get Link' button, you will be redirected to the destination. Ensure you do not refresh the page during the "Verifying" phase to avoid session timeout.</p>
+    </div>
+
+    <div class="ad-space"><script src="https://pl28328281.effectivegatecpm.com/27/3c/53/273c5378ff0557eae1a862b03131344a.js"></script></div>
+    <div class="ad-space"><script src="https://3nbf4.com/act/files/tag.min.js?z=10381339" data-cfasync="false" async></script></div>
+
 </div>
 
+<footer style="text-align:center; padding: 30px; color: #9ca3af; font-size: 12px;">
+    &copy; 2025 SecureLink System. All Rights Reserved.
+</footer>
+
 <script>
-  // --- COUNTDOWN ---
-  let timeLeft = 5;
-  const waitTimer = document.getElementById("wait-timer");
-  const timerContainer = document.getElementById("timer-container");
-  const finalBtn = document.getElementById("final-btn");
+    // Timer Logic
+    let timeLeft = 8;
+    const timerDisplay = document.getElementById("timer");
+    const countContainer = document.getElementById("countdown-ui");
+    const linkBtn = document.getElementById("get-link-btn");
 
-  const countdown = setInterval(() => {
-    timeLeft--;
-    waitTimer.innerText = timeLeft;
+    const timerInterval = setInterval(() => {
+        timeLeft--;
+        if(timeLeft >= 0) timerDisplay.innerText = timeLeft;
 
-    if (timeLeft <= 0) {
-      clearInterval(countdown);
-      timerContainer.style.display = "none";
-      finalBtn.style.display = "block";
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            countContainer.style.display = "none";
+            linkBtn.style.display = "block";
+        }
+    }, 1000);
+
+    // API REDIRECT LOGIC
+    const API_BASE = "https://api.kinglinky.com";
+
+    async function handleFinalRedirect() {
+        const btn = document.getElementById("get-link-btn");
+        const loading = document.getElementById("loading");
+        const params = new URLSearchParams(window.location.search);
+        const code = params.get("code");
+
+        if(!code) {
+            alert("Security Code Missing! Please restart.");
+            return;
+        }
+
+        btn.disabled = true;
+        btn.style.display = "none";
+        loading.style.display = "block";
+
+        try {
+            const response = await fetch(`${API_BASE}/api/track/final`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ code })
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                // Clear session and go to main file
+                sessionStorage.clear();
+                setTimeout(() => {
+                    window.location.href = data.redirect;
+                }, 2000);
+            } else {
+                alert("Verification Failed. Invalid Session.");
+                btn.disabled = false;
+                btn.style.display = "block";
+                loading.style.display = "none";
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            alert("Network Error. Please try again.");
+            btn.disabled = false;
+            btn.style.display = "block";
+            loading.style.display = "none";
+        }
     }
-  }, 1000);
-
-  // 🔥 BACKEND API BASE (IMPORTANT FIX)
-  const API_BASE = "https://api.kinglinky.com";
-  // if subdomain illa na temporarily:
-  // const API_BASE = "https://kinglinky.onrender.com";
-
-  async function finish(){
-    const btn = document.getElementById("final-btn");
-    const loading = document.getElementById("loading");
-    const params = new URLSearchParams(location.search);
-    const code = params.get("code");
-
-    if(!code){
-      alert("Error: Link code missing!");
-      return;
-    }
-
-    btn.disabled = true;
-    btn.innerText = "Verifying...";
-    loading.style.display = "block";
-
-    try {
-      const res = await fetch(`${API_BASE}/api/track/final`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ code })
-      });
-
-      const data = await res.json();
-
-      if(data.success){
-        sessionStorage.clear();
-        setTimeout(() => {
-          location.href = data.redirect;
-        }, 1500);
-      } else {
-        btn.disabled = false;
-        btn.innerText = "Get Link";
-        loading.style.display = "none";
-        alert("Verification Failed.");
-      }
-    } catch (err) {
-      console.error("Fetch error:", err);
-      btn.disabled = false;
-      btn.innerText = "Get Link";
-      loading.style.display = "none";
-    }
-  }
 </script>
 
 </body>
