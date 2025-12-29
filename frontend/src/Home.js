@@ -132,8 +132,8 @@ export default function Home({ isLoggedIn, userEmail }) {
           <div style={styles.heroRight}>
             <div style={styles.heroCard}>
               <h4 style={{ margin: 0 }}>Total Clicks</h4>
-              <div style={styles.statLarge}>100000</div>
-              <div style={styles.statSmall}>Total URLs: 10000</div>
+              <div style={styles.statLarge}>1,00,000</div>
+              <div style={styles.statSmall}>Total URLs: 10,000</div>
             </div>
 
             <div style={styles.featuresBox}>
@@ -169,7 +169,7 @@ export default function Home({ isLoggedIn, userEmail }) {
       <section style={styles.statsRow}>
         <div style={styles.statCard}>
           <div style={styles.statLabel}>Total Clicks</div>
-          <div style={styles.statValue}>100000</div>
+          <div style={styles.statValue}>1,00,000</div>
         </div>
         <div style={styles.statCard}>
           <div style={styles.statLabel}>Registered Users</div>
@@ -181,7 +181,7 @@ export default function Home({ isLoggedIn, userEmail }) {
         </div>
         <div style={styles.statCard}>
           <div style={styles.statLabel}>Total URLs</div>
-          <div style={styles.statValue}>10000</div>
+          <div style={styles.statValue}>10,000</div>
         </div>
       </section>
 
