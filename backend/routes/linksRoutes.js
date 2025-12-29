@@ -12,21 +12,17 @@ router.get("/", async (req, res) => {
       filter = { ownerEmail: email };
     }
 
-    // Database-la irunthu data-va edukkirom
     const links = await Shortcut.find(filter).sort({ createdAt: -1 });
 
-    // Frontend-la "email" nu kettaal kidaika vendum enbatharkaga 
-    // ownerEmail-ai email-aga maatri anuppugirom
+    // Intha mapping thaan mukkiyam: Database field ownerEmail-ai 
+    // "email" endra peyarilum anuppugirom.
     const formattedLinks = links.map(link => ({
       _id: link._id,
-      fullUrl: link.fullUrl,
-      shortCode: link.shortCode,
       shortUrl: link.shortUrl,
       clicks: link.clicks,
       createdAt: link.createdAt,
-      // Intha rendu field-um irunthaal frontend-la confusion varaathu
-      ownerEmail: link.ownerEmail,
-      email: link.ownerEmail 
+      email: link.ownerEmail || "No Email", // ownerEmail illai endral "No Email" nu varum
+      ownerEmail: link.ownerEmail
     }));
 
     res.json(formattedLinks);
@@ -50,7 +46,7 @@ router.post("/shorten", async (req, res) => {
       fullUrl: longUrl,
       shortCode: code,
       shortUrl,
-      ownerEmail: email, // Database-la ownerEmail-nu save aagum
+      ownerEmail: email, 
       clicks: 0,
       clickedIPs: [],
     });
@@ -67,11 +63,7 @@ router.delete("/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const deletedLink = await Shortcut.findByIdAndDelete(id);
-    
-    if (!deletedLink) {
-      return res.status(404).json({ message: "Link not found" });
-    }
-    
+    if (!deletedLink) return res.status(404).json({ message: "Link not found" });
     res.status(200).json({ success: true, message: "Deleted successfully" });
   } catch (err) {
     console.error("DELETE ERROR", err);
