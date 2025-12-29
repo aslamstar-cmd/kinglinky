@@ -176,26 +176,26 @@
         <div class="ad-slot"><div class="ad-label">ADVERTISEMENT</div></div>
 
         <h2>2. Quantum Supremacy in Daily Life</h2>
-        <p>Quantum computing will move from laboratory experiments to cloud-based utility. This will allow for "Perfect Cryptography" and the ability to simulate molecular structures in seconds. For medicine, this means we can design personalized vaccines and cures based on an individual's unique DNA within hours, effectively ending the era of 'one-size-fits-all' medicine.</p>
+        <p>Quantum computing will move from laboratory experiments to cloud-based utility. This will allow for "Perfect Cryptography" and the ability to simulate molecular structures in seconds. For medicine, this means we can design personalized vaccines and cures based on an individual's unique DNA within hours.</p>
 
         <img src="https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&q=80&w=1200" class="blog-img" alt="Quantum Computing">
 
         <div class="ad-slot"><div class="ad-label">ADVERTISEMENT</div></div>
 
         <h2>3. The Decentralized Energy Grid</h2>
-        <p>The 2030s will mark the true death of the fossil fuel era. With breakthroughs in solid-state batteries and small-scale fusion reactors, every home will effectively become its own power plant. Excess energy will be traded autonomously on blockchain-based microgrids, allowing neighbors to sell power to each other without a central utility company.</p>
+        <p>The 2030s will mark the true death of the fossil fuel era. With breakthroughs in solid-state batteries and small-scale fusion reactors, every home will effectively become its own power plant. Excess energy will be traded autonomously on blockchain-based microgrids.</p>
 
         <div class="ad-slot"><div class="ad-label">ADVERTISEMENT</div></div>
 
         <h2>4. Brain-Computer Interfaces (BCI)</h2>
-        <p>Direct neural links will have transitioned from medical prosthetics to consumer electronics. While not everyone will have a chip in their brain, high-fidelity non-invasive BCI headbands will allow us to control our smart homes, type messages, and even experience virtual reality with all five senses, bypassing traditional screens and speakers entirely.</p>
+        <p>Direct neural links will have transitioned from medical prosthetics to consumer electronics. High-fidelity non-invasive BCI headbands will allow us to control our smart homes, type messages, and even experience virtual reality with all five senses, bypassing traditional screens.</p>
         
         <img src="https://images.unsplash.com/photo-1507413245164-6160d8298b31?auto=format&fit=crop&q=80&w=1200" class="blog-img" alt="Bio Tech">
 
         <div class="ad-slot"><div class="ad-label">ADVERTISEMENT</div></div>
         
         <h2>5. The Metaverse to Omni-verse</h2>
-        <p>The "Metaverse" as we imagined it in 2022 will seem primitive. By 2030, Augmented Reality (AR) will be so seamless that the digital and physical worlds will be indistinguishable. Digital "twins" of every city will exist, allowing for perfect urban planning and immersive remote work experiences that feel more real than a Zoom call ever could.</p>
+        <p>The "Metaverse" as we imagined it in 2022 will seem primitive. By 2030, Augmented Reality (AR) will be so seamless that the digital and physical worlds will be indistinguishable. Digital "twins" of every city will exist, allowing for perfect urban planning.</p>
 
         <div class="ad-slot"><div class="ad-label">ADVERTISEMENT</div></div>
 
@@ -225,7 +225,6 @@
     const finalBtn = document.getElementById("final-btn");
     const statusMsg = document.getElementById("status-msg");
 
-    // Require user to scroll deep into the article (at least 1800 pixels)
     window.addEventListener("scroll", () => {
         if (window.scrollY > 1800) {
             didUserScroll = true;
@@ -236,7 +235,6 @@
         timeLeft--;
         if(timeLeft >= 0) secDisp.innerText = timeLeft;
         
-        // Update Progress Bar
         let progress = ((15 - timeLeft) / 15) * 100;
         pBar.style.width = progress + "%";
 
@@ -251,7 +249,6 @@
             statusMsg.innerHTML = "⚠️ Please read the full article to verify security.";
             statusMsg.style.color = "#ef4444";
             
-            // Re-check every 2 seconds if they scrolled
             const scrollCheck = setInterval(() => {
                 if (window.scrollY > 1800) {
                     clearInterval(scrollCheck);
@@ -271,12 +268,15 @@
     }
 
     function goToFinalPage() {
-        const code = new URLSearchParams(window.location.search).get("code");
+        const urlParams = new URLSearchParams(window.location.search);
+        const code = urlParams.get("code");
+        
         if(!code) {
-            alert("Security Error: Code missing. Please go back to Step 1.");
+            alert("Security Error: Code missing.");
             return;
         }
-        // REDIRECT TO final.html
+
+        // Change "final.html" to the exact name of your final page file
         window.location.href = "final.html?code=" + code;
     }
 </script>
