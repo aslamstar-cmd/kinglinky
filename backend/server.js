@@ -28,7 +28,7 @@ const app = express();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.resolve();
 
-/* ---------------- 1. CORS FIX (ADMIN LIST VARA IDHU MUKKIAM) ---------------- */
+/* ---------------- 1. CORS FIX ---------------- */
 app.use(cors({
     origin: [
         "https://www.kinglinky.com",
@@ -37,14 +37,16 @@ app.use(cors({
         "http://localhost:3000"
     ],
     methods: ["GET", "POST", "PUT", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization"], // Auth token header allow panrom
+    allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true
 }));
 
 /* ---------------- 2. MIDDLEWARES ---------------- */
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-// Step files (HTML) 'public' folder-la irundha dhaan step pages open aagum
+
+// IDHU THAAN MUKKIAM: 'public' folder kulla irukura 'ad-check.js' file-ai 
+// browser fetch panna indha line help pannum.
 app.use(express.static(path.join(__dirname, "public")));
 
 /* ---------------- 3. ROUTES MOUNTING ---------------- */
@@ -54,21 +56,23 @@ app.use("/api/admin", adminUsers);
 app.use("/api/admin/settings", settingsRoutes);
 app.use("/api/withdraw", withdrawRoutes);
 app.use("/api/links", linksRoutes);
-app.use("/api/track", trackRoutes); // Final redirect handle aagura route
+app.use("/api/track", trackRoutes); 
 app.use(stepRoutes);
 
 /* ---------------- 4. DB CONNECTION ---------------- */
+// Unga env-la MONGO_URI matum irundha kooda podhum. MONGO_DB illana URI-laye database name irukkanum.
 mongoose
-    .connect(`${process.env.MONGO_URI}/${process.env.MONGO_DB}`)
+    .connect(`${process.env.MONGO_URI}/${process.env.MONGO_DB || ''}`)
     .then(() => console.log("Mongo Connected ✅"))
     .catch((err) => console.log("DB Connection Error:", err));
 
 /* ---------------- 5. STEP PAGES ROUTING ---------------- */
-// Frontend logic-ku thagundha maari direct routing
+// Frontend logic match aaga step pages-ai serve pannuthu
 app.get("/step1/:code", (req, res) => res.sendFile(path.join(__dirname, "public/step1.html")));
 app.get("/step2/:code", (req, res) => res.sendFile(path.join(__dirname, "public/step2.html")));
 app.get("/step3/:code", (req, res) => res.sendFile(path.join(__dirname, "public/step3.html")));
 app.get("/step4/:code", (req, res) => res.sendFile(path.join(__dirname, "public/step4.html")));
+app.get("/final/:code", (req, res) => res.sendFile(path.join(__dirname, "public/final.html")));
 
 /* ---------------- 6. AUTH LOGIC (LOGIN/SIGNUP) ---------------- */
 app.post("/api/signup", async (req, res) => {
@@ -110,13 +114,21 @@ app.post("/api/login", async (req, res) => {
 
 /* ---------------- 7. DATA API ---------------- */
 app.get("/api/wallet/:email", async (req, res) => {
-    const user = await User.findOne({ email: req.params.email });
-    res.json({ balance: user?.wallet || 0 });
+    try {
+        const user = await User.findOne({ email: req.params.email });
+        res.json({ balance: user?.wallet || 0 });
+    } catch (e) {
+        res.status(500).json({ balance: 0 });
+    }
 });
 
 app.get("/api/user-links/:email", async (req, res) => {
-    const links = await Shortcut.find({ ownerEmail: req.params.email }).sort({ createdAt: -1 });
-    res.json(links);
+    try {
+        const links = await Shortcut.find({ ownerEmail: req.params.email }).sort({ createdAt: -1 });
+        res.json(links);
+    } catch (e) {
+        res.status(500).json([]);
+    }
 });
 
 app.get("/create-admin", async (req, res) => {
