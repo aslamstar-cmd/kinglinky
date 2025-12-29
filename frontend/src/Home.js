@@ -229,7 +229,7 @@ export default function Home({ isLoggedIn, userEmail }) {
 
           <div>
             <h4>Contact</h4>
-            <div><a href="@KingLinkySupport_Bot">@KingLinkySupport_Bot</a></div>
+            <div><a href="https://t.me/KingLinkySupport_Bot">@KingLinkySupport_Bot</a></div>
             <div style={{ marginTop: 8 }}>© {new Date().getFullYear()} Kinglinky</div>
           </div>
         </div>
