@@ -5,29 +5,36 @@ export default function AdminWithdraws() {
   const [withdraws, setWithdraws] = useState([]);
   const [loading, setLoading] = useState(true);
 
-// FETCH WITHDRAWS LOGIC
-const fetchWithdraws = async () => {
-  setLoading(true); // Fetch start pannum munnadi loading true
-  try {
-    const res = await api.get("/api/withdraw/admin");
-    
-    // Console-la response check pannunga:
-    console.log("API Response:", res.data);
+  // FETCH WITHDRAWS LOGIC
+  const fetchWithdraws = async () => {
+    setLoading(true);
+    try {
+      // 1. LocalStorage-la irundhu token edukkavum
+      const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
 
-    // Backend { success: true, data: [...] } nu anupuna:
-    if (res.data && res.data.success) {
-      setWithdraws(res.data.data || []);
-    } else {
-      console.warn("Backend success: false vandhuchu");
+      // 2. GET request headers-oda anupavum
+      const res = await api.get("/api/withdraw/admin", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      console.log("API Response:", res.data);
+
+      if (res.data && res.data.success) {
+        setWithdraws(res.data.data || []);
+      } else {
+        console.warn("Backend success: false vandhuchu");
+        setWithdraws([]);
+      }
+    } catch (err) {
+      // 401 Error vandha console-la clear-ah kaatum
+      console.error("Error fetching withdraws:", err.response ? err.response.data : err.message);
       setWithdraws([]);
+    } finally {
+      setLoading(false);
     }
-  } catch (err) {
-    console.error("Error fetching withdraws:", err.response ? err.response.data : err.message);
-    setWithdraws([]);
-  } finally {
-    setLoading(false); // Ellam mudinja appram loading false
-  }
-};
+  };
 
   useEffect(() => {
     fetchWithdraws();
@@ -38,86 +45,96 @@ const fetchWithdraws = async () => {
     if (!ok) return;
 
     try {
-      await api.post(`/api/withdraw/approve/${id}`);
+      const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
+      
+      await api.post(`/api/withdraw/approve/${id}`, {}, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      
+      alert("Status updated to PAID!");
       fetchWithdraws(); // Refresh the list
     } catch (err) {
       console.error("Error approving withdraw:", err);
-      alert("Approve failed");
+      alert("Approve failed: " + (err.response?.data?.message || "Unknown error"));
     }
   };
 
   return (
-    <div style={{ padding: 20 }}>
-      <h1 style={{ marginBottom: 16 }}>Withdraw Requests</h1>
+    <div style={{ padding: "20px", fontFamily: "sans-serif" }}>
+      <h1 style={{ marginBottom: "16px", fontSize: "24px", color: "#333" }}>Withdraw Requests</h1>
 
-      <div style={{ overflowX: "auto" }}>
+      <div style={{ overflowX: "auto", background: "#fff", borderRadius: "12px", boxShadow: "0 4px 12px rgba(0,0,0,0.1)" }}>
         <table
           style={{
-            width: "100%", // Fix: changed from 100px to 100%
+            width: "100%", 
             borderCollapse: "collapse",
-            background: "#fff",
-            borderRadius: 12,
-            overflow: "hidden",
-            boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
+            minWidth: "600px"
           }}
         >
           <thead style={{ background: "#0b7a46", color: "white" }}>
             <tr>
-              <th style={{ padding: 12, textAlign: "left" }}>Email</th>
-              <th style={{ padding: 12 }}>Amount</th>
-              <th style={{ padding: 12 }}>Note</th>
-              <th style={{ padding: 12 }}>Date</th>
-              <th style={{ padding: 12 }}>Status</th>
-              <th style={{ padding: 12 }}>Action</th>
+              <th style={{ padding: "15px", textAlign: "left" }}>Email</th>
+              <th style={{ padding: "15px" }}>Amount</th>
+              <th style={{ padding: "15px" }}>Note</th>
+              <th style={{ padding: "15px" }}>Date</th>
+              <th style={{ padding: "15px" }}>Status</th>
+              <th style={{ padding: "15px" }}>Action</th>
             </tr>
           </thead>
 
           <tbody>
             {loading ? (
               <tr>
-                <td colSpan="6" style={{ textAlign: "center", padding: 20 }}>
-                  Loading...
+                <td colSpan="6" style={{ textAlign: "center", padding: "40px", color: "#666" }}>
+                  <div className="spinner">Loading Withdrawals...</div>
                 </td>
               </tr>
             ) : withdraws.length === 0 ? (
               <tr>
-                <td colSpan="6" style={{ textAlign: "center", padding: 30 }}>
-                  No withdraws found.
+                <td colSpan="6" style={{ textAlign: "center", padding: "50px", color: "#888" }}>
+                  No withdraw requests found.
                 </td>
               </tr>
             ) : (
               withdraws.map((w) => (
-                <tr key={w._id} style={{ borderBottom: "1px solid #eee", textAlign: "center" }}>
-                  <td style={{ padding: 12, textAlign: "left" }}>{w.userEmail}</td>
-                  <td style={{ padding: 12 }}>₹ {w.amount}</td>
-                  <td style={{ padding: 12 }}>{w.note || "-"}</td>
-                  <td style={{ padding: 12 }}>
+                <tr key={w._id} style={{ borderBottom: "1px solid #f0f0f0", textAlign: "center" }}>
+                  <td style={{ padding: "15px", textAlign: "left", fontSize: "14px" }}>{w.userEmail}</td>
+                  <td style={{ padding: "15px", fontWeight: "bold" }}>₹ {w.amount}</td>
+                  <td style={{ padding: "15px", color: "#666" }}>{w.note || "-"}</td>
+                  <td style={{ padding: "15px", fontSize: "13px" }}>
                     {new Date(w.createdAt).toLocaleString()}
                   </td>
-                  <td style={{ padding: 12 }}>
+                  <td style={{ padding: "15px" }}>
                     <span style={{ 
-                      padding: "4px 8px", 
-                      borderRadius: 4, 
+                      padding: "5px 10px", 
+                      borderRadius: "20px", 
                       background: w.status === "paid" ? "#dcfce7" : "#fef9c3",
                       color: w.status === "paid" ? "#166534" : "#854d0e",
                       fontSize: "12px",
+                      fontWeight: "600",
                       textTransform: "capitalize"
                     }}>
                       {w.status}
                     </span>
                   </td>
-                  <td style={{ padding: 12 }}>
-                    {w.status === "pending" ? (
+                  <td style={{ padding: "15px" }}>
+                    {w.status === "pending" || w.status === "Processing" ? (
                       <button
                         onClick={() => approveWithdraw(w._id)}
                         style={{
-                          padding: "6px 12px",
-                          borderRadius: 8,
+                          padding: "8px 16px",
+                          borderRadius: "8px",
                           border: "none",
                           background: "#0b7a46",
                           color: "#fff",
                           cursor: "pointer",
+                          fontWeight: "600",
+                          transition: "0.2s"
                         }}
+                        onMouseOver={(e) => e.target.style.background = "#096339"}
+                        onMouseOut={(e) => e.target.style.background = "#0b7a46"}
                       >
                         Mark Paid
                       </button>
