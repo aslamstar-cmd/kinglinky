@@ -7,161 +7,44 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #f3f4f6;
-            --card: #ffffff;
-            --accent: #2563eb;
-            --text: #1f2937;
-            --border: #e5e7eb;
+            --bg: #f3f4f6; --card: #ffffff; --accent: #2563eb;
+            --text: #1f2937; --border: #e5e7eb;
         }
-
-        body {
-            background-color: var(--bg);
-            color: var(--text);
-            font-family: 'Inter', sans-serif;
-            margin: 0;
-            padding: 0;
-            line-height: 1.6;
-        }
-
-        header {
-            background: #fff;
-            padding: 15px 5%;
-            border-bottom: 1px solid var(--border);
-            text-align: center;
-            position: sticky; top: 0; z-index: 100;
-        }
-
-        .container {
-            max-width: 700px;
-            margin: 20px auto;
-            padding: 0 15px;
-        }
-
-        /* Ad Slots Layout */
-        .ad-space {
-            background: #fff;
-            border: 1px solid var(--border);
-            margin: 15px 0;
-            padding: 10px;
-            text-align: center;
-            border-radius: 8px;
-            min-height: 100px;
-        }
-
-        /* Main Verification Box */
-        .verify-box {
-            background: #fff;
-            padding: 30px 20px;
-            border-radius: 12px;
-            text-align: center;
-            border: 2px solid var(--accent);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-            margin-bottom: 30px;
-        }
-
-        .timer-val {
-            font-size: 2.5rem;
-            font-weight: 800;
-            color: var(--accent);
-            margin: 15px 0;
-        }
-
-        .btn-main {
-            background: var(--accent);
-            color: #fff;
-            padding: 18px 40px;
-            font-size: 1.1rem;
-            font-weight: 700;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            width: 100%;
-            display: none;
-            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
-            transition: 0.3s;
-        }
-
+        body { background-color: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; margin: 0; line-height: 1.6; }
+        header { background: #fff; padding: 15px 5%; border-bottom: 1px solid var(--border); text-align: center; position: sticky; top: 0; z-index: 100; }
+        .container { max-width: 700px; margin: 20px auto; padding: 0 15px; }
+        .ad-space { background: #fff; border: 1px solid var(--border); margin: 15px 0; padding: 10px; text-align: center; border-radius: 8px; min-height: 100px; }
+        .verify-box { background: #fff; padding: 30px 20px; border-radius: 12px; text-align: center; border: 2px solid var(--accent); box-shadow: 0 4px 20px rgba(0,0,0,0.05); margin-bottom: 30px; }
+        .timer-val { font-size: 2.5rem; font-weight: 800; color: var(--accent); margin: 15px 0; }
+        .btn-main { background: var(--accent); color: #fff; padding: 18px 40px; font-size: 1.1rem; font-weight: 700; border: none; border-radius: 8px; cursor: pointer; width: 100%; display: none; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3); transition: 0.3s; }
         .btn-main:hover { background: #1d4ed8; transform: translateY(-2px); }
-        .btn-main:disabled { background: #94a3b8; cursor: not-allowed; }
-
-        /* Article Content for SEO/Ads */
-        .article { background: #fff; padding: 25px; border-radius: 12px; border: 1px solid var(--border); margin-top: 20px; }
-        .article h2 { color: var(--accent); font-size: 1.4rem; }
-        .article p { font-size: 0.95rem; color: #4b5563; }
-
         .loading-text { color: var(--accent); font-weight: 600; display: none; margin-top: 15px; }
-
-        @media (max-width: 480px) {
-            h1 { font-size: 1.5rem; }
-            .verify-box { padding: 20px 15px; }
-        }
+        .article { background: #fff; padding: 25px; border-radius: 12px; border: 1px solid var(--border); margin-top: 20px; }
     </style>
 </head>
 <body>
-
-<script>
-    if (sessionStorage.getItem("step") !== "4") {
-        document.body.innerHTML = "<div style='text-align:center; padding-top:100px; font-family:sans-serif;'><h2>❌ Access Denied</h2><p>Please complete previous steps.</p></div>";
-    }
-</script>
 
 <header>
     <div style="font-weight: 800; font-size: 1.3rem; color: var(--accent);">SECURE<span style="color:#1f2937">LINK</span></div>
 </header>
 
 <div class="container">
-
-    <div class="ad-space">
-        <script src="https://3nbf4.com/act/files/tag.min.js?z=10381339" data-cfasync="false" async></script>
-    </div>
-
     <div class="verify-box">
         <h2 style="margin:0; font-size: 1.2rem;">Final Verification</h2>
-        <p style="margin: 5px 0 15px; font-size: 0.9rem;">Your link is being encrypted. Please wait...</p>
-
         <div id="countdown-ui">
             <div class="timer-val" id="timer">8</div>
-            <p style="font-size: 12px; color: #6b7280;">Secure Link Generation in Progress</p>
-        </div>
-
-        <div style="margin: 15px 0;">
-            <script>atOptions={'key':'666b2474ed4c3364af3ed998b397cf46','format':'iframe','height':100,'width':400,'params':{}};</script>
-            <script src="https://www.highperformanceformat.com/666b2474ed4c3364af3ed998b397cf46/invoke.js"></script>
+            <p>Secure Link Generation in Progress...</p>
         </div>
 
         <button class="btn-main" id="get-link-btn" onclick="handleFinalRedirect()">GET LINK</button>
         <div id="loading" class="loading-text">Verifying Session & Redirecting...</div>
     </div>
 
-    <div class="ad-space"><script src="https://3nbf4.com/act/files/tag.min.js?z=10381386" data-cfasync="false" async></script></div>
-
     <div class="article">
         <h2>Why Secure Links Matter?</h2>
-        <p>In the digital age, protecting your data is paramount. Secure link generators ensure that the traffic is human-verified and free from malicious bots. This process helps maintain the quality of the content you are about to access.</p>
-        
-        <div class="ad-space"><script>(function(s){s.dataset.zone='10381300',s.src='https://gizokraijaw.net/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script></div>
-
-        <h2>Cloud Technology 2026</h2>
-        <p>Most files are now hosted on decentralized servers. This ensures 99.9% uptime and faster download speeds regardless of your global location. The final link you will receive is optimized for your local server nodes.</p>
-
-        <div class="ad-space"><script src="https://3nbf4.com/act/files/tag.min.js?z=10381339" data-cfasync="false" async></script></div>
-        <div class="ad-space">
-            <script async="async" data-cfasync="false" src="https://pl28334516.effectivegatecpm.com/cbbb337fba63c479050336665248235f/invoke.js"></script>
-            <div id="container-cbbb337fba63c479050336665248235f"></div>
-        </div>
-
-        <h2>Final Guidelines</h2>
-        <p>Once you click the 'Get Link' button, you will be redirected to the destination. Ensure you do not refresh the page during the "Verifying" phase to avoid session timeout.</p>
+        <p>This process ensures that the traffic is human-verified and free from bots.</p>
     </div>
-
-    <div class="ad-space"><script src="https://pl28328281.effectivegatecpm.com/27/3c/53/273c5378ff0557eae1a862b03131344a.js"></script></div>
-    <div class="ad-space"><script src="https://3nbf4.com/act/files/tag.min.js?z=10381339" data-cfasync="false" async></script></div>
-
 </div>
-
-<footer style="text-align:center; padding: 30px; color: #9ca3af; font-size: 12px;">
-    &copy; 2025 SecureLink System. All Rights Reserved.
-</footer>
 
 <script>
     // Timer Logic
@@ -173,7 +56,6 @@
     const timerInterval = setInterval(() => {
         timeLeft--;
         if(timeLeft >= 0) timerDisplay.innerText = timeLeft;
-
         if (timeLeft <= 0) {
             clearInterval(timerInterval);
             countContainer.style.display = "none";
@@ -181,7 +63,7 @@
         }
     }, 1000);
 
-    // API REDIRECT LOGIC
+    // 🔥 REDIRECT LOGIC
     const API_BASE = "https://api.kinglinky.com";
 
     async function handleFinalRedirect() {
@@ -191,11 +73,10 @@
         const code = params.get("code");
 
         if(!code) {
-            alert("Security Code Missing! Please restart.");
+            alert("Security Code Missing!");
             return;
         }
 
-        btn.disabled = true;
         btn.style.display = "none";
         loading.style.display = "block";
 
@@ -208,27 +89,21 @@
 
             const data = await response.json();
 
-            if (data.success) {
-                // Clear session and go to main file
+            if (data.success && data.redirect) {
                 sessionStorage.clear();
-                setTimeout(() => {
-                    window.location.href = data.redirect;
-                }, 2000);
+                // Real Destination URL-ku redirect pannum
+                window.location.replace(data.redirect); 
             } else {
-                alert("Verification Failed. Invalid Session.");
-                btn.disabled = false;
+                alert("Verification Failed. Link Expired.");
                 btn.style.display = "block";
                 loading.style.display = "none";
             }
         } catch (error) {
-            console.error("Error:", error);
-            alert("Network Error. Please try again.");
-            btn.disabled = false;
+            alert("Network Error. Try again.");
             btn.style.display = "block";
             loading.style.display = "none";
         }
     }
 </script>
-
 </body>
 </html>
