@@ -11,8 +11,25 @@ router.get("/", async (req, res) => {
     if (email) {
       filter = { ownerEmail: email };
     }
+
+    // Database-la irunthu data-va edukkirom
     const links = await Shortcut.find(filter).sort({ createdAt: -1 });
-    res.json(links);
+
+    // Frontend-la "email" nu kettaal kidaika vendum enbatharkaga 
+    // ownerEmail-ai email-aga maatri anuppugirom
+    const formattedLinks = links.map(link => ({
+      _id: link._id,
+      fullUrl: link.fullUrl,
+      shortCode: link.shortCode,
+      shortUrl: link.shortUrl,
+      clicks: link.clicks,
+      createdAt: link.createdAt,
+      // Intha rendu field-um irunthaal frontend-la confusion varaathu
+      ownerEmail: link.ownerEmail,
+      email: link.ownerEmail 
+    }));
+
+    res.json(formattedLinks);
   } catch (err) {
     console.error("LINKS FETCH ERROR", err);
     res.status(500).json([]);
@@ -33,7 +50,7 @@ router.post("/shorten", async (req, res) => {
       fullUrl: longUrl,
       shortCode: code,
       shortUrl,
-      ownerEmail: email,
+      ownerEmail: email, // Database-la ownerEmail-nu save aagum
       clicks: 0,
       clickedIPs: [],
     });
@@ -45,7 +62,7 @@ router.post("/shorten", async (req, res) => {
   }
 });
 
-/* DELETE LINK (Intha section missing-ah irunthathu, ippo add panniyachu) */
+/* DELETE LINK */
 router.delete("/:id", async (req, res) => {
   try {
     const { id } = req.params;
