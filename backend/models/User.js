@@ -14,13 +14,21 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  referralCode: {type: String, default:""},
-  referralBy:{type: String, default:null},
-  referralEarnings:{type: Number, deafault: 0},
-  firstLoginRewardGiven: {type: Boolean, default: false},
+  // 🔹 Intha rendu field thaan mukkiyam
+  wallet: { 
+    type: Number, 
+    default: 0 
+  }, 
+  totalEarnings: { 
+    type: Number, 
+    default: 0 
+  },
+  referralCode: { type: String, default: "" },
+  referralBy: { type: String, default: null },
+  referralEarnings: { type: Number, default: 0 }, // Spelling fixed
+  firstLoginRewardGiven: { type: Boolean, default: false },
 },
- { timestamps: true}
+ { timestamps: true }
 );
-
 
 export default mongoose.model("User", userSchema);
