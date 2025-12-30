@@ -44,9 +44,6 @@ app.use(cors({
 /* ---------------- 2. MIDDLEWARES ---------------- */
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-// IDHU THAAN MUKKIAM: 'public' folder kulla irukura 'ad-check.js' file-ai 
-// browser fetch panna indha line help pannum.
 app.use(express.static(path.join(__dirname, "public")));
 
 /* ---------------- 3. ROUTES MOUNTING ---------------- */
@@ -60,21 +57,35 @@ app.use("/api/track", trackRoutes);
 app.use(stepRoutes);
 
 /* ---------------- 4. DB CONNECTION ---------------- */
-// Unga env-la MONGO_URI matum irundha kooda podhum. MONGO_DB illana URI-laye database name irukkanum.
 mongoose
     .connect(`${process.env.MONGO_URI}/${process.env.MONGO_DB || ''}`)
     .then(() => console.log("Mongo Connected ✅"))
     .catch((err) => console.log("DB Connection Error:", err));
 
-/* ---------------- 5. STEP PAGES ROUTING ---------------- */
-// Frontend logic match aaga step pages-ai serve pannuthu
-app.get("/step1/:code", (req, res) => res.sendFile(path.join(__dirname, "public/step1.html")));
-app.get("/step2/:code", (req, res) => res.sendFile(path.join(__dirname, "public/step2.html")));
-app.get("/step3/:code", (req, res) => res.sendFile(path.join(__dirname, "public/step3.html")));
-app.get("/step4/:code", (req, res) => res.sendFile(path.join(__dirname, "public/step4.html")));
-app.get("/final/:code", (req, res) => res.sendFile(path.join(__dirname, "public/final.html")));
+/* ---------------- 5. USER PROFILE API (DASHBOARD FIX) ---------------- */
+// Intha route illatha pothu thaan 404 error vanthathu.
+app.get("/api/users/profile", async (req, res) => {
+    try {
+        const email = req.query.email;
+        if (!email) return res.status(400).json({ message: "Email required" });
 
-/* ---------------- 6. AUTH LOGIC (LOGIN/SIGNUP) ---------------- */
+        const user = await User.findOne({ email });
+        if (!user) return res.status(404).json({ message: "User not found" });
+
+        // Dashboard-ku thevaiyana wallet data-va inga anupuroam
+        res.json({
+            success: true,
+            name: user.name,
+            email: user.email,
+            wallet: user.wallet || 0,
+            totalEarnings: user.totalEarnings || 0
+        });
+    } catch (err) {
+        res.status(500).json({ message: "Server error" });
+    }
+});
+
+/* ---------------- 6. AUTH LOGIC ---------------- */
 app.post("/api/signup", async (req, res) => {
     try {
         const { name, email, password } = req.body;
@@ -84,7 +95,8 @@ app.post("/api/signup", async (req, res) => {
         if (oldUser) return res.status(400).json({ message: "User exists" });
 
         const hashedPass = await bcrypt.hash(password, 10);
-        const newUser = new User({ name, email, password: hashedPass, wallet: 0 });
+        // Signup pannumpothe default-ah wallet 0 vechuduroam
+        const newUser = new User({ name, email, password: hashedPass, wallet: 0, totalEarnings: 0 });
         await newUser.save();
         res.json({ success: true });
     } catch (err) {
@@ -112,7 +124,7 @@ app.post("/api/login", async (req, res) => {
     }
 });
 
-/* ---------------- 7. DATA API ---------------- */
+/* ---------------- 7. OTHER DATA APIS ---------------- */
 app.get("/api/wallet/:email", async (req, res) => {
     try {
         const user = await User.findOne({ email: req.params.email });
@@ -131,6 +143,7 @@ app.get("/api/user-links/:email", async (req, res) => {
     }
 });
 
+// Admin creation tool
 app.get("/create-admin", async (req, res) => {
     const hashed = await bcrypt.hash("aslamlord", 10);
     await admin.findOneAndUpdate({ username: "kingaslam" }, { password: hashed }, { upsert: true });
@@ -140,4 +153,4 @@ app.get("/create-admin", async (req, res) => {
 app.get("/", (_req, res) => res.send("KingLinky Server Active 🚀"));
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server started on ${PORT}`));
+app.listen(PORT, '0.0.0.0', () => console.log(`Server started on ${PORT}`));
