@@ -11,7 +11,7 @@ import jwt from "jsonwebtoken";
 import admin from "./models/admin.js";
 import Shortcut from "./models/Shortcut.js";
 import User from "./models/User.js";
-import Withdraw from "./models/withdraw.js"; // IMPORT WITHDRAW MODEL
+import Withdraw from "./models/withdraw.js"; 
 
 // Routes
 import adminAuthRoutes from "./routes/adminAuth.js";
@@ -63,9 +63,7 @@ mongoose
     .then(() => console.log("Mongo Connected ✅"))
     .catch((err) => console.log("DB Connection Error:", err));
 
-/* ---------------- 5. DASHBOARD FIX APIS ---------------- */
-
-// PROFILE API: Dashboard-la Wallet and Total Earnings vara
+/* ---------------- 5. USER PROFILE & DASHBOARD API ---------------- */
 app.get("/api/users/profile", async (req, res) => {
     try {
         const email = req.query.email;
@@ -74,25 +72,36 @@ app.get("/api/users/profile", async (req, res) => {
         const user = await User.findOne({ email });
         if (!user) return res.status(404).json({ message: "User not found" });
 
+        // TODAY EARNINGS CALCULATION (Real-time calculation from links)
+        const today = new Date().toISOString().split('T')[0];
+        const userLinks = await Shortcut.find({ ownerEmail: email });
+        
+        let todayEarned = 0;
+        userLinks.forEach(link => {
+            const clicksToday = link.dailyClicks instanceof Map ? (link.dailyClicks.get(today) || 0) : 0;
+            // Assuming $10 CPM
+            todayEarned += (clicksToday / 1000) * 10;
+        });
+
         res.json({
             success: true,
             name: user.name,
             email: user.email,
             wallet: Number(user.wallet) || 0,
-            totalEarnings: Number(user.totalEarnings) || 0
+            totalEarnings: Number(user.totalEarnings) || 0,
+            todayEarnings: todayEarned
         });
     } catch (err) {
+        console.error("Profile Fetch Error:", err);
         res.status(500).json({ message: "Server error" });
     }
 });
 
-// WITHDRAW MY API: "Withdrawn" money dashboard-la update aaga
-// Frontend `axios.get(${API_BASE}/api/withdraw/my?email=${user.email})` nu kekkum
+// WITHDRAW DATA FOR DASHBOARD
 app.get("/api/withdraw/my", async (req, res) => {
     try {
         const email = req.query.email;
         if (!email) return res.status(400).json({ success: false, data: [] });
-
         const withdraws = await Withdraw.find({ userEmail: email }).sort({ createdAt: -1 });
         res.json({ success: true, data: withdraws });
     } catch (err) {
@@ -138,7 +147,7 @@ app.post("/api/login", async (req, res) => {
     }
 });
 
-/* ---------------- 7. OTHER DATA APIS ---------------- */
+/* ---------------- 7. ADDITIONAL DATA APIS ---------------- */
 app.get("/api/wallet/:email", async (req, res) => {
     try {
         const user = await User.findOne({ email: req.params.email });
