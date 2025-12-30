@@ -1,6 +1,6 @@
 import express from "express";
 import Withdraw from "../models/withdraw.js";
-import User from "../models/user.js"; // USER MODEL KANDIPPA VENUM
+import User from "../models/User.js"; // USER MODEL KANDIPPA VENUM
 import adminAuth from "../middleware/adminAuth.js";
 import userAuth from "../middleware/userAuth.js";
 
