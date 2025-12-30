@@ -29,23 +29,22 @@ const app = express();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.resolve();
 
-/* ---------------- 1. CORS FIX ---------------- */
+/* ---------------- 1. CORS & JSON ---------------- */
 app.use(cors({
-    origin: [
-        "https://www.kinglinky.com",
-        "https://kinglinky.com",
-        "https://api.kinglinky.com",
-        "http://localhost:3000"
-    ],
+    origin: ["https://www.kinglinky.com", "https://kinglinky.com", "http://localhost:3000"],
     methods: ["GET", "POST", "PUT", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true
 }));
-
-/* ---------------- 2. MIDDLEWARES ---------------- */
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
+
+/* ---------------- 2. DB CONNECTION ---------------- */
+// MongoDB connection string-ah check panni connect pannuvom
+const mongoURI = process.env.MONGO_URI;
+mongoose.connect(mongoURI)
+    .then(() => console.log("Database Connected Successfully ✅"))
+    .catch((err) => console.log("DB Connection Error ❌:", err));
 
 /* ---------------- 3. ROUTES MOUNTING ---------------- */
 app.use("/api/admin", adminAuthRoutes);
@@ -57,123 +56,117 @@ app.use("/api/links", linksRoutes);
 app.use("/api/track", trackRoutes); 
 app.use(stepRoutes);
 
-/* ---------------- 4. DB CONNECTION ---------------- */
-mongoose
-    .connect(`${process.env.MONGO_URI}/${process.env.MONGO_DB || ''}`)
-    .then(() => console.log("Mongo Connected ✅"))
-    .catch((err) => console.log("DB Connection Error:", err));
+/* ---------------- 4. CRITICAL DASHBOARD FIX ---------------- */
 
-/* ---------------- 5. USER PROFILE & DASHBOARD API ---------------- */
 app.get("/api/users/profile", async (req, res) => {
     try {
-        const email = req.query.email;
-        if (!email) return res.status(400).json({ message: "Email required" });
+        const { email } = req.query;
+        console.log("Fetching profile for:", email); // Log check panna
 
-        const user = await User.findOne({ email });
-        if (!user) return res.status(404).json({ message: "User not found" });
+        if (!email) return res.status(400).json({ message: "Email missing" });
 
-        // TODAY EARNINGS CALCULATION (Real-time calculation from links)
+        // Database la user-ah thedurom
+        const user = await User.findOne({ email: email.trim().toLowerCase() });
+
+        if (!user) {
+            console.log("User not found in DB for email:", email);
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        // Today Earnings Calculation
         const today = new Date().toISOString().split('T')[0];
-        const userLinks = await Shortcut.find({ ownerEmail: email });
+        const userLinks = await Shortcut.find({ ownerEmail: user.email });
         
         let todayEarned = 0;
         userLinks.forEach(link => {
-            const clicksToday = link.dailyClicks instanceof Map ? (link.dailyClicks.get(today) || 0) : 0;
-            // Assuming $10 CPM
-            todayEarned += (clicksToday / 1000) * 10;
+            if (link.dailyClicks && typeof link.dailyClicks.get === 'function') {
+                const clicksToday = link.dailyClicks.get(today) || 0;
+                todayEarned += (clicksToday / 1000) * 10;
+            }
         });
+
+        console.log(`Data found: Wallet: ${user.wallet}, Earnings: ${user.totalEarnings}`);
 
         res.json({
             success: true,
-            name: user.name,
-            email: user.email,
             wallet: Number(user.wallet) || 0,
             totalEarnings: Number(user.totalEarnings) || 0,
-            todayEarnings: todayEarned
+            todayEarnings: Number(todayEarned.toFixed(4)),
+            name: user.name
         });
     } catch (err) {
-        console.error("Profile Fetch Error:", err);
-        res.status(500).json({ message: "Server error" });
+        console.error("Profile API Error:", err);
+        res.status(500).json({ message: "Server error", error: err.message });
     }
 });
 
-// WITHDRAW DATA FOR DASHBOARD
 app.get("/api/withdraw/my", async (req, res) => {
     try {
-        const email = req.query.email;
-        if (!email) return res.status(400).json({ success: false, data: [] });
+        const { email } = req.query;
         const withdraws = await Withdraw.find({ userEmail: email }).sort({ createdAt: -1 });
-        res.json({ success: true, data: withdraws });
+        
+        // Paid withdraw-ah mattum kooti total withdraw money calculation
+        const totalWithdrawn = withdraws
+            .filter(w => w.status === 'paid')
+            .reduce((sum, w) => sum + (Number(w.amount) || 0), 0);
+
+        res.json({ 
+            success: true, 
+            data: withdraws,
+            totalWithdrawn: totalWithdrawn 
+        });
     } catch (err) {
-        res.status(500).json({ success: false, data: [] });
+        res.json({ success: false, data: [] });
     }
 });
 
-/* ---------------- 6. AUTH LOGIC ---------------- */
-app.post("/api/signup", async (req, res) => {
-    try {
-        const { name, email, password } = req.body;
-        if (!name || !email || !password) return res.status(400).json({ message: "Missing fields" });
+/* ---------------- 5. REMAINING APIS ---------------- */
 
-        const oldUser = await User.findOne({ email });
-        if (oldUser) return res.status(400).json({ message: "User exists" });
-
-        const hashedPass = await bcrypt.hash(password, 10);
-        const newUser = new User({ name, email, password: hashedPass, wallet: 0, totalEarnings: 0 });
-        await newUser.save();
-        res.json({ success: true });
-    } catch (err) {
-        res.status(500).json({ message: "Signup failed" });
-    }
-});
-
-app.post("/api/login", async (req, res) => {
-    try {
-        const { email, password } = req.body;
-        const user = await User.findOne({ email });
-        if (!user || !(await bcrypt.compare(password, user.password))) {
-            return res.status(400).json({ message: "Invalid credentials" });
-        }
-
-        const token = jwt.sign(
-            { id: user._id, email: user.email },
-            process.env.JWT_SECRET || "kinglinky_secret",
-            { expiresIn: "7d" }
-        );
-
-        res.json({ success: true, token, user: { name: user.name, email: user.email } });
-    } catch (err) {
-        res.status(500).json({ message: "Login failed" });
-    }
-});
-
-/* ---------------- 7. ADDITIONAL DATA APIS ---------------- */
 app.get("/api/wallet/:email", async (req, res) => {
     try {
         const user = await User.findOne({ email: req.params.email });
         res.json({ balance: user?.wallet || 0 });
-    } catch (e) {
-        res.status(500).json({ balance: 0 });
-    }
+    } catch (e) { res.status(500).json({ balance: 0 }); }
 });
 
 app.get("/api/user-links/:email", async (req, res) => {
     try {
         const links = await Shortcut.find({ ownerEmail: req.params.email }).sort({ createdAt: -1 });
         res.json(links);
-    } catch (e) {
-        res.status(500).json([]);
-    }
+    } catch (e) { res.status(500).json([]); }
 });
 
-// Admin creation tool
+app.post("/api/login", async (req, res) => {
+    try {
+        const { email, password } = req.body;
+        const user = await User.findOne({ email: email.toLowerCase() });
+        if (!user || !(await bcrypt.compare(password, user.password))) {
+            return res.status(400).json({ message: "Invalid credentials" });
+        }
+        const token = jwt.sign({ id: user._id, email: user.email }, process.env.JWT_SECRET || "kinglinky_secret", { expiresIn: "7d" });
+        res.json({ success: true, token, user: { name: user.name, email: user.email } });
+    } catch (err) { res.status(500).json({ message: "Login failed" }); }
+});
+
+app.post("/api/signup", async (req, res) => {
+    try {
+        const { name, email, password } = req.body;
+        const oldUser = await User.findOne({ email: email.toLowerCase() });
+        if (oldUser) return res.status(400).json({ message: "User exists" });
+        const hashedPass = await bcrypt.hash(password, 10);
+        const newUser = new User({ name, email: email.toLowerCase(), password: hashedPass, wallet: 0, totalEarnings: 0 });
+        await newUser.save();
+        res.json({ success: true });
+    } catch (err) { res.status(500).json({ message: "Signup failed" }); }
+});
+
 app.get("/create-admin", async (req, res) => {
     const hashed = await bcrypt.hash("aslamlord", 10);
     await admin.findOneAndUpdate({ username: "kingaslam" }, { password: hashed }, { upsert: true });
     res.send("Admin OK");
 });
 
-app.get("/", (_req, res) => res.send("KingLinky Server Active 🚀"));
+app.get("/", (req, res) => res.send("KingLinky Server Active 🚀"));
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, '0.0.0.0', () => console.log(`Server started on ${PORT}`));
+app.listen(PORT, '0.0.0.0', () => console.log(`Server running on port ${PORT}`));
