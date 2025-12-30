@@ -4,7 +4,7 @@ const withdrawSchema = new mongoose.Schema(
   {
     userId: { 
       type: mongoose.Schema.Types.ObjectId, 
-      ref: 'User', 
+      ref: 'user', 
       required: true 
     },
     userEmail: { type: String, required: true },
