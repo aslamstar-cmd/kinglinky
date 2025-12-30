@@ -18,6 +18,7 @@ export default function Dashboard({ user }) {
   const [currency, setCurrency] = useState("USD");
   const [links, setLinks] = useState([]);
   const [withdraws, setWithdraws] = useState([]);
+  const [userData, setUserData] = useState(null); 
   const [longUrl, setLongUrl] = useState("");
   const [withdrawAmount, setWithdrawAmount] = useState("");
   const [note, setNote] = useState("");
@@ -36,13 +37,16 @@ export default function Dashboard({ user }) {
   async function loadData() {
     setLoading(true);
     try {
-      const [linksRes, wdRes] = await Promise.all([
+      // Direct-ah User Profile-la irunthu Wallet matrum Total Earnings edukurom
+      const [linksRes, wdRes, userRes] = await Promise.all([
         axios.get(`${API_BASE}/api/links?email=${user.email}`, auth),
-        axios.get(`${API_BASE}/api/withdraw/my?email=${user.email}`, auth)
+        axios.get(`${API_BASE}/api/withdraw/my?email=${user.email}`, auth),
+        axios.get(`${API_BASE}/api/users/profile?email=${user.email}`, auth) 
       ]);
       
       setLinks(Array.isArray(linksRes.data) ? linksRes.data : (linksRes.data?.data || []));
       setWithdraws(Array.isArray(wdRes.data) ? wdRes.data : (wdRes.data?.data || []));
+      setUserData(userRes.data); 
     } catch (err) {
       console.error("Dashboard load error", err);
     } finally {
@@ -50,20 +54,18 @@ export default function Dashboard({ user }) {
     }
   }
 
-  /* ========= STATS CALCULATION (FIXED) ========= */
+  /* ========= STATS CALCULATION (ACCURATE) ========= */
   const totalViews = links.reduce((sum, l) => sum + (Number(l.clicks) || 0), 0);
   const currentCPM = calculateCPM(totalViews);
   
-  // Real Earnings based on views
-  const allTimeUSD = (totalViews / 1000) * currentCPM;
+  // Backend-la iruntha data-va inga assign panrom
+  const walletUSD = userData?.wallet || 0;
+  const allTimeUSD = userData?.totalEarnings || 0;
 
-  // Withdrawn: Admin "Paid" nu status mathuna amount mattum thaan inga varum
+  // Actual 'Paid' status history-la irunthu calculate panrom
   const paidUSD = withdraws
     .filter((w) => w.status === "paid")
     .reduce((sum, w) => sum + (Number(w.amount) || 0), 0);
-  
-  // Wallet: Total earnings - actual paid amount
-  const walletUSD = Math.max(allTimeUSD - paidUSD, 0);
 
   const todayKey = new Date().toISOString().slice(0, 10);
   const todayViews = links.reduce((sum, l) => {
@@ -72,7 +74,7 @@ export default function Dashboard({ user }) {
   }, 0);
   const todayUSD = (todayViews / 1000) * currentCPM;
 
-  // Daily Withdraw Limit Check
+  // Daily Limit Check
   const hasRequestedToday = withdraws.some(w => {
     const wdDate = new Date(w.createdAt).toISOString().slice(0, 10);
     return wdDate === todayKey;
@@ -105,20 +107,13 @@ export default function Dashboard({ user }) {
 
   async function requestWithdraw() {
     const amt = Number(withdrawAmount);
+    if (hasRequestedToday) return alert("One request per day only!");
+    if (!amt || amt < MIN_WITHDRAW) return alert(`Minimum withdrawal is ${money(MIN_WITHDRAW)}`);
+    if (amt > walletUSD) return alert("Insufficient balance in wallet!");
     
-    if (hasRequestedToday) {
-      return alert("Limit Reached: You can only send one withdraw request per day!");
-    }
-    if (!amt || amt < MIN_WITHDRAW) {
-      return alert(`Minimum withdrawal is ${money(MIN_WITHDRAW)}`);
-    }
-    if (amt > walletUSD) {
-      return alert("Insufficient balance in wallet!");
-    }
-
     try {
       await axios.post(`${API_BASE}/api/withdraw`, { amount: amt, note, email: user.email }, auth);
-      alert("Withdraw Request Sent! ✅ Admin will process it soon.");
+      alert("Withdraw Request Sent! ✅");
       setWithdrawAmount(""); setNote("");
       loadData();
     } catch { alert("Withdraw request failed"); }
@@ -127,7 +122,7 @@ export default function Dashboard({ user }) {
   if (loading) {
     return (
       <div style={{...styles.wrap, display:'flex', justifyContent:'center', alignItems:'center'}}>
-        <h2 style={{color:'#00ffd0'}}>👑 {user?.name} Loading...</h2>
+        <h2 style={{color:'#00ffd0'}}>👑 Loading Dashboard...</h2>
       </div>
     );
   }
@@ -157,7 +152,7 @@ export default function Dashboard({ user }) {
       )}
 
       <div style={styles.userBanner}>
-        <span>👑 <b>{user?.name}</b></span>
+        <span>👑 <b>{userData?.name || user?.name}</b></span>
         <span style={styles.cpmBadge}>CPM: ${currentCPM}</span>
       </div>
 
@@ -196,7 +191,7 @@ export default function Dashboard({ user }) {
             links.map(l => (
               <div key={l._id} style={styles.linkBox}>
                 <div style={{overflow:'hidden', marginRight: 10}}>
-                  <div style={{color:'#00ffd0', fontWeight:'bold', fontSize: 14, overflow:'hidden', textOverflow:'ellipsis'}}>{l.shortUrl}</div>
+                  <div style={{color:'#00ffd0', fontWeight:'bold', fontSize: 14}}>{l.shortUrl}</div>
                   <small style={{color:'#aaa'}}>{l.clicks} clicks</small>
                 </div>
                 <div style={{display:'flex', gap: 5}}>
@@ -244,7 +239,7 @@ export default function Dashboard({ user }) {
         <div style={styles.supportBox}>
           <div style={{fontSize: 50, marginBottom: 10}}>💬</div>
           <h3>Help Center</h3>
-          <p style={{color: '#aaa', fontSize: 14}}>Contact our support team on Telegram if you face any issues with links or withdrawals.</p>
+          <p style={{color: '#aaa', fontSize: 14}}>Contact support on Telegram if you face any issues.</p>
           <button style={styles.btnTg} onClick={() => window.open("https://t.me/KingLinkySupport_Bot")}>
             Chat on Telegram
           </button>
