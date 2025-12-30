@@ -11,6 +11,7 @@ import jwt from "jsonwebtoken";
 import admin from "./models/admin.js";
 import Shortcut from "./models/Shortcut.js";
 import User from "./models/User.js";
+import Withdraw from "./models/withdraw.js"; // IMPORT WITHDRAW MODEL
 
 // Routes
 import adminAuthRoutes from "./routes/adminAuth.js";
@@ -62,8 +63,9 @@ mongoose
     .then(() => console.log("Mongo Connected ✅"))
     .catch((err) => console.log("DB Connection Error:", err));
 
-/* ---------------- 5. USER PROFILE API (DASHBOARD FIX) ---------------- */
-// Intha route illatha pothu thaan 404 error vanthathu.
+/* ---------------- 5. DASHBOARD FIX APIS ---------------- */
+
+// PROFILE API: Dashboard-la Wallet and Total Earnings vara
 app.get("/api/users/profile", async (req, res) => {
     try {
         const email = req.query.email;
@@ -72,16 +74,29 @@ app.get("/api/users/profile", async (req, res) => {
         const user = await User.findOne({ email });
         if (!user) return res.status(404).json({ message: "User not found" });
 
-        // Dashboard-ku thevaiyana wallet data-va inga anupuroam
         res.json({
             success: true,
             name: user.name,
             email: user.email,
-            wallet: user.wallet || 0,
-            totalEarnings: user.totalEarnings || 0
+            wallet: Number(user.wallet) || 0,
+            totalEarnings: Number(user.totalEarnings) || 0
         });
     } catch (err) {
         res.status(500).json({ message: "Server error" });
+    }
+});
+
+// WITHDRAW MY API: "Withdrawn" money dashboard-la update aaga
+// Frontend `axios.get(${API_BASE}/api/withdraw/my?email=${user.email})` nu kekkum
+app.get("/api/withdraw/my", async (req, res) => {
+    try {
+        const email = req.query.email;
+        if (!email) return res.status(400).json({ success: false, data: [] });
+
+        const withdraws = await Withdraw.find({ userEmail: email }).sort({ createdAt: -1 });
+        res.json({ success: true, data: withdraws });
+    } catch (err) {
+        res.status(500).json({ success: false, data: [] });
     }
 });
 
@@ -95,7 +110,6 @@ app.post("/api/signup", async (req, res) => {
         if (oldUser) return res.status(400).json({ message: "User exists" });
 
         const hashedPass = await bcrypt.hash(password, 10);
-        // Signup pannumpothe default-ah wallet 0 vechuduroam
         const newUser = new User({ name, email, password: hashedPass, wallet: 0, totalEarnings: 0 });
         await newUser.save();
         res.json({ success: true });
