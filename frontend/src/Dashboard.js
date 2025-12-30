@@ -22,12 +22,11 @@ export default function Dashboard({ user }) {
   const [withdrawAmount, setWithdrawAmount] = useState("");
   const [note, setNote] = useState("");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [loading, setLoading] = useState(true); // Data load aaguratha track panna
+  const [loading, setLoading] = useState(true);
 
   /* ========= DYNAMIC CPM LOGIC ========= */
   const calculateCPM = (views) => (views >= 5000 ? 9.8 : 10);
 
-  // DASHBOARD LOAD AAGUMPOTHE DATA FETCH PANNA ITHU THAAN FIX
   useEffect(() => {
     if (token && user?.email) {
       loadData();
@@ -42,25 +41,28 @@ export default function Dashboard({ user }) {
         axios.get(`${API_BASE}/api/withdraw/my?email=${user.email}`, auth)
       ]);
       
-      // Data-ah correct format-la set panrom
       setLinks(Array.isArray(linksRes.data) ? linksRes.data : (linksRes.data?.data || []));
       setWithdraws(Array.isArray(wdRes.data) ? wdRes.data : (wdRes.data?.data || []));
     } catch (err) {
       console.error("Dashboard load error", err);
     } finally {
-      setLoading(false); // Data vanthathum loading-ah stop pannidum
+      setLoading(false);
     }
   }
 
-  /* ========= STATS CALCULATION ========= */
+  /* ========= STATS CALCULATION (FIXED) ========= */
   const totalViews = links.reduce((sum, l) => sum + (Number(l.clicks) || 0), 0);
   const currentCPM = calculateCPM(totalViews);
   
+  // Real Earnings based on views
   const allTimeUSD = (totalViews / 1000) * currentCPM;
+
+  // Withdrawn: Admin "Paid" nu status mathuna amount mattum thaan inga varum
   const paidUSD = withdraws
     .filter((w) => w.status === "paid")
     .reduce((sum, w) => sum + (Number(w.amount) || 0), 0);
   
+  // Wallet: Total earnings - actual paid amount
   const walletUSD = Math.max(allTimeUSD - paidUSD, 0);
 
   const todayKey = new Date().toISOString().slice(0, 10);
@@ -70,8 +72,15 @@ export default function Dashboard({ user }) {
   }, 0);
   const todayUSD = (todayViews / 1000) * currentCPM;
 
+  // Daily Withdraw Limit Check
+  const hasRequestedToday = withdraws.some(w => {
+    const wdDate = new Date(w.createdAt).toISOString().slice(0, 10);
+    return wdDate === todayKey;
+  });
+
   function money(v) {
-    return currency === "USD" ? `$ ${v.toFixed(2)}` : `₹ ${(v * USD_TO_INR).toFixed(2)}`;
+    const val = Number(v) || 0;
+    return currency === "USD" ? `$ ${val.toFixed(2)}` : `₹ ${(val * USD_TO_INR).toFixed(2)}`;
   }
 
   /* ========= ACTIONS ========= */
@@ -96,16 +105,25 @@ export default function Dashboard({ user }) {
 
   async function requestWithdraw() {
     const amt = Number(withdrawAmount);
-    if (!amt || amt < MIN_WITHDRAW || amt > walletUSD) return alert("Invalid amount!");
+    
+    if (hasRequestedToday) {
+      return alert("Limit Reached: You can only send one withdraw request per day!");
+    }
+    if (!amt || amt < MIN_WITHDRAW) {
+      return alert(`Minimum withdrawal is ${money(MIN_WITHDRAW)}`);
+    }
+    if (amt > walletUSD) {
+      return alert("Insufficient balance in wallet!");
+    }
+
     try {
       await axios.post(`${API_BASE}/api/withdraw`, { amount: amt, note, email: user.email }, auth);
-      alert("Withdraw Request Sent! ✅");
+      alert("Withdraw Request Sent! ✅ Admin will process it soon.");
       setWithdrawAmount(""); setNote("");
       loadData();
     } catch { alert("Withdraw request failed"); }
   }
 
-  // Loading Screen
   if (loading) {
     return (
       <div style={{...styles.wrap, display:'flex', justifyContent:'center', alignItems:'center'}}>
@@ -114,7 +132,6 @@ export default function Dashboard({ user }) {
     );
   }
 
-  /* ================= UI ================= */
   return (
     <div style={styles.wrap}>
       {/* HEADER */}
@@ -129,7 +146,6 @@ export default function Dashboard({ user }) {
         </div>
       </div>
 
-      {/* SANDWICH MENU */}
       {isMenuOpen && (
         <div style={styles.mobileMenu}>
           {["dashboard", "manage", "withdraw", "history", "support"].map(t => (
@@ -140,7 +156,6 @@ export default function Dashboard({ user }) {
         </div>
       )}
 
-      {/* USER BANNER */}
       <div style={styles.userBanner}>
         <span>👑 <b>{user?.name}</b></span>
         <span style={styles.cpmBadge}>CPM: ${currentCPM}</span>
@@ -181,7 +196,7 @@ export default function Dashboard({ user }) {
             links.map(l => (
               <div key={l._id} style={styles.linkBox}>
                 <div style={{overflow:'hidden', marginRight: 10}}>
-                  <div style={{color:'#00ffd0', fontWeight:'bold', fontSize: 14}}>{l.shortUrl}</div>
+                  <div style={{color:'#00ffd0', fontWeight:'bold', fontSize: 14, overflow:'hidden', textOverflow:'ellipsis'}}>{l.shortUrl}</div>
                   <small style={{color:'#aaa'}}>{l.clicks} clicks</small>
                 </div>
                 <div style={{display:'flex', gap: 5}}>
@@ -197,9 +212,15 @@ export default function Dashboard({ user }) {
       {tab === "withdraw" && (
         <div style={styles.withdrawCard}>
           <h3 style={{marginTop: 0}}>Wallet: {money(walletUSD)}</h3>
-          <input type="number" style={styles.inputFull} value={withdrawAmount} onChange={e => setWithdrawAmount(e.target.value)} placeholder="Amount to withdraw" />
-          <textarea style={styles.inputFull} value={note} onChange={e => setNote(e.target.value)} placeholder="UPI ID / Bank Details" rows={3} />
-          <button style={styles.btnWithdraw} onClick={requestWithdraw}>Request Withdrawal</button>
+          {hasRequestedToday ? (
+             <p style={{color: '#ffcc00', fontSize: 13}}>⚠️ You have already sent a request today. Come back tomorrow!</p>
+          ) : (
+            <>
+              <input type="number" style={styles.inputFull} value={withdrawAmount} onChange={e => setWithdrawAmount(e.target.value)} placeholder={`Min ${money(MIN_WITHDRAW)}`} />
+              <textarea style={styles.inputFull} value={note} onChange={e => setNote(e.target.value)} placeholder="UPI ID / GPay / Bank Details" rows={3} />
+              <button style={styles.btnWithdraw} onClick={requestWithdraw}>Request Withdrawal</button>
+            </>
+          )}
         </div>
       )}
 
@@ -208,7 +229,10 @@ export default function Dashboard({ user }) {
           {withdraws.length === 0 ? <p style={{textAlign:'center', color:'#888'}}>No history found.</p> :
             withdraws.map(w => (
               <div key={w._id} style={styles.linkBox}>
-                <span>{money(w.amount)}</span>
+                <div>
+                    <div>{money(w.amount)}</div>
+                    <small style={{color:'#888'}}>{new Date(w.createdAt).toLocaleDateString()}</small>
+                </div>
                 <b style={{color: w.status==='paid'?'#00ffd0':'#ffcc00'}}>{w.status.toUpperCase()}</b>
               </div>
             ))
@@ -230,7 +254,6 @@ export default function Dashboard({ user }) {
   );
 }
 
-/* UI HELPER */
 function Card({ title, value, color="#fff" }) {
   return (
     <div style={styles.card}>
@@ -240,14 +263,13 @@ function Card({ title, value, color="#fff" }) {
   );
 }
 
-/* STYLES (Old styles maintained exactly) */
 const styles = {
   wrap: { padding: "15px", minHeight: "100vh", background: "#011111", color: "#eafffa", fontFamily: "system-ui" },
   header: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 15 },
   headerRight: { display: "flex", gap: 12, alignItems: "center" },
   burger: { fontSize: 26, cursor: "pointer", color: "#00ffd0" },
   select: { background: "#053737", color: "#fff", border: "1px solid #00ffd0", borderRadius: 4, padding: "2px 5px" },
-  mobileMenu: { background: "#021c1c", borderRadius: 10, padding: 8, marginBottom: 15, border: "1px solid #053737" },
+  mobileMenu: { background: "#021c1c", borderRadius: 10, padding: 8, marginBottom: 15, border: "1px solid #053737", position: 'absolute', right: 15, top: 60, zIndex: 100, width: 150 },
   menuItem: { padding: "12px", borderBottom: "1px solid #033", cursor: "pointer", fontWeight: "600", fontSize: 13 },
   userBanner: { display: "flex", justifyContent: "space-between", background: "#022626", padding: "12px", borderRadius: 10, marginBottom: 15, border: "1px solid #053737" },
   cpmBadge: { color: "#00ffd0", fontSize: 11, border: "1px solid #00ffd0", padding: "2px 8px", borderRadius: 12 },
