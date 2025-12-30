@@ -1,5 +1,6 @@
 import express from "express";
 import Withdraw from "../models/withdraw.js";
+import User from "../models/user.js"; // USER MODEL KANDIPPA VENUM
 import adminAuth from "../middleware/adminAuth.js";
 import userAuth from "../middleware/userAuth.js";
 
@@ -7,39 +8,28 @@ const router = express.Router();
 
 /* ============================
    ADMIN → GET ALL WITHDRAWS
-   GET /api/withdraw/admin
-============================ */
-/* ============================
-   ADMIN → GET ALL WITHDRAWS
-   GET /api/withdraw/admin
 ============================ */
 router.get("/admin", adminAuth, async (req, res) => {
   try {
-    // Database-la irundhu data-vai fetch pannuvom
-    const withdraws = await Withdraw.find({})
-      .sort({ createdAt: -1 });
-
-    // Enna data varudhu nu console-la check panna:
+    const withdraws = await Withdraw.find({}).sort({ createdAt: -1 });
     console.log("Admin Fetching Withdraws count:", withdraws.length);
 
-    // KANDIPPA structure success: true and data: [array] - nu irukanum
     return res.status(200).json({
       success: true,
-      data: withdraws, // Ithu thaan frontend state-ku pogum
+      data: withdraws,
     });
   } catch (err) {
     console.error("WITHDRAW ADMIN GET ERROR:", err);
     return res.status(500).json({
       success: false,
       message: "Server error",
-      data: [], // Error vandha empty array anupa nalladhu
+      data: [],
     });
   }
 });
 
 /* ============================
    USER → GET OWN WITHDRAWS
-   GET /api/withdraw/my
 ============================ */
 router.get("/my", userAuth, async (req, res) => {
   try {
@@ -62,23 +52,44 @@ router.get("/my", userAuth, async (req, res) => {
 
 /* ============================
    USER → REQUEST WITHDRAW
-   POST /api/withdraw
 ============================ */
 router.post("/", userAuth, async (req, res) => {
   try {
     const { amount, note } = req.body;
+    const reqAmount = Number(amount);
 
-    if (!amount || Number(amount) <= 0) {
+    if (!reqAmount || reqAmount <= 0) {
+      return res.status(400).json({ success: false, message: "Invalid amount" });
+    }
+
+    // Daily Limit Check: Oru naalukku oru request thaan
+    const startOfDay = new Date();
+    startOfDay.setHours(0, 0, 0, 0);
+    const endOfDay = new Date();
+    endOfDay.setHours(23, 59, 59, 999);
+
+    const existingRequest = await Withdraw.findOne({
+      userId: req.user.id,
+      createdAt: { $gte: startOfDay, $lte: endOfDay }
+    });
+
+    if (existingRequest) {
       return res.status(400).json({
         success: false,
-        message: "Invalid amount",
+        message: "Limit Reached: You can only send one request per day!"
       });
+    }
+
+    // User kitta balance irukka nu check panrom
+    const user = await User.findById(req.user.id);
+    if (!user || user.wallet < reqAmount) {
+      return res.status(400).json({ success: false, message: "Insufficient wallet balance" });
     }
 
     const withdraw = await Withdraw.create({
       userId: req.user.id,
       userEmail: req.user.email,
-      amount: Number(amount),
+      amount: reqAmount,
       note: note || "",
       status: "pending",
     });
@@ -90,27 +101,38 @@ router.post("/", userAuth, async (req, res) => {
     });
   } catch (err) {
     console.error("WITHDRAW CREATE ERROR:", err);
-    return res.status(500).json({
-      success: false,
-      message: "Withdraw failed",
-    });
+    return res.status(500).json({ success: false, message: "Withdraw failed" });
   }
 });
 
 /* ============================
-   ADMIN → APPROVE WITHDRAW
-   POST /api/withdraw/approve/:id
+   ADMIN → APPROVE WITHDRAW (FIXED)
 ============================ */
 router.post("/approve/:id", adminAuth, async (req, res) => {
   try {
-    const updated = await Withdraw.findByIdAndUpdate(
-      req.params.id,
-      { status: "paid" },
-      { new: true }
-    );
+    const withdraw = await Withdraw.findById(req.params.id);
+
+    if (!withdraw) {
+      return res.status(404).json({ success: false, message: "Request not found" });
+    }
+
+    // Request ippo thaan 'paid' aaga poguthuna mattum wallet-ah kuraikanum
+    if (withdraw.status !== "paid") {
+      const user = await User.findById(withdraw.userId);
+      
+      if (user) {
+        // Wallet-la irunthu amount-ah minus panrom
+        user.wallet = Math.max(user.wallet - withdraw.amount, 0);
+        await user.save();
+      }
+    }
+
+    withdraw.status = "paid";
+    const updated = await withdraw.save();
 
     return res.json({
       success: true,
+      message: "Withdraw approved and wallet updated",
       data: updated,
     });
   } catch (err) {
