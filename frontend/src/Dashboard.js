@@ -37,15 +37,20 @@ export default function Dashboard({ user }) {
   async function loadData() {
     setLoading(true);
     try {
-      // Direct-ah User Profile-la irunthu Wallet matrum Total Earnings edukurom
       const [linksRes, wdRes, userRes] = await Promise.all([
         axios.get(`${API_BASE}/api/links?email=${user.email}`, auth),
-        axios.get(`${API_BASE}/api/withdraw/my?email=${user.email}`, auth),
-        axios.get(`${API_BASE}/api/users/profile?email=${user.email}`, auth) 
+
+        // ✅ FIX 1: email REMOVE pannirukkom
+        axios.get`(${API_BASE}/api/withdraw/my, auth)`,
+
+        axios.get(`${API_BASE}/api/users/profile?email=${user.email}`, auth),
       ]);
       
-      setLinks(Array.isArray(linksRes.data) ? linksRes.data : (linksRes.data?.data || []));
-      setWithdraws(Array.isArray(wdRes.data) ? wdRes.data : (wdRes.data?.data || []));
+      setLinks(Array.isArray(linksRes.data) ? linksRes.data : []);
+
+      // ✅ FIX 2: withdraw response correct-ah read pannrom
+      setWithdraws(wdRes.data?.data || []);
+
       setUserData(userRes.data); 
     } catch (err) {
       console.error("Dashboard load error", err);
@@ -54,46 +59,53 @@ export default function Dashboard({ user }) {
     }
   }
 
-  /* ========= STATS CALCULATION (ACCURATE) ========= */
+  /* ========= STATS ========= */
   const totalViews = links.reduce((sum, l) => sum + (Number(l.clicks) || 0), 0);
   const currentCPM = calculateCPM(totalViews);
-  
-  // Backend-la iruntha data-va inga assign panrom
-  const walletUSD = userData?.wallet || 0;
-  const allTimeUSD = userData?.totalEarnings || 0;
 
-  // Actual 'Paid' status history-la irunthu calculate panrom
+  const walletUSD = Number(userData?.wallet || 0);
+  const allTimeUSD = Number(userData?.totalEarnings || 0);
+
   const paidUSD = withdraws
     .filter((w) => w.status === "paid")
     .reduce((sum, w) => sum + (Number(w.amount) || 0), 0);
 
-  const todayKey = new Date().toISOString().slice(0, 10);
   const todayViews = links.reduce((sum, l) => {
     const d = l.createdAt ? new Date(l.createdAt).toISOString().slice(0, 10) : "";
-    return d === todayKey ? sum + (Number(l.clicks) || 0) : sum;
+    const today = new Date().toISOString().slice(0, 10);
+    return d === today ? sum + (Number(l.clicks) || 0) : sum;
   }, 0);
-  const todayUSD = (todayViews / 1000) * currentCPM;
 
-  // Daily Limit Check
-  const hasRequestedToday = withdraws.some(w => {
-    const wdDate = new Date(w.createdAt).toISOString().slice(0, 10);
-    return wdDate === todayKey;
-  });
+  // ✅ FIX 3: today earnings backend-la irundhu
+  const todayUSD = Number(userData?.todayEarnings || 0);
+
+  const todayKey = new Date().toISOString().slice(0, 10);
+  const hasRequestedToday = withdraws.some(w =>
+    new Date(w.createdAt).toISOString().slice(0, 10) === todayKey
+  );
 
   function money(v) {
     const val = Number(v) || 0;
-    return currency === "USD" ? `$ ${val.toFixed(2)}` : `₹ ${(val * USD_TO_INR).toFixed(2)}`;
+    return currency === "USD"
+      ? `$ ${val.toFixed(2)}`
+      : `₹ ${(val * USD_TO_INR).toFixed(2)}`;
   }
 
   /* ========= ACTIONS ========= */
   async function shorten() {
     if (!longUrl) return alert("Paste URL first!");
     try {
-      await axios.post(`${API_BASE}/api/links/shorten`, { longUrl, email: user.email }, auth);
+      await axios.post(
+        `${API_BASE}/api/links/shorten`,
+        { longUrl, email: user.email },
+        auth
+      );
       setLongUrl("");
       loadData();
       alert("Link Shortened! 🚀");
-    } catch { alert("Shorten failed"); }
+    } catch {
+      alert("Shorten failed");
+    }
   }
 
   async function deleteLink(id) {
@@ -102,7 +114,9 @@ export default function Dashboard({ user }) {
       await axios.delete(`${API_BASE}/api/links/${id}`, auth);
       setLinks(prev => prev.filter(l => l._id !== id));
       alert("Deleted! 🗑️");
-    } catch { alert("Delete failed!"); }
+    } catch {
+      alert("Delete failed!");
+    }
   }
 
   async function requestWithdraw() {
@@ -110,23 +124,29 @@ export default function Dashboard({ user }) {
     if (hasRequestedToday) return alert("One request per day only!");
     if (!amt || amt < MIN_WITHDRAW) return alert(`Minimum withdrawal is ${money(MIN_WITHDRAW)}`);
     if (amt > walletUSD) return alert("Insufficient balance in wallet!");
-    
+
     try {
-      await axios.post(`${API_BASE}/api/withdraw`, { amount: amt, note, email: user.email }, auth);
+      await axios.post(
+        `${API_BASE}/api/withdraw`,
+        { amount: amt, note },
+        auth
+      );
       alert("Withdraw Request Sent! ✅");
-      setWithdrawAmount(""); setNote("");
+      setWithdrawAmount("");
+      setNote("");
       loadData();
-    } catch { alert("Withdraw request failed"); }
+    } catch {
+      alert("Withdraw request failed");
+    }
   }
 
   if (loading) {
     return (
       <div style={{...styles.wrap, display:'flex', justifyContent:'center', alignItems:'center'}}>
-        <h2 style={{color:'#00ffd0'}}>👑{userData?.name || user?.name}  Dashboard...</h2>
+        <h2 style={{color:'#00ffd0'}}>👑{userData?.name || user?.name} Dashboard...</h2>
       </div>
     );
   }
-
   return (
     <div style={styles.wrap}>
       {/* HEADER */}
