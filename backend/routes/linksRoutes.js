@@ -9,21 +9,19 @@ router.get("/", async (req, res) => {
     const { email } = req.query;
 
     let filter = {};
-    if (email) {
-      filter = { ownerEmail: email };
-    }
+    if (email) filter = { ownerEmail: email };
 
-    const links = await Shortcut.find(filter)
-      .sort({ createdAt: -1 })
-      .lean(); // 🔥 VERY IMPORTANT
+    const links = await Shortcut.find(filter).sort({ createdAt: -1 });
 
     const formattedLinks = links.map(link => ({
       _id: link._id,
       shortUrl: link.shortUrl,
-      clicks: link.clicks,
+      clicks: link.clicks || 0,
       createdAt: link.createdAt,
       ownerEmail: link.ownerEmail,
-      dailyClicks: link.dailyClicks || {} // 🔥 THIS IS THE KEY
+      dailyClicks: link.dailyClicks
+        ? Object.fromEntries(link.dailyClicks)
+        : {}   // 🔥 IMPORTANT
     }));
 
     res.json(formattedLinks);

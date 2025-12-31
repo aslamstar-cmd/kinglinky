@@ -33,64 +33,76 @@ export default function Dashboard({ user }) {
       loadData();
     }
   }, [user, token]);
+async function loadData() {
+  setLoading(true);
+  try {
+    const [linksRes, wdRes, userRes] = await Promise.all([
+      axios.get(`${API_BASE}/api/links?email=${user.email}`, auth),
 
-  async function loadData() {
-    setLoading(true);
-    try {
-      const [linksRes, wdRes, userRes] = await Promise.all([
-        axios.get(`${API_BASE}/api/links?email=${user.email}`, auth),
+      // ✅ FIX 1: correct axios.get syntax (email removed)
+      axios.get(`${API_BASE}/api/withdraw/my`, auth),
 
-        // ✅ FIX 1: email REMOVE pannirukkom
-        axios.get`(${API_BASE}/api/withdraw/my, auth)`,
+      axios.get(`${API_BASE}/api/users/profile?email=${user.email}`, auth),
+    ]);
 
-        axios.get(`${API_BASE}/api/users/profile?email=${user.email}`, auth),
-      ]);
+    setLinks(Array.isArray(linksRes.data) ? linksRes.data : []);
 
-      setLinks(Array.isArray(linksRes.data) ? linksRes.data : []);
+    // ✅ FIX 2: withdraw response correct-ah read
+    setWithdraws(wdRes.data?.data || []);
 
-      // ✅ FIX 2: withdraw response correct-ah read pannrom
-      setWithdraws(wdRes.data?.data || []);
-
-      setUserData(userRes.data);
-    } catch (err) {
-      console.error("Dashboard load error", err);
-    } finally {
-      setLoading(false);
-    }
+    setUserData(userRes.data);
+  } catch (err) {
+    console.error("Dashboard load error", err);
+  } finally {
+    setLoading(false);
   }
+}
 
-  /* ========= STATS ========= */
-  const totalViews = links.reduce((sum, l) => sum + (Number(l.clicks) || 0), 0);
-  const currentCPM = calculateCPM(totalViews);
+/* ========= STATS ========= */
 
-  const walletUSD = Number(userData?.wallet || 0);
-  const allTimeUSD = Number(userData?.totalEarnings || 0);
+// ✅ FIX 3: todayKey FIRST define pannanum
+const todayKey = new Date().toISOString().slice(0, 10);
 
-  const paidUSD = withdraws
-    .filter((w) => w.status === "paid")
-    .reduce((sum, w) => sum + (Number(w.amount) || 0), 0);
+// TOTAL VIEWS
+const totalViews = links.reduce(
+  (sum, l) => sum + (Number(l?.clicks) || 0),
+  0
+);
 
-  const todayViews = links.reduce((sum, l) => {
-    if (l.dailyClicks && typeof l.dailyClicks === "object") {
-      return sum + Number(l.dailyClicks[todayKey] || 0);
-    }
-    return sum;
-  }, 0);
+const currentCPM = calculateCPM(totalViews);
 
-  // ✅ FIX 3: today earnings backend-la irundhu
-  const todayUSD = Number(userData?.todayEarnings || 0);
+// WALLET + ALL TIME
+const walletUSD = Number(userData?.wallet || 0);
+const allTimeUSD = Number(userData?.totalEarnings || 0);
 
-  const todayKey = new Date().toISOString().slice(0, 10);
-  const hasRequestedToday = withdraws.some(w =>
+// WITHDRAWN (PAID)
+const paidUSD = withdraws
+  .filter((w) => w.status === "paid")
+  .reduce((sum, w) => sum + (Number(w.amount) || 0), 0);
+
+// TODAY VIEWS (from dailyClicks map → object)
+const todayViews = links.reduce((sum, l) => {
+  if (l?.dailyClicks && typeof l.dailyClicks === "object") {
+    return sum + Number(l.dailyClicks[todayKey] || 0);
+  }
+  return sum;
+}, 0);
+
+// ✅ FIX 4: today earnings BACKEND-la irundhu
+const todayUSD = Number(userData?.todayEarnings || 0);
+
+// DAILY WITHDRAW LIMIT
+const hasRequestedToday = withdraws.some(
+  (w) =>
     new Date(w.createdAt).toISOString().slice(0, 10) === todayKey
-  );
+);
 
-  function money(v) {
-    const val = Number(v) || 0;
-    return currency === "USD"
-      ? `$ ${val.toFixed(2)}`
-      : `₹ ${(val * USD_TO_INR).toFixed(2)}`;
-  }
+function money(v) {
+  const val = Number(v) || 0;
+  return currency === "USD"
+    ? `$ ${val.toFixed(2)}`
+    : `₹ ${(val * USD_TO_INR).toFixed(2)}`;
+}
 
   /* ========= ACTIONS ========= */
   async function shorten() {
