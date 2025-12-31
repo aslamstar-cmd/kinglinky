@@ -2,15 +2,53 @@ import mongoose from "mongoose";
 
 const shortcutSchema = new mongoose.Schema(
   {
-    fullUrl: String,
-    shortCode: String,
-    shortUrl: String,
-    ownerEmail: String,
-    clicks: { type: Number, default: 0 },
-    clickedIPs: [String],
-    clickedFps:[String],
+    fullUrl: {
+      type: String,
+      required: true,
+    },
+
+    shortCode: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+
+    shortUrl: {
+      type: String,
+      required: true,
+    },
+
+    ownerEmail: {
+      type: String,
+      required: true,
+      index: true,
+    },
+
+    /* ======================
+       CLICK TRACKING
+    ====================== */
+    clicks: {
+      type: Number,
+      default: 0,
+    },
+
+    // 🔥 IMPORTANT – duplicate protection
+    clickedFPs: {
+      type: [String],
+      default: [],
+    },
+
+    // 🔥 IMPORTANT – today earnings calculation
+    dailyClicks: {
+      type: Map,
+      of: Number,
+      default: {},
+    },
   },
-  { timestamps: true } // 🔥 THIS IS IMPORTANT
+  {
+    timestamps: true, // createdAt / updatedAt
+  }
 );
 
-export default mongoose.model("Shortcut", shortcutSchema);
+export default mongoose.models.Shortcut ||
+  mongoose.model("Shortcut", shortcutSchema);
