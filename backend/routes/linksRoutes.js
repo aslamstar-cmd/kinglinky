@@ -7,27 +7,28 @@ const router = express.Router();
 router.get("/", async (req, res) => {
   try {
     const { email } = req.query;
+
     let filter = {};
     if (email) {
       filter = { ownerEmail: email };
     }
 
-    const links = await Shortcut.find(filter).sort({ createdAt: -1 });
+    const links = await Shortcut.find(filter)
+      .sort({ createdAt: -1 })
+      .lean(); // 🔥 VERY IMPORTANT
 
-    // Intha mapping thaan mukkiyam: Database field ownerEmail-ai 
-    // "email" endra peyarilum anuppugirom.
     const formattedLinks = links.map(link => ({
       _id: link._id,
       shortUrl: link.shortUrl,
       clicks: link.clicks,
       createdAt: link.createdAt,
-      email: link.ownerEmail || "No Email", // ownerEmail illai endral "No Email" nu varum
-      ownerEmail: link.ownerEmail
+      ownerEmail: link.ownerEmail,
+      dailyClicks: link.dailyClicks || {} // 🔥 THIS IS THE KEY
     }));
 
     res.json(formattedLinks);
   } catch (err) {
-    console.error("LINKS FETCH ERROR", err);
+    console.error("LINKS FETCH ERROR:", err);
     res.status(500).json([]);
   }
 });
