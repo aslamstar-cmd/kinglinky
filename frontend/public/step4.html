@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Future Tech 2030 | Deep Dive Analysis & Verification</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap"
+        rel="stylesheet">
     <style>
         :root {
             --bg: #030712;
@@ -26,9 +28,12 @@
 
         #pBar {
             position: fixed;
-            top: 0; left: 0; height: 6px;
+            top: 0;
+            left: 0;
+            height: 6px;
             background: linear-gradient(to right, var(--accent), #3b82f6);
-            width: 0%; z-index: 10000;
+            width: 0%;
+            z-index: 10000;
             transition: width 0.3s ease;
         }
 
@@ -37,8 +42,12 @@
             backdrop-filter: blur(12px);
             padding: 15px 5%;
             border-bottom: 1px solid var(--border);
-            position: sticky; top: 0; z-index: 999;
-            display: flex; justify-content: space-between; align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 999;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .timer-badge {
@@ -72,23 +81,58 @@
             justify-content: center;
             position: relative;
         }
-        .ad-label { 
-            position: absolute; top: -12px; left: 20px;
-            background: var(--bg); padding: 0 12px;
-            font-size: 11px; color: var(--text-dim); letter-spacing: 2px; 
+
+        .ad-label {
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: var(--bg);
+            padding: 0 12px;
+            font-size: 11px;
+            color: var(--text-dim);
+            letter-spacing: 2px;
         }
 
-        h1 { font-size: 3.8rem; font-weight: 800; line-height: 1.1; margin-bottom: 20px; letter-spacing: -2px; }
-        h2 { font-size: 2.2rem; color: var(--accent); margin-top: 60px; font-weight: 700; border-left: 5px solid var(--accent); padding-left: 20px; }
-        
-        .meta-info { color: var(--text-dim); margin-bottom: 40px; font-size: 0.95rem; border-bottom: 1px solid var(--border); padding-bottom: 25px; display: flex; gap: 20px; }
+        h1 {
+            font-size: 3.8rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 20px;
+            letter-spacing: -2px;
+        }
 
-        p { font-size: 1.2rem; margin-bottom: 30px; color: #d1d5db; text-align: justify; }
+        h2 {
+            font-size: 2.2rem;
+            color: var(--accent);
+            margin-top: 60px;
+            font-weight: 700;
+            border-left: 5px solid var(--accent);
+            padding-left: 20px;
+        }
 
-        .blog-img { 
-            width: 100%; border-radius: 24px; margin: 40px 0; 
+        .meta-info {
+            color: var(--text-dim);
+            margin-bottom: 40px;
+            font-size: 0.95rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 25px;
+            display: flex;
+            gap: 20px;
+        }
+
+        p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            color: #d1d5db;
+            text-align: justify;
+        }
+
+        .blog-img {
+            width: 100%;
+            border-radius: 24px;
+            margin: 40px 0;
             border: 1px solid var(--border);
-            box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
         }
 
         .highlight-quote {
@@ -126,160 +170,391 @@
             text-transform: uppercase;
         }
 
-        .btn-final:hover { 
-            transform: scale(1.05) translateY(-8px); 
-            box-shadow: 0 25px 60px rgba(16, 185, 129, 0.6); 
+        .btn-final:hover {
+            transform: scale(1.05) translateY(-8px);
+            box-shadow: 0 25px 60px rgba(16, 185, 129, 0.6);
         }
 
         @media (max-width: 768px) {
-            h1 { font-size: 2.5rem; }
-            .container { padding: 0 15px; }
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            .container {
+                padding: 0 15px;
+            }
         }
     </style>
 </head>
+
 <body>
 
-<div id="pBar"></div>
+    <div id="pBar"></div>
 
-<header>
-    <div style="font-weight: 800; font-size: 1.6rem; letter-spacing: -1px;">TECH<span style="color:var(--accent)">2030</span></div>
-    <div class="timer-badge" id="timer-ui">SECURITY SYNC: <span id="sec">20</span>s</div>
-</header>
+    <header>
+        <div style="font-weight: 800; font-size: 1.6rem; letter-spacing: -1px;">TECH<span
+                style="color:var(--accent)">2030</span></div>
+        <div class="timer-badge" id="timer-ui">SECURITY SYNC: <span id="sec">20</span>s</div>
+    </header>
 
-<div class="container">
-    <div class="ad-slot">
-        <div class="ad-label">SPONSORED AD</div>
-        <p style="color:#4b5563">Your Ad Code Here (Header)</p>
+    <div class="container">
+        <div class="ad-slot">
+            <div class="ad-label">
+                <script>
+                    atOptions = {
+                        'key': 'd41be1e917eb87afabc417d7885c1eb3',
+                        'format': 'iframe',
+                        'height': 250,
+                        'width': 300,
+                        'params': {}
+                    };
+                </script>
+                <script src="https://www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
+                <script>
+                    atOptions = {
+                        'key': 'd41be1e917eb87afabc417d7885c1eb3',
+                        'format': 'iframe',
+                        'height': 250,
+                        'width': 300,
+                        'params': {}
+                    };
+                </script>
+                <script src="https://www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
+                <script>(function (s) { s.dataset.zone = '10400040', s.src = 'https://nap5k.com/tag.min.js' })([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
+                <script>(function (s) { s.dataset.zone = '10400040', s.src = 'https://nap5k.com/tag.min.js' })([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
+                <script>(function (s) { s.dataset.zone = '10400040', s.src = 'https://nap5k.com/tag.min.js' })([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
+            </div>
+            <p style="color:#4b5563">
+            <div class="ad-container">
+                <div class="ad-tag">
+                    <script async="async" data-cfasync="false"
+                        src="https://pl28334516.effectivegatecpm.com/cbbb337fba63c479050336665248235f/invoke.js"></script>
+                    <div id="container-cbbb337fba63c479050336665248235f"></div>
+                    <script
+                        src="https://www.highperformanceformat.com/666b2474ed4c3364af3ed998b397cf46/invoke.js"></script>
+                </div>
+                <script async="async" data-cfasync="false"
+                    src="https://pl28334516.effectivegatecpm.com/cbbb337fba63c479050336665248235f/invoke.js"></script>
+                <div id="container-cbbb337fba63c479050336665248235f"></div>
+            </div>
+            </p>
+        </div>
+
+        <article>
+            <h1>The Great Convergence: Beyond the 2030 Digital Horizon</h1>
+            <div class="meta-info">
+                <span>By Tech Analysis Lab</span>
+                <span>•</span>
+                <span>30 Min Read</span>
+                <span>•</span>
+                <span>Dec 2025 Edition</span>
+            </div>
+
+            <p>As we edge closer to the end of the decade, the speed of technological evolution is no longer linear; it
+                has become exponential. We are standing at the precipice of the "Singularity"—a moment where machine
+                intelligence surpasses collective human intelligence. But what does that actually mean for the average
+                person in 2030?</p>
+
+            <img src="https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&q=80&w=1200"
+                class="blog-img" alt="Advanced Robotics">
+
+            <h2>1. The Autonomous Labor Revolution</h2>
+            <p>By 2030, the concept of "manual labor" will have undergone a total metamorphosis. Humanoid robots,
+                powered by localized large language models, will be common sights in logistics, construction, and even
+                elderly care. These aren't just machines; they are collaborative partners capable of understanding
+                nuanced human emotions and complex instructions.</p>
+
+            <div class="highlight-quote">
+                "We are moving from a world where we tell computers what to do, to a world where computers understand
+                what we need."
+            </div>
+
+            <div class="ad-slot">
+                <div class="ad-label">
+                    <script>
+                        atOptions = {
+                            'key': 'd41be1e917eb87afabc417d7885c1eb3',
+                            'format': 'iframe',
+                            'height': 250,
+                            'width': 300,
+                            'params': {}
+                        };
+                    </script>
+                    <script
+                        src="https://www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
+                    <script>
+                        atOptions = {
+                            'key': 'd41be1e917eb87afabc417d7885c1eb3',
+                            'format': 'iframe',
+                            'height': 250,
+                            'width': 300,
+                            'params': {}
+                        };
+                    </script>
+                    <script
+                        src="https://www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
+                    <script async="async" data-cfasync="false"
+                        src="https://pl28334516.effectivegatecpm.com/cbbb337fba63c479050336665248235f/invoke.js"></script>
+                    <div id="container-cbbb337fba63c479050336665248235f">
+                        <script async="async" data-cfasync="false"
+                            src="https://pl28334516.effectivegatecpm.com/cbbb337fba63c479050336665248235f/invoke.js"></script>
+                        <div id="container-cbbb337fba63c479050336665248235f"></div>
+                        <script async="async" data-cfasync="false"
+                            src="https://pl28334516.effectivegatecpm.com/cbbb337fba63c479050336665248235f/invoke.js"></script>
+                        <div id="container-cbbb337fba63c479050336665248235f"></div>
+                    </div>
+                </div>
+            </div>
+
+            <h2>2. Quantum Supremacy in Daily Life</h2>
+            <p>Quantum computing will move from laboratory experiments to cloud-based utility. This will allow for
+                "Perfect Cryptography" and the ability to simulate molecular structures in seconds. For medicine, this
+                means we can design personalized vaccines and cures based on an individual's unique DNA within hours.
+            </p>
+
+            <img src="https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&q=80&w=1200"
+                class="blog-img" alt="Quantum Computing">
+
+            <div class="ad-slot">
+                <div class="ad-label">
+                    <script>
+                        atOptions = {
+                            'key': 'd41be1e917eb87afabc417d7885c1eb3',
+                            'format': 'iframe',
+                            'height': 250,
+                            'width': 300,
+                            'params': {}
+                        };
+                    </script>
+                    <script
+                        src="https://www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
+                </div>
+            </div>
+
+            <h2>3. The Decentralized Energy Grid</h2>
+            <p>The 2030s will mark the true death of the fossil fuel era. With breakthroughs in solid-state batteries
+                and small-scale fusion reactors, every home will effectively become its own power plant. Excess energy
+                will be traded autonomously on blockchain-based microgrids.</p>
+
+            <div class="ad-slot">
+                <div class="ad-label">
+                    <script>
+                        atOptions = {
+                            'key': 'd41be1e917eb87afabc417d7885c1eb3',
+                            'format': 'iframe',
+                            'height': 250,
+                            'width': 300,
+                            'params': {}
+                        };
+                    </script>
+                    <script
+                        src="https://www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
+                </div>
+            </div>
+
+            <h2>4. Brain-Computer Interfaces (BCI)</h2>
+            <p>Direct neural links will have transitioned from medical prosthetics to consumer electronics.
+                High-fidelity non-invasive BCI headbands will allow us to control our smart homes, type messages, and
+                even experience virtual reality with all five senses, bypassing traditional screens.</p>
+
+            <img src="https://images.unsplash.com/photo-1507413245164-6160d8298b31?auto=format&fit=crop&q=80&w=1200"
+                class="blog-img" alt="Bio Tech">
+
+            <div class="ad-slot">
+                <div class="ad-label">
+                    <script>
+                        atOptions = {
+                            'key': 'd41be1e917eb87afabc417d7885c1eb3',
+                            'format': 'iframe',
+                            'height': 250,
+                            'width': 300,
+                            'params': {}
+                        };
+                    </script>
+                    <script
+                        src="https://www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
+                </div>
+            </div>
+
+            <h2>5. The Metaverse to Omni-verse</h2>
+            <p>The "Metaverse" as we imagined it in 2022 will seem primitive. By 2030, Augmented Reality (AR) will be so
+                seamless that the digital and physical worlds will be indistinguishable. Digital "twins" of every city
+                will exist, allowing for perfect urban planning.</p>
+
+            <div class="ad-slot">
+                <div class="ad-label">
+                    <script>
+                        atOptions = {
+                            'key': 'd41be1e917eb87afabc417d7885c1eb3',
+                            'format': 'iframe',
+                            'height': 250,
+                            'width': 300,
+                            'params': {}
+                        };
+                    </script>
+                    <script
+                        src="https://www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
+                    <script>
+                        atOptions = {
+                            'key': 'd41be1e917eb87afabc417d7885c1eb3',
+                            'format': 'iframe',
+                            'height': 250,
+                            'width': 300,
+                            'params': {}
+                        };
+                    </script>
+                    <script
+                        src="https://www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
+                    <script>
+                        atOptions = {
+                            'key': 'd41be1e917eb87afabc417d7885c1eb3',
+                            'format': 'iframe',
+                            'height': 250,
+                            'width': 300,
+                            'params': {}
+                        };
+                    </script>
+                    <script
+                        src="https://www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
+                    T
+                </div>
+            </div>
+
+            <p>Conclusion: As we prepare for this shift, the priority must be ethics. How we govern these technologies
+                today will determine the survival of our species tomorrow. The future is bright, but it requires a human
+                heart to guide the machine mind.</p>
+
+            <div class="ad-slot">
+                <div class="ad-label">
+                    <script>
+                        atOptions = {
+                            'key': 'd41be1e917eb87afabc417d7885c1eb3',
+                            'format': 'iframe',
+                            'height': 250,
+                            'width': 300,
+                            'params': {}
+                        };
+                    </script>
+                    <script
+                        src="https://www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
+                    <script>
+                        atOptions = {
+                            'key': 'd41be1e917eb87afabc417d7885c1eb3',
+                            'format': 'iframe',
+                            'height': 250,
+                            'width': 300,
+                            'params': {}
+                        };
+                    </script>
+                    <script
+                        src="https://www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
+                </div>
+            </div>
+
+            <div class="final-box">
+                <h3 style="font-size: 2rem; margin-bottom: 15px;">System Synchronization</h3>
+                <p id="status-msg" style="color:var(--text-dim); margin-bottom:35px;">Scanning for human interaction...
+                    please scroll to the end.</p>
+
+                <button class="btn-final" id="final-btn" onclick="goToFinalPage()">
+                    Proceed to Final Destination
+                </button>
+            </div>
+
+            <div class="ad-slot">
+                <div class="ad-label">
+                    <script>
+                        atOptions = {
+                            'key': 'd41be1e917eb87afabc417d7885c1eb3',
+                            'format': 'iframe',
+                            'height': 250,
+                            'width': 300,
+                            'params': {}
+                        };
+                    </script>
+                    <script
+                        src="https://www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
+                    <script>
+                        atOptions = {
+                            'key': 'd41be1e917eb87afabc417d7885c1eb3',
+                            'format': 'iframe',
+                            'height': 250,
+                            'width': 300,
+                            'params': {}
+                        };
+                    </script>
+                    <script
+                        src="https://www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
+                    /div>
+                </div>
+
+        </article>
     </div>
 
-    <article>
-        <h1>The Great Convergence: Beyond the 2030 Digital Horizon</h1>
-        <div class="meta-info">
-            <span>By Tech Analysis Lab</span>
-            <span>•</span>
-            <span>30 Min Read</span>
-            <span>•</span>
-            <span>Dec 2025 Edition</span>
-        </div>
+    <script>
+        let timeLeft = 20;
+        let didUserScroll = false;
+        const secDisp = document.getElementById("sec");
+        const pBar = document.getElementById("pBar");
+        const finalBtn = document.getElementById("final-btn");
+        const statusMsg = document.getElementById("status-msg");
 
-        <p>As we edge closer to the end of the decade, the speed of technological evolution is no longer linear; it has become exponential. We are standing at the precipice of the "Singularity"—a moment where machine intelligence surpasses collective human intelligence. But what does that actually mean for the average person in 2030?</p>
+        window.addEventListener("scroll", () => {
+            if (window.scrollY > 1800) {
+                didUserScroll = true;
+            }
+        });
 
-        <img src="https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&q=80&w=1200" class="blog-img" alt="Advanced Robotics">
+        const timer = setInterval(() => {
+            timeLeft--;
+            if (timeLeft >= 0) secDisp.innerText = timeLeft;
 
-        <h2>1. The Autonomous Labor Revolution</h2>
-        <p>By 2030, the concept of "manual labor" will have undergone a total metamorphosis. Humanoid robots, powered by localized large language models, will be common sights in logistics, construction, and even elderly care. These aren't just machines; they are collaborative partners capable of understanding nuanced human emotions and complex instructions.</p>
-        
-        <div class="highlight-quote">
-            "We are moving from a world where we tell computers what to do, to a world where computers understand what we need."
-        </div>
+            let progress = ((20 - timeLeft) / 20) * 100;
+            pBar.style.width = progress + "%";
 
-        <div class="ad-slot"><div class="ad-label">ADVERTISEMENT</div></div>
+            if (timeLeft <= 0) {
+                clearInterval(timer);
+                checkVerification();
+            }
+        }, 1000);
 
-        <h2>2. Quantum Supremacy in Daily Life</h2>
-        <p>Quantum computing will move from laboratory experiments to cloud-based utility. This will allow for "Perfect Cryptography" and the ability to simulate molecular structures in seconds. For medicine, this means we can design personalized vaccines and cures based on an individual's unique DNA within hours.</p>
+        function checkVerification() {
+            if (!didUserScroll) {
+                statusMsg.innerHTML = "⚠️ Please read the full article to verify security.";
+                statusMsg.style.color = "#ef4444";
 
-        <img src="https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&q=80&w=1200" class="blog-img" alt="Quantum Computing">
-
-        <div class="ad-slot"><div class="ad-label">ADVERTISEMENT</div></div>
-
-        <h2>3. The Decentralized Energy Grid</h2>
-        <p>The 2030s will mark the true death of the fossil fuel era. With breakthroughs in solid-state batteries and small-scale fusion reactors, every home will effectively become its own power plant. Excess energy will be traded autonomously on blockchain-based microgrids.</p>
-
-        <div class="ad-slot"><div class="ad-label">ADVERTISEMENT</div></div>
-
-        <h2>4. Brain-Computer Interfaces (BCI)</h2>
-        <p>Direct neural links will have transitioned from medical prosthetics to consumer electronics. High-fidelity non-invasive BCI headbands will allow us to control our smart homes, type messages, and even experience virtual reality with all five senses, bypassing traditional screens.</p>
-        
-        <img src="https://images.unsplash.com/photo-1507413245164-6160d8298b31?auto=format&fit=crop&q=80&w=1200" class="blog-img" alt="Bio Tech">
-
-        <div class="ad-slot"><div class="ad-label">ADVERTISEMENT</div></div>
-        
-        <h2>5. The Metaverse to Omni-verse</h2>
-        <p>The "Metaverse" as we imagined it in 2022 will seem primitive. By 2030, Augmented Reality (AR) will be so seamless that the digital and physical worlds will be indistinguishable. Digital "twins" of every city will exist, allowing for perfect urban planning.</p>
-
-        <div class="ad-slot"><div class="ad-label">ADVERTISEMENT</div></div>
-
-        <p>Conclusion: As we prepare for this shift, the priority must be ethics. How we govern these technologies today will determine the survival of our species tomorrow. The future is bright, but it requires a human heart to guide the machine mind.</p>
-
-        <div class="ad-slot"><div class="ad-label">ADVERTISEMENT</div></div>
-
-        <div class="final-box">
-            <h3 style="font-size: 2rem; margin-bottom: 15px;">System Synchronization</h3>
-            <p id="status-msg" style="color:var(--text-dim); margin-bottom:35px;">Scanning for human interaction... please scroll to the end.</p>
-            
-            <button class="btn-final" id="final-btn" onclick="goToFinalPage()">
-                Proceed to Final Destination
-            </button>
-        </div>
-
-        <div class="ad-slot"><div class="ad-label">BOTTOM SPONSOR</div></div>
-
-    </article>
-</div>
-
-<script>
-    let timeLeft = 20;
-    let didUserScroll = false;
-    const secDisp = document.getElementById("sec");
-    const pBar = document.getElementById("pBar");
-    const finalBtn = document.getElementById("final-btn");
-    const statusMsg = document.getElementById("status-msg");
-
-    window.addEventListener("scroll", () => {
-        if (window.scrollY > 1800) {
-            didUserScroll = true;
-        }
-    });
-
-    const timer = setInterval(() => {
-        timeLeft--;
-        if(timeLeft >= 0) secDisp.innerText = timeLeft;
-        
-        let progress = ((20 - timeLeft) / 20) * 100;
-        pBar.style.width = progress + "%";
-
-        if (timeLeft <= 0) {
-            clearInterval(timer);
-            checkVerification();
-        }
-    }, 1000);
-
-    function checkVerification() {
-        if (!didUserScroll) {
-            statusMsg.innerHTML = "⚠️ Please read the full article to verify security.";
-            statusMsg.style.color = "#ef4444";
-            
-            const scrollCheck = setInterval(() => {
-                if (window.scrollY > 1800) {
-                    clearInterval(scrollCheck);
-                    showFinalAction();
-                }
-            }, 2000);
-        } else {
-            showFinalAction();
-        }
-    }
-
-    function showFinalAction() {
-        document.getElementById("timer-ui").innerHTML = "✅ VERIFIED";
-        statusMsg.innerHTML = "Identity confirmed. Click below to get your link.";
-        statusMsg.style.color = "#10b981";
-        finalBtn.style.display = "inline-block";
-    }
-
-    function goToFinalPage() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const code = urlParams.get("code");
-        
-        if(!code) {
-            alert("Security Error: Code missing.");
-            return;
+                const scrollCheck = setInterval(() => {
+                    if (window.scrollY > 1800) {
+                        clearInterval(scrollCheck);
+                        showFinalAction();
+                    }
+                }, 2000);
+            } else {
+                showFinalAction();
+            }
         }
 
-        // Change "final.html" to the exact name of your final page file
-        window.location.href = "final.html?code=" + code;
-    }
-</script>
+        function showFinalAction() {
+            document.getElementById("timer-ui").innerHTML = "✅ VERIFIED";
+            statusMsg.innerHTML = "Identity confirmed. Click below to get your link.";
+            statusMsg.style.color = "#10b981";
+            finalBtn.style.display = "inline-block";
+        }
+
+        function goToFinalPage() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const code = urlParams.get("code");
+
+            if (!code) {
+                alert("Security Error: Code missing.");
+                return;
+            }
+
+            // Change "final.html" to the exact name of your final page file
+            window.location.href = "final.html?code=" + code;
+        }
+    </script>
 
 </body>
+
 </html>

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,9 +8,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #020617; /* Slate Black */
+            --bg-color: #020617;
+            /* Slate Black */
             --card-bg: #0f172a;
-            --accent: #22d3ee; /* Cyan Accent */
+            --accent: #22d3ee;
+            /* Cyan Accent */
             --text-main: #f1f5f9;
             --text-dim: #94a3b8;
             --border: #1e293b;
@@ -26,9 +29,12 @@
         /* Reading Progress */
         #pBar {
             position: fixed;
-            top: 0; left: 0; height: 4px;
+            top: 0;
+            left: 0;
+            height: 4px;
             background: linear-gradient(to right, var(--accent), #818cf8);
-            width: 0%; z-index: 10000;
+            width: 0%;
+            z-index: 10000;
         }
 
         /* Premium Header */
@@ -37,8 +43,12 @@
             backdrop-filter: blur(12px);
             padding: 15px 6%;
             border-bottom: 1px solid var(--border);
-            position: sticky; top: 0; z-index: 999;
-            display: flex; justify-content: space-between; align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 999;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .status-badge {
@@ -57,17 +67,35 @@
         }
 
         /* Article Styling */
-        h1 { font-size: 3rem; font-weight: 800; line-height: 1.1; color: var(--accent); margin-bottom: 15px; }
-        .author-box { border-bottom: 1px solid var(--border); padding-bottom: 20px; margin-bottom: 40px; color: var(--text-dim); }
+        h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            line-height: 1.1;
+            color: var(--accent);
+            margin-bottom: 15px;
+        }
 
-        .section-title { font-size: 1.8rem; margin-top: 50px; color: var(--text-main); border-left: 5px solid var(--accent); padding-left: 15px; }
-        
+        .author-box {
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 20px;
+            margin-bottom: 40px;
+            color: var(--text-dim);
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            margin-top: 50px;
+            color: var(--text-main);
+            border-left: 5px solid var(--accent);
+            padding-left: 15px;
+        }
+
         .blog-image {
             width: 100%;
             height: auto;
             border-radius: 20px;
             margin: 30px 0;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
         }
 
         /* Ad Slots - Optimized for CTR */
@@ -83,7 +111,14 @@
             flex-direction: column;
             justify-content: center;
         }
-        .ad-hint { font-size: 10px; color: #475569; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 2px; }
+
+        .ad-hint {
+            font-size: 10px;
+            color: #475569;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
 
         /* Action Footer */
         .footer-action {
@@ -108,135 +143,366 @@
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        .btn-next:hover { transform: scale(1.05); filter: brightness(1.1); }
-        .instruction { color: var(--text-dim); margin-bottom: 25px; font-weight: 500; }
+        .btn-next:hover {
+            transform: scale(1.05);
+            filter: brightness(1.1);
+        }
+
+        .instruction {
+            color: var(--text-dim);
+            margin-bottom: 25px;
+            font-weight: 500;
+        }
 
         @media (max-width: 768px) {
-            h1 { font-size: 2.2rem; }
+            h1 {
+                font-size: 2.2rem;
+            }
         }
     </style>
 </head>
+
 <body>
 
-<div id="pBar"></div>
+    <div id="pBar"></div>
+    <script>(function (s) { s.dataset.zone = '10400021', s.src = 'https://nap5k.com/tag.min.js' })([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
 
-<header>
-    <div style="font-weight: 800; font-size: 1.4rem;">ELITE<span style="color:var(--accent)">HUB</span></div>
-    <div class="status-badge" id="timer-ui">Verifying: <span id="sec">20</span>s</div>
-</header>
+    <header>
+        <div style="font-weight: 800; font-size: 1.4rem;">ELITE<span style="color:var(--accent)">HUB</span></div>
+        <div class="status-badge" id="timer-ui">Verifying: <span id="sec">20</span>s</div>
+    </header>
 
-<div class="main-wrapper">
-
-    <div class="ad-unit">
-        <div class="ad-hint">Advertisement</div>
-        <script src="https://3nbf4.com/act/files/tag.min.js?z=10381339" data-cfasync="false" async></script>
-    </div>
-
-    <article>
-        <h1>Autonomous Evolution: The Automotive Shift of 2025</h1>
-        <div class="author-box">Updated: Dec 2025 • Read Time: 15 Min • Automotive Excellence</div>
-
-        <div class="content">
-            <p>2025 has become the pivotal year for the "Software Defined Vehicle." Cars are no longer just mechanical objects; they are rolling data centers. As we step into the second half of the decade, luxury and speed have merged with silicon and intelligence.</p>
-
-            <h2 class="section-title">1. The Porsche Taycan GT Phenomenon</h2>
-            <p>Porsche’s latest masterpiece, the Taycan Turbo GT, isn't just about speed—it's about thermal management. Using a new silicon-carbide inverter, it maintains peak performance longer than any EV in history. It represents the pinnacle of German engineering in a carbon-conscious world.</p>
-            <img src="https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?auto=format&fit=crop&q=80&w=1000" class="blog-image" alt="Porsche Taycan">
-        </div>
+    <div class="main-wrapper">
 
         <div class="ad-unit">
-            <div class="ad-hint">Sponsored Content</div>
-            <script>atOptions={'key':'d41be1e917eb87afabc417d7885c1eb3','format':'iframe','height':250,'width':300,'params':{}};</script>
-        </div>
-
-        <div class="content">
-            <h2 class="section-title">2. Lamborghini Revuelto: Hybrid Mastery</h2>
-            <p>The Revuelto is Lamborghini's "High Performance Electrified Vehicle" (HPEV). By combining a naturally aspirated V12 with three electric motors, they've solved the low-end torque gap while preserving the soul-stirring sound that enthusiasts crave. It's a bridge between two eras.</p>
-            <img src="https://images.unsplash.com/photo-1544636331-e26879cd4d9b?auto=format&fit=crop&q=80&w=1000" class="blog-image" alt="Luxury Supercar">
-        </div>
-
-        <div class="ad-unit">
-            <div class="ad-hint">Advertisement</div>
-            <script src="https://pl28328281.effectivegatecpm.com/27/3c/53/273c5378ff0557eae1a862b03131344a.js"></script>
-        </div>
-
-        <div class="content">
-            <h2 class="section-title">3. Tesla's FSD v13: The AI Driver</h2>
-            <p>Tesla’s latest Full Self-Driving update has moved away from traditional coding. The car now learns purely through "end-to-end neural networks," meaning it watches millions of human driving videos to understand complex social cues on the road, such as when to yield or nudge forward at a busy intersection.</p>
-            <img src="https://images.unsplash.com/photo-1563720223185-11003d516905?auto=format&fit=crop&q=80&w=1000" class="blog-image" alt="Autonomous Tech">
-        </div>
-
-        <div class="ad-unit">
-            <div class="ad-hint">Don't miss this</div>
-            <script async="async" data-cfasync="false" src="https://pl28334516.effectivegatecpm.com/cbbb337fba63c479050336665248235f/invoke.js"></script>
+            <script>
+                atOptions = {
+                    'key': 'd41be1e917eb87afabc417d7885c1eb3',
+                    'format': 'iframe',
+                    'height': 250,
+                    'width': 300,
+                    'params': {}
+                };
+            </script>
+            <script src="https://www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
+            <script>
+                atOptions = {
+                    'key': 'd41be1e917eb87afabc417d7885c1eb3',
+                    'format': 'iframe',
+                    'height': 250,
+                    'width': 300,
+                    'params': {}
+                };
+            </script>
+            <script src="https://www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
+            <script>
+                atOptions = {
+                    'key': 'd41be1e917eb87afabc417d7885c1eb3',
+                    'format': 'iframe',
+                    'height': 250,
+                    'width': 300,
+                    'params': {}
+                };
+            </script>
+            <script src="https://www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
+            <script async="async" data-cfasync="false"
+                src="https://pl28334516.effectivegatecpm.com/cbbb337fba63c479050336665248235f/invoke.js"></script>
             <div id="container-cbbb337fba63c479050336665248235f"></div>
+            <div class="ad-hint">
+                <script>(function (s) { s.dataset.zone = '10400040', s.src = 'https://nap5k.com/tag.min.js' })([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
+                <script>(function (s) { s.dataset.zone = '10400040', s.src = 'https://nap5k.com/tag.min.js' })([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
+                <script>(function (s) { s.dataset.zone = '10400040', s.src = 'https://nap5k.com/tag.min.js' })([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
+                <script>
+                    atOptions = {
+                        'key': '666b2474ed4c3364af3ed998b397cf46',
+                        'format': 'iframe',
+                        'height': 600,
+                        'width': 50,
+                        'params': {}
+                    };
+                </script>
+                <script src="https://www.highperformanceformat.com/666b2474ed4c3364af3ed998b397cf46/invoke.js"></script>
+                /div>
+                <script src="https://3nbf4.com/act/files/tag.min.js?z=10381339" data-cfasync="false" async></script>
+            </div>
+
+            <article>
+                <h1>Autonomous Evolution: The Automotive Shift of 2025</h1>
+                <div class="author-box">Updated: Dec 2025 • Read Time: 15 Min • Automotive Excellence</div>
+
+                <div class="content">
+                    <p>2025 has become the pivotal year for the "Software Defined Vehicle." Cars are no longer just
+                        mechanical objects; they are rolling data centers. As we step into the second half of the
+                        decade,
+                        luxury and speed have merged with silicon and intelligence.</p>
+
+                    <h2 class="section-title">1. The Porsche Taycan GT Phenomenon</h2>
+                    <p>Porsche’s latest masterpiece, the Taycan Turbo GT, isn't just about speed—it's about thermal
+                        management. Using a new silicon-carbide inverter, it maintains peak performance longer than any
+                        EV
+                        in history. It represents the pinnacle of German engineering in a carbon-conscious world.</p>
+                    <img src="https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?auto=format&fit=crop&q=80&w=1000"
+                        class="blog-image" alt="Porsche Taycan">
+                </div>
+
+                <div class="ad-unit">
+                    <script async="async" data-cfasync="false"
+                        src="https://pl28334516.effectivegatecpm.com/cbbb337fba63c479050336665248235f/invoke.js"></script>
+                    <div id="container-cbbb337fba63c479050336665248235f"></div>
+                    <div class="ad-hint">
+                        <script>
+                            atOptions = {
+                                'key': 'd41be1e917eb87afabc417d7885c1eb3',
+                                'format': 'iframe',
+                                'height': 250,
+                                'width': 300,
+                                'params': {}
+                            };
+                        </script>
+                        <script
+                            src="https://www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
+                        <script>
+                            atOptions = {
+                                'key': 'd41be1e917eb87afabc417d7885c1eb3',
+                                'format': 'iframe',
+                                'height': 250,
+                                'width': 300,
+                                'params': {}
+                            };
+                        </script>
+                        <script
+                            src="https://www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
+                        <script>
+                            atOptions = {
+                                'key': '666b2474ed4c3364af3ed998b397cf46',
+                                'format': 'iframe',
+                                'height': 600,
+                                'width': 50,
+                                'params': {}
+                            };
+                        </script>
+                        <script
+                            src="https://www.highperformanceformat.com/666b2474ed4c3364af3ed998b397cf46/invoke.js"></script>
+                    </div>
+                    <script>atOptions = { 'key': 'd41be1e917eb87afabc417d7885c1eb3', 'format': 'iframe', 'height': 250, 'width': 300, 'params': {} };</script>
+                </div>
+
+                <div class="content">
+                    <h2 class="section-title">2. Lamborghini Revuelto: Hybrid Mastery</h2>
+                    <p>The Revuelto is Lamborghini's "High Performance Electrified Vehicle" (HPEV). By combining a
+                        naturally
+                        aspirated V12 with three electric motors, they've solved the low-end torque gap while preserving
+                        the
+                        soul-stirring sound that enthusiasts crave. It's a bridge between two eras.</p>
+                    <img src="https://images.unsplash.com/photo-1544636331-e26879cd4d9b?auto=format&fit=crop&q=80&w=1000"
+                        class="blog-image" alt="Luxury Supercar">
+                </div>
+
+                <div class="ad-unit">
+                    <script async="async" data-cfasync="false"
+                        src="https://pl28334516.effectivegatecpm.com/cbbb337fba63c479050336665248235f/invoke.js"></script>
+                    <div id="container-cbbb337fba63c479050336665248235f"></div>
+                    <div class="ad-hint">
+                        <script>
+                            atOptions = {
+                                'key': 'd41be1e917eb87afabc417d7885c1eb3',
+                                'format': 'iframe',
+                                'height': 250,
+                                'width': 300,
+                                'params': {}
+                            };
+                        </script>
+                        <script
+                            src="https://www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
+                        <script>
+                            atOptions = {
+                                'key': 'd41be1e917eb87afabc417d7885c1eb3',
+                                'format': 'iframe',
+                                'height': 250,
+                                'width': 300,
+                                'params': {}
+                            };
+                        </script>
+                        <script
+                            src="https://www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
+                        <script>
+                            atOptions = {
+                                'key': '666b2474ed4c3364af3ed998b397cf46',
+                                'format': 'iframe',
+                                'height': 600,
+                                'width': 50,
+                                'params': {}
+                            };
+                        </script>
+                        <script
+                            src="https://www.highperformanceformat.com/666b2474ed4c3364af3ed998b397cf46/invoke.js"></script>
+                        t
+                    </div>
+                    <script
+                        src="https://pl28328281.effectivegatecpm.com/27/3c/53/273c5378ff0557eae1a862b03131344a.js"></script>
+                </div>
+
+                <div class="content">
+                    <h2 class="section-title">3. Tesla's FSD v13: The AI Driver</h2>
+                    <p>Tesla’s latest Full Self-Driving update has moved away from traditional coding. The car now
+                        learns
+                        purely through "end-to-end neural networks," meaning it watches millions of human driving videos
+                        to
+                        understand complex social cues on the road, such as when to yield or nudge forward at a busy
+                        intersection.</p>
+                    <img src="https://images.unsplash.com/photo-1563720223185-11003d516905?auto=format&fit=crop&q=80&w=1000"
+                        class="blog-image" alt="Autonomous Tech">
+                </div>
+
+                <div class="ad-unit">
+                    <script async="async" data-cfasync="false"
+                        src="https://pl28334516.effectivegatecpm.com/cbbb337fba63c479050336665248235f/invoke.js"></script>
+                    <div class="ad-hint">
+                        <script>
+                            atOptions = {
+                                'key': 'd41be1e917eb87afabc417d7885c1eb3',
+                                'format': 'iframe',
+                                'height': 250,
+                                'width': 300,
+                                'params': {}
+                            };
+                        </script>
+                        <script
+                            src="https://www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
+                        <script>
+                            atOptions = {
+                                'key': 'd41be1e917eb87afabc417d7885c1eb3',
+                                'format': 'iframe',
+                                'height': 250,
+                                'width': 300,
+                                'params': {}
+                            };
+                        </script>
+                        <script
+                            src="https://www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
+                        <script>
+                            atOptions = {
+                                'key': '666b2474ed4c3364af3ed998b397cf46',
+                                'format': 'iframe',
+                                'height': 600,
+                                'width': 50,
+                                'params': {}
+                            };
+                        </script>
+                        <script
+                            src="https://www.highperformanceformat.com/666b2474ed4c3364af3ed998b397cf46/invoke.js"></script>
+                    </div>
+                    <script async="async" data-cfasync="false"
+                        src="https://pl28334516.effectivegatecpm.com/cbbb337fba63c479050336665248235f/invoke.js"></script>
+                    <div id="container-cbbb337fba63c479050336665248235f"></div>
+                </div>
+
+                <div class="content">
+                    <h2 class="section-title">4. Sustainable Manufacturing</h2>
+                    <p>Luxury brands are now competing on their "Carbon Footprint" as much as their 0-60 times. From
+                        using
+                        recycled ocean plastics for seat fabrics to solar-powered factories, the entire lifecycle of the
+                        car
+                        is being redesigned for a circular economy.</p>
+                </div>
+
+                <div class="ad-unit">
+                    <script>
+                        atOptions = {
+                            'key': 'd41be1e917eb87afabc417d7885c1eb3',
+                            'format': 'iframe',
+                            'height': 250,
+                            'width': 300,
+                            'params': {}
+                        };
+                    </script>
+                    <script
+                        src="https://www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
+                    <script>
+                        atOptions = {
+                            'key': 'd41be1e917eb87afabc417d7885c1eb3',
+                            'format': 'iframe',
+                            'height': 250,
+                            'width': 300,
+                            'params': {}
+                        };
+                    </script>
+                    <script
+                        src="https://www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
+                    <script async="async" data-cfasync="false"
+                        src="https://pl28334516.effectivegatecpm.com/cbbb337fba63c479050336665248235f/invoke.js"></script>
+                    <div class="ad-hint">
+                        <script>
+                            atOptions = {
+                                'key': '666b2474ed4c3364af3ed998b397cf46',
+                                'format': 'iframe',
+                                'height': 600,
+                                'width': 50,
+                                'params': {}
+                            };
+                        </script>
+                        <script
+                            src="https://www.highperformanceformat.com/666b2474ed4c3364af3ed998b397cf46/invoke.js"></script>
+                    </div>
+                    <script src="https://3nbf4.com/act/files/tag.min.js?z=10381386" data-cfasync="false" async></script>
+                </div>
+
+                <div class="footer-action">
+                    <p id="instruction" class="instruction">Scroll and stay on page to complete verification...</p>
+                    <button class="btn-next" id="next-btn" onclick="proceed()">Continue to Step 3</button>
+                </div>
+
+            </article>
         </div>
 
-        <div class="content">
-            <h2 class="section-title">4. Sustainable Manufacturing</h2>
-            <p>Luxury brands are now competing on their "Carbon Footprint" as much as their 0-60 times. From using recycled ocean plastics for seat fabrics to solar-powered factories, the entire lifecycle of the car is being redesigned for a circular economy.</p>
+        <div style="padding: 20px; text-align: center;">
+            <script src="https://gizokraijaw.net/vignette.min.js" data-zone="10381300"></script>
         </div>
 
-        <div class="ad-unit">
-             <div class="ad-hint">Advertisement</div>
-             <script src="https://3nbf4.com/act/files/tag.min.js?z=10381386" data-cfasync="false" async></script>
-        </div>
+        <script>
+            let timeLeft = 20;
+            let userActive = false;
+            const secDisp = document.getElementById("sec");
+            const pBar = document.getElementById("pBar");
+            const nextBtn = document.getElementById("next-btn");
+            const instruct = document.getElementById("instruction");
 
-        <div class="footer-action">
-            <p id="instruction" class="instruction">Scroll and stay on page to complete verification...</p>
-            <button class="btn-next" id="next-btn" onclick="proceed()">Continue to Step 3</button>
-        </div>
+            // Anti-bot interaction check
+            window.addEventListener("scroll", () => userActive = true);
+            window.addEventListener("touchstart", () => userActive = true);
+            window.addEventListener("mousemove", () => userActive = true);
 
-    </article>
-</div>
+            const countdown = setInterval(() => {
+                timeLeft--;
+                if (timeLeft >= 0) secDisp.innerText = timeLeft;
 
-<div style="padding: 20px; text-align: center;">
-    <script src="https://gizokraijaw.net/vignette.min.js" data-zone="10381300"></script>
-</div>
+                // Update Progress Bar
+                let width = ((20 - timeLeft) / 20) * 100;
+                pBar.style.width = width + "%";
 
-<script>
-    let timeLeft = 20;
-    let userActive = false;
-    const secDisp = document.getElementById("sec");
-    const pBar = document.getElementById("pBar");
-    const nextBtn = document.getElementById("next-btn");
-    const instruct = document.getElementById("instruction");
+                if (timeLeft <= 0) {
+                    clearInterval(countdown);
+                    if (!userActive) {
+                        document.body.innerHTML = "<div style='color:white; text-align:center; padding-top:100px;'><h1>Verification Failed</h1><p>Please interact with the page to prove you are human.</p><button onclick='location.reload()'>Retry</button></div>";
+                    } else {
+                        document.getElementById("timer-ui").innerHTML = "✅ Verified";
+                        instruct.innerText = "You have successfully completed Step 2.";
+                        nextBtn.style.display = "inline-block";
+                    }
+                }
+            }, 1000);
 
-    // Anti-bot interaction check
-    window.addEventListener("scroll", () => userActive = true);
-    window.addEventListener("touchstart", () => userActive = true);
-    window.addEventListener("mousemove", () => userActive = true);
+            function proceed() {
+                nextBtn.innerText = "Finalizing Check...";
+                nextBtn.disabled = true;
 
-    const countdown = setInterval(() => {
-        timeLeft--;
-        if(timeLeft >= 0) secDisp.innerText = timeLeft;
-        
-        // Update Progress Bar
-        let width = ((20 - timeLeft) / 20) * 100;
-        pBar.style.width = width + "%";
-
-        if (timeLeft <= 0) {
-            clearInterval(countdown);
-            if (!userActive) {
-                document.body.innerHTML = "<div style='color:white; text-align:center; padding-top:100px;'><h1>Verification Failed</h1><p>Please interact with the page to prove you are human.</p><button onclick='location.reload()'>Retry</button></div>";
-            } else {
-                document.getElementById("timer-ui").innerHTML = "✅ Verified";
-                instruct.innerText = "You have successfully completed Step 2.";
-                nextBtn.style.display = "inline-block";
+                setTimeout(() => {
+                    const urlParams = new URLSearchParams(window.location.search);
+                    window.location.href = "step3.html?code=" + (urlParams.get("code") || "EliteAuto");
+                }, 3000);
             }
-        }
-    }, 1000);
-
-    function proceed() {
-        nextBtn.innerText = "Finalizing Check...";
-        nextBtn.disabled = true;
-        
-        setTimeout(() => {
-            const urlParams = new URLSearchParams(window.location.search);
-            window.location.href = "step3.html?code=" + (urlParams.get("code") || "EliteAuto");
-        }, 3000);
-    }
-</script>
+        </script>
 
 </body>
+
 </html>
