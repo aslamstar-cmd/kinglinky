@@ -143,7 +143,7 @@
 
 <header>
     <div style="font-weight: 800; font-size: 1.6rem; letter-spacing: -1px;">TECH<span style="color:var(--accent)">2030</span></div>
-    <div class="timer-badge" id="timer-ui">SECURITY SYNC: <span id="sec">15</span>s</div>
+    <div class="timer-badge" id="timer-ui">SECURITY SYNC: <span id="sec">20</span>s</div>
 </header>
 
 <div class="container">
@@ -218,7 +218,7 @@
 </div>
 
 <script>
-    let timeLeft = 15;
+    let timeLeft = 20;
     let didUserScroll = false;
     const secDisp = document.getElementById("sec");
     const pBar = document.getElementById("pBar");
@@ -235,7 +235,7 @@
         timeLeft--;
         if(timeLeft >= 0) secDisp.innerText = timeLeft;
         
-        let progress = ((15 - timeLeft) / 15) * 100;
+        let progress = ((20 - timeLeft) / 20) * 100;
         pBar.style.width = progress + "%";
 
         if (timeLeft <= 0) {

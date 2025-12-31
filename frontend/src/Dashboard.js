@@ -18,7 +18,7 @@ export default function Dashboard({ user }) {
   const [currency, setCurrency] = useState("USD");
   const [links, setLinks] = useState([]);
   const [withdraws, setWithdraws] = useState([]);
-  const [userData, setUserData] = useState(null); 
+  const [userData, setUserData] = useState(null);
   const [longUrl, setLongUrl] = useState("");
   const [withdrawAmount, setWithdrawAmount] = useState("");
   const [note, setNote] = useState("");
@@ -45,13 +45,13 @@ export default function Dashboard({ user }) {
 
         axios.get(`${API_BASE}/api/users/profile?email=${user.email}`, auth),
       ]);
-      
+
       setLinks(Array.isArray(linksRes.data) ? linksRes.data : []);
 
       // ✅ FIX 2: withdraw response correct-ah read pannrom
       setWithdraws(wdRes.data?.data || []);
 
-      setUserData(userRes.data); 
+      setUserData(userRes.data);
     } catch (err) {
       console.error("Dashboard load error", err);
     } finally {
@@ -71,9 +71,10 @@ export default function Dashboard({ user }) {
     .reduce((sum, w) => sum + (Number(w.amount) || 0), 0);
 
   const todayViews = links.reduce((sum, l) => {
-    const d = l.createdAt ? new Date(l.createdAt).toISOString().slice(0, 10) : "";
-    const today = new Date().toISOString().slice(0, 10);
-    return d === today ? sum + (Number(l.clicks) || 0) : sum;
+    if (l.dailyClicks && typeof l.dailyClicks === "object") {
+      return sum + Number(l.dailyClicks[todayKey] || 0);
+    }
+    return sum;
   }, 0);
 
   // ✅ FIX 3: today earnings backend-la irundhu
@@ -142,8 +143,8 @@ export default function Dashboard({ user }) {
 
   if (loading) {
     return (
-      <div style={{...styles.wrap, display:'flex', justifyContent:'center', alignItems:'center'}}>
-        <h2 style={{color:'#00ffd0'}}>👑{userData?.name || user?.name} Dashboard...</h2>
+      <div style={{ ...styles.wrap, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <h2 style={{ color: '#00ffd0' }}>👑{userData?.name || user?.name} Dashboard...</h2>
       </div>
     );
   }
@@ -151,9 +152,9 @@ export default function Dashboard({ user }) {
     <div style={styles.wrap}>
       {/* HEADER */}
       <div style={styles.header}>
-        <h2 style={{color: '#00ffd0', margin: 0}}>👑 Kinglinky</h2>
+        <h2 style={{ color: '#00ffd0', margin: 0 }}>👑 Kinglinky</h2>
         <div style={styles.headerRight}>
-           <select value={currency} onChange={(e) => setCurrency(e.target.value)} style={styles.select}>
+          <select value={currency} onChange={(e) => setCurrency(e.target.value)} style={styles.select}>
             <option value="USD">USD</option>
             <option value="INR">INR</option>
           </select>
@@ -187,14 +188,14 @@ export default function Dashboard({ user }) {
           </div>
 
           <div style={styles.chartContainer}>
-            <h4 style={{marginBottom: 15, fontSize: 14}}>Recent Link Performance</h4>
+            <h4 style={{ marginBottom: 15, fontSize: 14 }}>Recent Link Performance</h4>
             <ResponsiveContainer width="100%" height={220}>
               <LineChart data={links.slice(-8).map(l => ({ n: 'Link', c: l.clicks }))}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#053737" />
                 <XAxis hide />
                 <YAxis stroke="#888" fontSize={12} />
-                <Tooltip contentStyle={{background:'#021c1c', border:'1px solid #00ffd0'}} />
-                <Line type="monotone" dataKey="c" stroke="#00ffd0" strokeWidth={3} dot={{r: 4, fill: '#00ffd0'}} />
+                <Tooltip contentStyle={{ background: '#021c1c', border: '1px solid #00ffd0' }} />
+                <Line type="monotone" dataKey="c" stroke="#00ffd0" strokeWidth={3} dot={{ r: 4, fill: '#00ffd0' }} />
               </LineChart>
             </ResponsiveContainer>
           </div>
@@ -207,15 +208,15 @@ export default function Dashboard({ user }) {
             <input style={styles.input} value={longUrl} onChange={e => setLongUrl(e.target.value)} placeholder="Paste long URL..." />
             <button style={styles.btnAction} onClick={shorten}>Shorten</button>
           </div>
-          {links.length === 0 ? <p style={{textAlign:'center', color:'#888'}}>No links found.</p> : 
+          {links.length === 0 ? <p style={{ textAlign: 'center', color: '#888' }}>No links found.</p> :
             links.map(l => (
               <div key={l._id} style={styles.linkBox}>
-                <div style={{overflow:'hidden', marginRight: 10}}>
-                  <div style={{color:'#00ffd0', fontWeight:'bold', fontSize: 14}}>{l.shortUrl}</div>
-                  <small style={{color:'#aaa'}}>{l.clicks} clicks</small>
+                <div style={{ overflow: 'hidden', marginRight: 10 }}>
+                  <div style={{ color: '#00ffd0', fontWeight: 'bold', fontSize: 14 }}>{l.shortUrl}</div>
+                  <small style={{ color: '#aaa' }}>{l.clicks} clicks</small>
                 </div>
-                <div style={{display:'flex', gap: 5}}>
-                  <button style={styles.iconBtn} onClick={() => {navigator.clipboard.writeText(l.shortUrl); alert("Copied!")}}>📋</button>
+                <div style={{ display: 'flex', gap: 5 }}>
+                  <button style={styles.iconBtn} onClick={() => { navigator.clipboard.writeText(l.shortUrl); alert("Copied!") }}>📋</button>
                   <button style={styles.iconBtn} onClick={() => deleteLink(l._id)}>🗑️</button>
                 </div>
               </div>
@@ -226,9 +227,9 @@ export default function Dashboard({ user }) {
 
       {tab === "withdraw" && (
         <div style={styles.withdrawCard}>
-          <h3 style={{marginTop: 0}}>Wallet: {money(walletUSD)}</h3>
+          <h3 style={{ marginTop: 0 }}>Wallet: {money(walletUSD)}</h3>
           {hasRequestedToday ? (
-             <p style={{color: '#ffcc00', fontSize: 13}}>⚠️ You have already sent a request today. Come back tomorrow!</p>
+            <p style={{ color: '#ffcc00', fontSize: 13 }}>⚠️ You have already sent a request today. Come back tomorrow!</p>
           ) : (
             <>
               <input type="number" style={styles.inputFull} value={withdrawAmount} onChange={e => setWithdrawAmount(e.target.value)} placeholder={`Min ${money(MIN_WITHDRAW)}`} />
@@ -241,14 +242,14 @@ export default function Dashboard({ user }) {
 
       {tab === "history" && (
         <div style={styles.section}>
-          {withdraws.length === 0 ? <p style={{textAlign:'center', color:'#888'}}>No history found.</p> :
+          {withdraws.length === 0 ? <p style={{ textAlign: 'center', color: '#888' }}>No history found.</p> :
             withdraws.map(w => (
               <div key={w._id} style={styles.linkBox}>
                 <div>
-                    <div>{money(w.amount)}</div>
-                    <small style={{color:'#888'}}>{new Date(w.createdAt).toLocaleDateString()}</small>
+                  <div>{money(w.amount)}</div>
+                  <small style={{ color: '#888' }}>{new Date(w.createdAt).toLocaleDateString()}</small>
                 </div>
-                <b style={{color: w.status==='paid'?'#00ffd0':'#ffcc00'}}>{w.status.toUpperCase()}</b>
+                <b style={{ color: w.status === 'paid' ? '#00ffd0' : '#ffcc00' }}>{w.status.toUpperCase()}</b>
               </div>
             ))
           }
@@ -257,9 +258,9 @@ export default function Dashboard({ user }) {
 
       {tab === "support" && (
         <div style={styles.supportBox}>
-          <div style={{fontSize: 50, marginBottom: 10}}>💬</div>
+          <div style={{ fontSize: 50, marginBottom: 10 }}>💬</div>
           <h3>Help Center</h3>
-          <p style={{color: '#aaa', fontSize: 14}}>Contact support on Telegram if you face any issues.</p>
+          <p style={{ color: '#aaa', fontSize: 14 }}>Contact support on Telegram if you face any issues.</p>
           <button style={styles.btnTg} onClick={() => window.open("https://t.me/KingLinkySupport_Bot")}>
             Chat on Telegram
           </button>
@@ -269,11 +270,11 @@ export default function Dashboard({ user }) {
   );
 }
 
-function Card({ title, value, color="#fff" }) {
+function Card({ title, value, color = "#fff" }) {
   return (
     <div style={styles.card}>
-      <div style={{color:'#aaa', fontSize: 11, marginBottom: 5, textTransform: 'uppercase'}}>{title}</div>
-      <div style={{color: color, fontSize: 18, fontWeight: 'bold'}}>{value}</div>
+      <div style={{ color: '#aaa', fontSize: 11, marginBottom: 5, textTransform: 'uppercase' }}>{title}</div>
+      <div style={{ color: color, fontSize: 18, fontWeight: 'bold' }}>{value}</div>
     </div>
   );
 }

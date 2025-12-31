@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -26,9 +27,12 @@
         /* Top Progress */
         #pBar {
             position: fixed;
-            top: 0; left: 0; height: 4px;
+            top: 0;
+            left: 0;
+            height: 4px;
             background: linear-gradient(to right, var(--accent), #008cff);
-            width: 0%; z-index: 10000;
+            width: 0%;
+            z-index: 10000;
         }
 
         /* Cyberpunk Header */
@@ -36,9 +40,13 @@
             background: rgba(15, 18, 21, 0.95);
             padding: 15px 5%;
             border-bottom: 2px solid var(--border);
-            position: sticky; top: 0; z-index: 999;
-            display: flex; justify-content: space-between; align-items: center;
-            box-shadow: 0 4px 20px rgba(0,255,208,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 999;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 20px rgba(0, 255, 208, 0.1);
         }
 
         .timer-unit {
@@ -57,11 +65,31 @@
         }
 
         /* Article Styling */
-        h1 { font-size: 2.8rem; font-weight: 700; color: var(--accent); text-transform: uppercase; margin-bottom: 10px; }
-        .article-meta { color: var(--text-dim); font-size: 0.9rem; margin-bottom: 40px; border-left: 2px solid #333; padding-left: 15px; }
+        h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: var(--accent);
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
 
-        .section-header { font-size: 1.8rem; margin-top: 50px; color: #fff; background: rgba(0,255,208,0.05); padding: 10px; border-radius: 4px; }
-        
+        .article-meta {
+            color: var(--text-dim);
+            font-size: 0.9rem;
+            margin-bottom: 40px;
+            border-left: 2px solid #333;
+            padding-left: 15px;
+        }
+
+        .section-header {
+            font-size: 1.8rem;
+            margin-top: 50px;
+            color: #fff;
+            background: rgba(0, 255, 208, 0.05);
+            padding: 10px;
+            border-radius: 4px;
+        }
+
         .jet-display {
             width: 100%;
             height: auto;
@@ -71,7 +99,11 @@
             filter: grayscale(20%);
             transition: 0.5s;
         }
-        .jet-display:hover { filter: grayscale(0%); border-color: var(--accent); }
+
+        .jet-display:hover {
+            filter: grayscale(0%);
+            border-color: var(--accent);
+        }
 
         /* Optimized Ad Slots */
         .ad-box {
@@ -86,7 +118,13 @@
             flex-direction: column;
             justify-content: center;
         }
-        .ad-tag { font-size: 10px; color: #444; margin-bottom: 15px; letter-spacing: 3px; }
+
+        .ad-tag {
+            font-size: 10px;
+            color: #444;
+            margin-bottom: 15px;
+            letter-spacing: 3px;
+        }
 
         /* Footer Section */
         .action-gate {
@@ -109,134 +147,203 @@
             cursor: pointer;
             display: none;
             text-transform: uppercase;
-            box-shadow: 0 0 25px rgba(0,255,208,0.3);
+            box-shadow: 0 0 25px rgba(0, 255, 208, 0.3);
         }
 
-        .btn-launch:hover { background: #fff; box-shadow: 0 0 40px rgba(255,255,255,0.4); }
+        .btn-launch:hover {
+            background: #fff;
+            box-shadow: 0 0 40px rgba(255, 255, 255, 0.4);
+        }
 
         @media (max-width: 600px) {
-            h1 { font-size: 1.8rem; }
-            .action-gate { padding: 30px 15px; }
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .action-gate {
+                padding: 30px 15px;
+            }
         }
     </style>
 </head>
+
 <body>
 
-<div id="pBar"></div>
+    <div id="pBar"></div>
 
-<header>
-    <div style="font-weight: 700; font-size: 1.5rem; letter-spacing: 2px;">AVIA<span style="color:var(--accent)">ELITE</span></div>
-    <div class="timer-unit" id="timer-display">SYNCING: <span id="sec">20</span>s</div>
-</header>
+    <header>
+        <div style="font-weight: 700; font-size: 1.5rem; letter-spacing: 2px;">AVIA<span
+                style="color:var(--accent)">ELITE</span></div>
+        <div class="timer-unit" id="timer-display">SYNCING: <span id="sec">20</span>s</div>
+    </header>
 
-<div class="container">
+    <div class="container">
 
-    <div class="ad-box">
-        <div class="ad-tag">SYSTEM_AD_01</div>
-        <script src="https://3nbf4.com/act/files/tag.min.js?z=10381339" data-cfasync="false" async></script>
+        <div class="ad-box">
+            <div class="ad-tag">SYSTEM_AD_01</div>
+            <script src="https://3nbf4.com/act/files/tag.min.js?z=10381339" data-cfasync="false" async></script>
+        </div>
+
+        <article>
+            <h1>Mach 5 & Beyond: The Hypersonic Era</h1>
+            <div class="article-meta">Aviation Intelligence Report • Dec 2025 • 18 Min Read</div>
+
+            <div class="content">
+                <p>Traditional flight is becoming a thing of the past. As we enter 2025, the focus has shifted from
+                    "Super" sonic to "Hyper" sonic. This means traveling at five times the speed of sound, effectively
+                    crossing the Atlantic in under an hour.</p>
+
+                <h2 class="section-header">1. Lockheed Martin's Darkstar Heritage</h2>
+                <p>The lessons learned from experimental aircraft like the Darkstar have finally been integrated into
+                    the next-gen reconnaissance drones. These UAVs can operate at the edge of space, providing real-time
+                    data without ever being detected by traditional ground-based defense systems.</p>
+                <img src="https://images.unsplash.com/photo-1517976384346-3136801d605d?auto=format&fit=crop&q=80&w=1000"
+                    class="jet-display" alt="Stealth UAV">
+            </div>
+
+            <div class="ad-box">
+                <div class="ad-tag">SPONSORED_TRANSMISSION</div>
+                <script>atOptions = { 'key': '0012116427b5a4ccef598927fc9dfa89', 'format': 'iframe', 'height': 50, 'width': 320, 'params': {} };</script>
+            </div>
+
+            <div class="content">
+                <h2 class="section-header">2. The Su-57 Felon: AI Dogfighting</h2>
+                <p>Russia's Su-57 has received its most significant software patch in 2025. The aircraft's computer can
+                    now handle 90% of the landing and combat maneuvers, allowing the pilot to focus solely on high-level
+                    strategy and electronic warfare. It is the perfect symbiosis of man and machine.</p>
+                <img src="https://images.unsplash.com/photo-1527482937786-6608f6764615?auto=format&fit=crop&q=80&w=1000"
+                    class="jet-display" alt="Fighter Tech">
+            </div>
+
+            <div class="ad-box">
+                <div class="ad-tag">ADVERTISEMENT</div>
+                <script
+                    src="https://pl28328281.effectivegatecpm.com/27/3c/53/273c5378ff0557eae1a862b03131344a.js"></script>
+            </div>
+
+            <div class="content">
+                <h2 class="section-header">3. NGAD: 6th Gen Combat</h2>
+                <p>The Next Generation Air Dominance (NGAD) isn't just one plane; it's a family of systems. In 2025, the
+                    first manned flight of the technology demonstrator proved that "Collaborative Combat Aircraft" (CCA)
+                    can fly as wingmen, making a single pilot as effective as a whole squadron.</p>
+                <img src="https://images.unsplash.com/photo-1460186136353-977e9d6085a1?auto=format&fit=crop&q=80&w=1000"
+                    class="jet-display" alt="NGAD Future">
+            </div>
+
+            <div class="ad-box">
+                <div class="ad-tag">ADVERTISEMENT</div>
+                <script async="async" data-cfasync="false"
+                    src="https://pl28334516.effectivegatecpm.com/cbbb337fba63c479050336665248235f/invoke.js"></script>
+                <div id="container-cbbb337fba63c479050336665248235f"></div>
+            </div>
+
+            <div class="content">
+                <h2 class="section-header">4. Space Tourism: The New Horizon</h2>
+                <p>Beyond the military, companies like SpaceX and Blue Origin are finalizing the "2026 Orbital Tours."
+                    By December 2025, the first civilian-ready Starship cabin has been certified, opening the door for
+                    non-astronauts to experience zero-G for extended periods.</p>
+            </div>
+
+            <div class="ad-box">
+                <div class="ad-tag">FINAL_SPONSOR</div>
+                <script src="https://3nbf4.com/act/files/tag.min.js?z=10381386" data-cfasync="false" async></script>
+            </div>
+
+            <div class="content">
+                <h2 class="section-header">5. "Some will not change behavior until something bad happens."</h2>
+                <p>Earth is surrounded by human-made debris that orbits our planet. The problem is worsening every year,
+                    and 2025 was no different.
+
+                    Space debris experts say nearly 130 million pieces of orbital junk are zipping around our planet:
+                    high-speed leftovers from rocket stage explosions, abandoned satellites, as well as bits and pieces
+                    of junk from space hardware deployments. Some of this meandering mess is the result of the
+                    deliberate demolition of spacecraft by way of anti-satellite weapons testing.
+
+                    All this space clutter means increased risk of collisions that generate more debris — better known
+                    as the Kessler syndrome. That cascading effect was detailed back in 1978 by NASA scientists, Donald
+                    Kessler and Burton Cour-Palais in the seminal space physics paper "Collision frequency of artificial
+                    satellites: The creation of a debris belt." 47 years later, the problem has only gotten worse, and
+                    as several debris strike incidents this year show, we still have no good way to solve or even slow
+                    down the accumulation of orbital debris around our planet.
+
+                </p>
+            </div>
+
+            <div class="ad-box">
+                <div class="ad-tag">FINAL_SPONSOR</div>
+                <script src="https://3nbf4.com/act/files/tag.min.js?z=10381386" data-cfasync="false" async></script>
+            </div>
+            <div class="content">
+                <h2 class="section-header">6. Golden satellite insulation sparkles during test | Space photo of the day
+                    for Dec. 30, 2025</h2>
+                <p>Earth's orbital environment is becoming increasingly crowded. Thousands of satellites—many of them
+                    inactive, damaged, or out of fuel—now circle the planet alongside fragments of debris from past
+                    collisions.
+
+                    As more and more satellites enter orbit, one of the biggest questions becomes: how can these
+                    satellites approach and maneuver around each other safely? To answer that question, Luxembourg-based
+                    companies LMO and ClearSpace carried out a carefully designed simulation using the European Space
+                    Agency's Guidance, Navigation and Control Rendezvous, Approach and Landing Simulator (GRALS).</p>
+            </div>
+
+            <div class="ad-box">
+                <div class="ad-tag">FINAL_SPONSOR</div>
+                <script src="https://3nbf4.com/act/files/tag.min.js?z=10381386" data-cfasync="false" async></script>
+            </div>
+
+            <div class="action-gate">
+                <p id="status-text" style="color:var(--text-dim); margin-bottom:20px;">Verification in progress...
+                    Please scroll to bottom.</p>
+                <button class="btn-launch" id="launch-btn" onclick="goNext()">Initiate Step 4</button>
+            </div>
+
+        </article>
     </div>
 
-    <article>
-        <h1>Mach 5 & Beyond: The Hypersonic Era</h1>
-        <div class="article-meta">Aviation Intelligence Report • Dec 2025 • 18 Min Read</div>
+    <div style="text-align:center; padding:20px;">
+        <script src="https://gizokraijaw.net/vignette.min.js" data-zone="10381300"></script>
+    </div>
 
-        <div class="content">
-            <p>Traditional flight is becoming a thing of the past. As we enter 2025, the focus has shifted from "Super" sonic to "Hyper" sonic. This means traveling at five times the speed of sound, effectively crossing the Atlantic in under an hour.</p>
+    <script>
+        let seconds = 20;
+        let didScroll = false;
+        const secEl = document.getElementById("sec");
+        const bar = document.getElementById("pBar");
+        const launchBtn = document.getElementById("launch-btn");
+        const statusTxt = document.getElementById("status-text");
 
-            <h2 class="section-header">1. Lockheed Martin's Darkstar Heritage</h2>
-            <p>The lessons learned from experimental aircraft like the Darkstar have finally been integrated into the next-gen reconnaissance drones. These UAVs can operate at the edge of space, providing real-time data without ever being detected by traditional ground-based defense systems.</p>
-            <img src="https://images.unsplash.com/photo-1517976384346-3136801d605d?auto=format&fit=crop&q=80&w=1000" class="jet-display" alt="Stealth UAV">
-        </div>
+        window.addEventListener("scroll", () => didScroll = true);
 
-        <div class="ad-box">
-            <div class="ad-tag">SPONSORED_TRANSMISSION</div>
-            <script>atOptions={'key':'0012116427b5a4ccef598927fc9dfa89','format':'iframe','height':50,'width':320,'params':{}};</script>
-        </div>
+        const timer = setInterval(() => {
+            seconds--;
+            if (seconds >= 0) secEl.innerText = seconds;
 
-        <div class="content">
-            <h2 class="section-header">2. The Su-57 Felon: AI Dogfighting</h2>
-            <p>Russia's Su-57 has received its most significant software patch in 2025. The aircraft's computer can now handle 90% of the landing and combat maneuvers, allowing the pilot to focus solely on high-level strategy and electronic warfare. It is the perfect symbiosis of man and machine.</p>
-            <img src="https://images.unsplash.com/photo-1527482937786-6608f6764615?auto=format&fit=crop&q=80&w=1000" class="jet-display" alt="Fighter Tech">
-        </div>
+            let pPercent = ((20 - seconds) / 20) * 100;
+            bar.style.width = pPercent + "%";
 
-        <div class="ad-box">
-            <div class="ad-tag">ADVERTISEMENT</div>
-            <script src="https://pl28328281.effectivegatecpm.com/27/3c/53/273c5378ff0557eae1a862b03131344a.js"></script>
-        </div>
-
-        <div class="content">
-            <h2 class="section-header">3. NGAD: 6th Gen Combat</h2>
-            <p>The Next Generation Air Dominance (NGAD) isn't just one plane; it's a family of systems. In 2025, the first manned flight of the technology demonstrator proved that "Collaborative Combat Aircraft" (CCA) can fly as wingmen, making a single pilot as effective as a whole squadron.</p>
-            <img src="https://images.unsplash.com/photo-1460186136353-977e9d6085a1?auto=format&fit=crop&q=80&w=1000" class="jet-display" alt="NGAD Future">
-        </div>
-
-        <div class="ad-box">
-            <div class="ad-tag">ADVERTISEMENT</div>
-            <script async="async" data-cfasync="false" src="https://pl28334516.effectivegatecpm.com/cbbb337fba63c479050336665248235f/invoke.js"></script>
-            <div id="container-cbbb337fba63c479050336665248235f"></div>
-        </div>
-
-        <div class="content">
-            <h2 class="section-header">4. Space Tourism: The New Horizon</h2>
-            <p>Beyond the military, companies like SpaceX and Blue Origin are finalizing the "2026 Orbital Tours." By December 2025, the first civilian-ready Starship cabin has been certified, opening the door for non-astronauts to experience zero-G for extended periods.</p>
-        </div>
-
-        <div class="ad-box">
-             <div class="ad-tag">FINAL_SPONSOR</div>
-             <script src="https://3nbf4.com/act/files/tag.min.js?z=10381386" data-cfasync="false" async></script>
-        </div>
-
-        <div class="action-gate">
-            <p id="status-text" style="color:var(--text-dim); margin-bottom:20px;">Verification in progress... Please scroll to bottom.</p>
-            <button class="btn-launch" id="launch-btn" onclick="goNext()">Initiate Step 4</button>
-        </div>
-
-    </article>
-</div>
-
-<div style="text-align:center; padding:20px;">
-    <script src="https://gizokraijaw.net/vignette.min.js" data-zone="10381300"></script>
-</div>
-
-<script>
-    let seconds = 20;
-    let didScroll = false;
-    const secEl = document.getElementById("sec");
-    const bar = document.getElementById("pBar");
-    const launchBtn = document.getElementById("launch-btn");
-    const statusTxt = document.getElementById("status-text");
-
-    window.addEventListener("scroll", () => didScroll = true);
-
-    const timer = setInterval(() => {
-        seconds--;
-        if(seconds >= 0) secEl.innerText = seconds;
-        
-        let pPercent = ((20 - seconds) / 20) * 100;
-        bar.style.width = pPercent + "%";
-
-        if (seconds <= 0) {
-            clearInterval(timer);
-            if (!didScroll) {
-                document.body.innerHTML = "<div style='color:white; text-align:center; padding-top:100px;'><h1>HUMAN VERIFICATION FAILED</h1><p>Please interact with the page content.</p><button onclick='location.reload()'>RETRY</button></div>";
-            } else {
-                document.getElementById("timer-display").innerHTML = "✅ READY";
-                statusTxt.innerHTML = "Flight verification complete. You may proceed.";
-                launchBtn.style.display = "inline-block";
+            if (seconds <= 0) {
+                clearInterval(timer);
+                if (!didScroll) {
+                    document.body.innerHTML = "<div style='color:white; text-align:center; padding-top:100px;'><h1>HUMAN VERIFICATION FAILED</h1><p>Please interact with the page content.</p><button onclick='location.reload()'>RETRY</button></div>";
+                } else {
+                    document.getElementById("timer-display").innerHTML = "✅ READY";
+                    statusTxt.innerHTML = "Flight verification complete. You may proceed.";
+                    launchBtn.style.display = "inline-block";
+                }
             }
-        }
-    }, 1000);
+        }, 1000);
 
-    function goNext() {
-        launchBtn.innerText = "CALIBRATING...";
-        launchBtn.disabled = true;
-        
-        setTimeout(() => {
-            const urlParams = new URLSearchParams(window.location.search);
-            window.location.href = "step4.html?code=" + (urlParams.get("code") || "MachVelocity");
-        }, 3000);
-    }
-</script>
+        function goNext() {
+            launchBtn.innerText = "CALIBRATING...";
+            launchBtn.disabled = true;
+
+            setTimeout(() => {
+                const urlParams = new URLSearchParams(window.location.search);
+                window.location.href = "step4.html?code=" + (urlParams.get("code") || "MachVelocity");
+            }, 3000);
+        }
+    </script>
 
 </body>
+
 </html>
