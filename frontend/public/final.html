@@ -22,7 +22,7 @@
 <div class="box">
   <h2>Final Verification</h2>
   <div class="timer" id="timer">8</div>
-  <p class="status-text">Verifying your secure connection. Please wait...</p>
+  <p class="status-text" id="status-txt">Verifying your secure connection. Please wait...</p>
   <button id="btn" onclick="go()">GET DESTINATION LINK</button>
 </div>
 
@@ -35,6 +35,7 @@
   let time = 8;
   const timerEl = document.getElementById("timer");
   const btn = document.getElementById("btn");
+  const statusTxt = document.getElementById("status-txt");
 
   const interval = setInterval(() => {
     time--;
@@ -59,6 +60,14 @@
   async function go() {
     if (!code) return alert("Error: Security code missing.");
     
+    // Step 1: Check if we already have this link saved locally (Bypass duplicate error)
+    const savedLink = localStorage.getItem("last_dest_" + code);
+    if (savedLink) {
+        statusTxt.innerText = "Redirecting to saved destination...";
+        window.location.href = savedLink;
+        return;
+    }
+
     btn.innerText = "VERIFYING...";
     btn.disabled = true;
 
@@ -72,22 +81,23 @@
 
       const data = await res.json();
 
-      // CASE 1: Normal first-time user
+      // CASE 1: Success - Save the link and redirect
       if (data.success && data.redirect) {
+        localStorage.setItem("last_dest_" + code, data.redirect); // Local-ah save panniduvom
         window.location.href = data.redirect;
       } 
-      // CASE 2: Duplicate user (2nd time)
-      // KingLinky API duplicate response-la redirect link iruntha athai eduthukkom
+      // CASE 2: API returns redirect even if not 'success'
       else if (data.redirect) {
         window.location.href = data.redirect;
       }
       else {
-        alert("Verification Status: " + (data.message || "Please refresh and try again."));
+        // Ippo "Link not found" nu vantha, user-ai automatic-ah 1st page-kku thalli thirumba vara veika mudiyum
+        alert("Verification Status: " + (data.message || "Link not ready."));
         btn.innerText = "RETRY";
         btn.disabled = false;
       }
     } catch (err) {
-      alert("Connection error. Check your internet.");
+      alert("Connection error. Please try again.");
       btn.innerText = "GET DESTINATION LINK";
       btn.disabled = false;
     }
