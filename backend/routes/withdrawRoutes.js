@@ -117,15 +117,19 @@ router.post("/approve/:id", adminAuth, async (req, res) => {
     }
 
     // Request ippo thaan 'paid' aaga poguthuna mattum wallet-ah kuraikanum
-    if (withdraw.status !== "paid") {
-      const user = await User.findById(withdraw.userId);
-      
-      if (user) {
-        // Wallet-la irunthu amount-ah minus panrom
-        user.wallet = Math.max(user.wallet - withdraw.amount, 0);
-        await user.save();
-      }
-    }
+ if (withdraw.status !== "paid") {
+  withdraw.status = "paid";
+  await withdraw.save();
+
+  const user = await User.findOne({ email: withdraw.email });
+  if (user) {
+    user.wallet = Math.max(
+      0,
+      Number(user.wallet || 0) - Number(withdraw.amount || 0)
+    );
+    await user.save();
+  }
+}
 
     withdraw.status = "paid";
     const updated = await withdraw.save();

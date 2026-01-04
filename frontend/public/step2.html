@@ -9,10 +9,8 @@
     <style>
         :root {
             --bg-color: #020617;
-            /* Slate Black */
             --card-bg: #0f172a;
             --accent: #22d3ee;
-            /* Cyan Accent */
             --text-main: #f1f5f9;
             --text-dim: #94a3b8;
             --border: #1e293b;
@@ -26,7 +24,6 @@
             line-height: 1.8;
         }
 
-        /* Reading Progress */
         #pBar {
             position: fixed;
             top: 0;
@@ -37,7 +34,6 @@
             z-index: 10000;
         }
 
-        /* Premium Header */
         header {
             background: rgba(15, 23, 42, 0.9);
             backdrop-filter: blur(12px);
@@ -66,63 +62,26 @@
             padding: 0 20px;
         }
 
-        /* Article Styling */
-        h1 {
-            font-size: 3rem;
-            font-weight: 800;
-            line-height: 1.1;
-            color: var(--accent);
-            margin-bottom: 15px;
-        }
+        h1 { font-size: 2.8rem; font-weight: 800; color: var(--accent); margin-bottom: 10px; }
+        .author-box { border-bottom: 1px solid var(--border); padding-bottom: 15px; margin-bottom: 30px; color: var(--text-dim); }
+        .section-title { font-size: 1.8rem; margin-top: 40px; color: var(--accent); border-left: 5px solid var(--accent); padding-left: 15px; }
+        .blog-image { width: 100%; height: 450px; object-fit: cover; border-radius: 20px; margin: 25px 0; border: 1px solid var(--border); }
 
-        .author-box {
-            border-bottom: 1px solid var(--border);
-            padding-bottom: 20px;
-            margin-bottom: 40px;
-            color: var(--text-dim);
-        }
-
-        .section-title {
-            font-size: 1.8rem;
-            margin-top: 50px;
-            color: var(--text-main);
-            border-left: 5px solid var(--accent);
-            padding-left: 15px;
-        }
-
-        .blog-image {
-            width: 100%;
-            height: auto;
-            border-radius: 20px;
-            margin: 30px 0;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-        }
-
-        /* Ad Slots - Optimized for CTR */
-        .ad-unit {
-            background: #0b0f1a;
-            border: 1px solid var(--border);
-            margin: 45px 0;
-            padding: 25px;
-            text-align: center;
-            border-radius: 12px;
-            min-height: 250px;
+        /* Banner Ad Grid (No Redirects) */
+        .ad-grid {
             display: flex;
-            flex-direction: column;
+            flex-wrap: wrap;
             justify-content: center;
+            gap: 15px;
+            margin: 30px 0;
+            padding: 20px;
+            background: #0b0f1a;
+            border-radius: 15px;
+            border: 1px dashed #334155;
         }
 
-        .ad-hint {
-            font-size: 10px;
-            color: #475569;
-            margin-bottom: 12px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        /* Action Footer */
         .footer-action {
-            margin-top: 80px;
+            margin-top: 50px;
             padding: 60px 20px;
             background: var(--card-bg);
             border-radius: 24px;
@@ -133,376 +92,176 @@
         .btn-next {
             background: var(--accent);
             color: #020617;
-            padding: 22px 55px;
+            padding: 20px 50px;
             font-size: 1.2rem;
             font-weight: 800;
             border: none;
-            border-radius: 14px;
+            border-radius: 12px;
             cursor: pointer;
             display: none;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 10px 25px rgba(34, 211, 238, 0.3);
         }
 
-        .btn-next:hover {
-            transform: scale(1.05);
-            filter: brightness(1.1);
-        }
-
-        .instruction {
-            color: var(--text-dim);
-            margin-bottom: 25px;
-            font-weight: 500;
-        }
-
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 2.2rem;
-            }
+        #adblock-wrapper {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(2, 6, 23, 0.98);
+            z-index: 99999;
+            color: white;
+            text-align: center;
+            padding-top: 150px;
         }
     </style>
 </head>
 
 <body>
+    <div id="adblock-wrapper">
+        <div style="max-width: 500px; margin: auto; padding: 30px; border: 2px solid #ef4444; border-radius: 20px;">
+            <h1 style="color: #ef4444;">AdBlock Detected!</h1>
+            <p>Please disable AdBlock to continue to the next step. Our content is free because of ads.</p>
+            <button onclick="window.location.reload()" style="background: var(--accent); color: black; border: none; padding: 15px 30px; cursor: pointer; border-radius: 10px; font-weight: bold;">Reload Page</button>
+        </div>
+    </div>
 
     <div id="pBar"></div>
-    <script>(function (s) { s.dataset.zone = '10400021', s.src = 'https://nap5k.com/tag.min.js' })([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
 
     <header>
         <div style="font-weight: 800; font-size: 1.4rem;">ELITE<span style="color:var(--accent)">HUB</span></div>
-        <div class="status-badge" id="timer-ui">Verifying: <span id="sec">20</span>s</div>
+        <div class="status-badge" id="timer-ui">Analyzing: <span id="sec">20</span>s</div>
     </header>
 
     <div class="main-wrapper">
+        <div class="ad-grid">
+            <script type="text/javascript">atOptions={'key':'d41be1e917eb87afabc417d7885c1eb3','format':'iframe','height':250,'width':300,'params':{}};</script>
+            <script type="text/javascript" src="//www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
+            <script type="text/javascript">atOptions={'key':'d41be1e917eb87afabc417d7885c1eb3','format':'iframe','height':250,'width':300,'params':{}};</script>
+            <script type="text/javascript" src="//www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
+            <script type="text/javascript">atOptions={'key':'d41be1e917eb87afabc417d7885c1eb3','format':'iframe','height':250,'width':300,'params':{}};</script>
+            <script type="text/javascript" src="//www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
+            <script type="text/javascript">atOptions={'key':'d41be1e917eb87afabc417d7885c1eb3','format':'iframe','height':250,'width':300,'params':{}};</script>
+            <script type="text/javascript" src="//www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
+        </div>
 
-        <div class="ad-unit">
-            <script>
-                atOptions = {
-                    'key': 'd41be1e917eb87afabc417d7885c1eb3',
-                    'format': 'iframe',
-                    'height': 250,
-                    'width': 300,
-                    'params': {}
-                };
-            </script>
-            <script src="https://www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
-            <script>
-                atOptions = {
-                    'key': 'd41be1e917eb87afabc417d7885c1eb3',
-                    'format': 'iframe',
-                    'height': 250,
-                    'width': 300,
-                    'params': {}
-                };
-            </script>
-            <script src="https://www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
-            <script>
-                atOptions = {
-                    'key': 'd41be1e917eb87afabc417d7885c1eb3',
-                    'format': 'iframe',
-                    'height': 250,
-                    'width': 300,
-                    'params': {}
-                };
-            </script>
-            <script src="https://www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
-            <script async="async" data-cfasync="false"
-                src="https://pl28334516.effectivegatecpm.com/cbbb337fba63c479050336665248235f/invoke.js"></script>
-            <div id="container-cbbb337fba63c479050336665248235f"></div>
-            <div class="ad-hint">
-                <script>(function (s) { s.dataset.zone = '10400040', s.src = 'https://nap5k.com/tag.min.js' })([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
-                <script>(function (s) { s.dataset.zone = '10400040', s.src = 'https://nap5k.com/tag.min.js' })([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
-                <script>(function (s) { s.dataset.zone = '10400040', s.src = 'https://nap5k.com/tag.min.js' })([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
-                <script>
-                    atOptions = {
-                        'key': '666b2474ed4c3364af3ed998b397cf46',
-                        'format': 'iframe',
-                        'height': 600,
-                        'width': 50,
-                        'params': {}
-                    };
-                </script>
-                <script src="https://www.highperformanceformat.com/666b2474ed4c3364af3ed998b397cf46/invoke.js"></script>
-                /div>
-                <script src="https://3nbf4.com/act/files/tag.min.js?z=10381339" data-cfasync="false" async></script>
+        <article>
+            <h1>Autonomous Evolution: The Automotive Shift</h1>
+            <div class="author-box">Dec 2025 • Read Time: 12 Min • Automotive Tech</div>
+
+            <p>The year 2025 marks a massive turning point for the automotive industry. We are moving from simple electric cars to "AI-first" machines...</p>
+
+            <h2 class="section-title">1. Silicon Carbide Inverters</h2>
+            <p>New thermal management systems are allowing EVs to charge in under 10 minutes while maintaining battery health for over 500,000 miles.</p>
+            <img src="https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?q=80&w=1000" class="blog-image">
+
+            <div class="ad-grid">
+                <script type="text/javascript">atOptions={'key':'d41be1e917eb87afabc417d7885c1eb3','format':'iframe','height':250,'width':300,'params':{}};</script>
+                <script type="text/javascript" src="//www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
+                <script type="text/javascript">atOptions={'key':'d41be1e917eb87afabc417d7885c1eb3','format':'iframe','height':250,'width':300,'params':{}};</script>
+                <script type="text/javascript" src="//www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
+                <script type="text/javascript">atOptions={'key':'d41be1e917eb87afabc417d7885c1eb3','format':'iframe','height':250,'width':300,'params':{}};</script>
+                <script type="text/javascript" src="//www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
+                <script type="text/javascript">atOptions={'key':'d41be1e917eb87afabc417d7885c1eb3','format':'iframe','height':250,'width':300,'params':{}};</script>
+                <script type="text/javascript" src="//www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
+                <script type="text/javascript">atOptions={'key':'d41be1e917eb87afabc417d7885c1eb3','format':'iframe','height':250,'width':300,'params':{}};</script>
+                <script type="text/javascript" src="//www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
+                <script type="text/javascript">atOptions={'key':'d41be1e917eb87afabc417d7885c1eb3','format':'iframe','height':250,'width':300,'params':{}};</script>
+                <script type="text/javascript" src="//www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
+                <script type="text/javascript">atOptions={'key':'d41be1e917eb87afabc417d7885c1eb3','format':'iframe','height':250,'width':300,'params':{}};</script>
+                <script type="text/javascript" src="//www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
+                <script type="text/javascript">atOptions={'key':'d41be1e917eb87afabc417d7885c1eb3','format':'iframe','height':250,'width':300,'params':{}};</script>
+                <script type="text/javascript" src="//www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
             </div>
 
-            <article>
-                <h1>Autonomous Evolution: The Automotive Shift of 2025</h1>
-                <div class="author-box">Updated: Dec 2025 • Read Time: 15 Min • Automotive Excellence</div>
+            <h2 class="section-title">2. LiDAR vs Pure Vision</h2>
+            <p>Tesla and Waymo are taking different paths. One relies on eyes (cameras), while the other uses lasers. Both are achieving Level 4 autonomy in urban centers.</p>
+            <img src="https://images.unsplash.com/photo-1544636331-e26879cd4d9b?q=80&w=1000" class="blog-image">
 
-                <div class="content">
-                    <p>2025 has become the pivotal year for the "Software Defined Vehicle." Cars are no longer just
-                        mechanical objects; they are rolling data centers. As we step into the second half of the
-                        decade,
-                        luxury and speed have merged with silicon and intelligence.</p>
+            <p>Autonomous trucking is also seeing a massive surge in 2026, with highways specifically designed for robotic convoys.</p>
 
-                    <h2 class="section-title">1. The Porsche Taycan GT Phenomenon</h2>
-                    <p>Porsche’s latest masterpiece, the Taycan Turbo GT, isn't just about speed—it's about thermal
-                        management. Using a new silicon-carbide inverter, it maintains peak performance longer than any
-                        EV
-                        in history. It represents the pinnacle of German engineering in a carbon-conscious world.</p>
-                    <img src="https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?auto=format&fit=crop&q=80&w=1000"
-                        class="blog-image" alt="Porsche Taycan">
-                </div>
+            <div class="ad-grid">
+                <script type="text/javascript">atOptions={'key':'d41be1e917eb87afabc417d7885c1eb3','format':'iframe','height':250,'width':300,'params':{}};</script>
+                <script type="text/javascript" src="//www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
+                <script type="text/javascript">atOptions={'key':'d41be1e917eb87afabc417d7885c1eb3','format':'iframe','height':250,'width':300,'params':{}};</script>
+                <script type="text/javascript" src="//www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
+                <script type="text/javascript">atOptions={'key':'d41be1e917eb87afabc417d7885c1eb3','format':'iframe','height':250,'width':300,'params':{}};</script>
+                <script type="text/javascript" src="//www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
+                <script type="text/javascript">atOptions={'key':'d41be1e917eb87afabc417d7885c1eb3','format':'iframe','height':250,'width':300,'params':{}};</script>
+                <script type="text/javascript" src="//www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
+                
+                <script type="text/javascript">atOptions={'key':'d41be1e917eb87afabc417d7885c1eb3','format':'iframe','height':250,'width':300,'params':{}};</script>
+                <script type="text/javascript" src="//www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
+                <script type="text/javascript">atOptions={'key':'d41be1e917eb87afabc417d7885c1eb3','format':'iframe','height':250,'width':300,'params':{}};</script>
+                <script type="text/javascript" src="//www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
+                <script type="text/javascript">atOptions={'key':'d41be1e917eb87afabc417d7885c1eb3','format':'iframe','height':250,'width':300,'params':{}};</script>
+                <script type="text/javascript" src="//www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
+                <script type="text/javascript">atOptions={'key':'d41be1e917eb87afabc417d7885c1eb3','format':'iframe','height':250,'width':300,'params':{}};</script>
+                <script type="text/javascript" src="//www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
+            </div>
+        </article>
 
-                <div class="ad-unit">
-                    <script async="async" data-cfasync="false"
-                        src="https://pl28334516.effectivegatecpm.com/cbbb337fba63c479050336665248235f/invoke.js"></script>
-                    <div id="container-cbbb337fba63c479050336665248235f"></div>
-                    <div class="ad-hint">
-                        <script>
-                            atOptions = {
-                                'key': 'd41be1e917eb87afabc417d7885c1eb3',
-                                'format': 'iframe',
-                                'height': 250,
-                                'width': 300,
-                                'params': {}
-                            };
-                        </script>
-                        <script
-                            src="https://www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
-                        <script>
-                            atOptions = {
-                                'key': 'd41be1e917eb87afabc417d7885c1eb3',
-                                'format': 'iframe',
-                                'height': 250,
-                                'width': 300,
-                                'params': {}
-                            };
-                        </script>
-                        <script
-                            src="https://www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
-                        <script>
-                            atOptions = {
-                                'key': '666b2474ed4c3364af3ed998b397cf46',
-                                'format': 'iframe',
-                                'height': 600,
-                                'width': 50,
-                                'params': {}
-                            };
-                        </script>
-                        <script
-                            src="https://www.highperformanceformat.com/666b2474ed4c3364af3ed998b397cf46/invoke.js"></script>
-                    </div>
-                    <script>atOptions = { 'key': 'd41be1e917eb87afabc417d7885c1eb3', 'format': 'iframe', 'height': 250, 'width': 300, 'params': {} };</script>
-                </div>
-
-                <div class="content">
-                    <h2 class="section-title">2. Lamborghini Revuelto: Hybrid Mastery</h2>
-                    <p>The Revuelto is Lamborghini's "High Performance Electrified Vehicle" (HPEV). By combining a
-                        naturally
-                        aspirated V12 with three electric motors, they've solved the low-end torque gap while preserving
-                        the
-                        soul-stirring sound that enthusiasts crave. It's a bridge between two eras.</p>
-                    <img src="https://images.unsplash.com/photo-1544636331-e26879cd4d9b?auto=format&fit=crop&q=80&w=1000"
-                        class="blog-image" alt="Luxury Supercar">
-                </div>
-
-                <div class="ad-unit">
-                    <script async="async" data-cfasync="false"
-                        src="https://pl28334516.effectivegatecpm.com/cbbb337fba63c479050336665248235f/invoke.js"></script>
-                    <div id="container-cbbb337fba63c479050336665248235f"></div>
-                    <div class="ad-hint">
-                        <script>
-                            atOptions = {
-                                'key': 'd41be1e917eb87afabc417d7885c1eb3',
-                                'format': 'iframe',
-                                'height': 250,
-                                'width': 300,
-                                'params': {}
-                            };
-                        </script>
-                        <script
-                            src="https://www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
-                        <script>
-                            atOptions = {
-                                'key': 'd41be1e917eb87afabc417d7885c1eb3',
-                                'format': 'iframe',
-                                'height': 250,
-                                'width': 300,
-                                'params': {}
-                            };
-                        </script>
-                        <script
-                            src="https://www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
-                        <script>
-                            atOptions = {
-                                'key': '666b2474ed4c3364af3ed998b397cf46',
-                                'format': 'iframe',
-                                'height': 600,
-                                'width': 50,
-                                'params': {}
-                            };
-                        </script>
-                        <script
-                            src="https://www.highperformanceformat.com/666b2474ed4c3364af3ed998b397cf46/invoke.js"></script>
-                        t
-                    </div>
-                    <script
-                        src="https://pl28328281.effectivegatecpm.com/27/3c/53/273c5378ff0557eae1a862b03131344a.js"></script>
-                </div>
-
-                <div class="content">
-                    <h2 class="section-title">3. Tesla's FSD v13: The AI Driver</h2>
-                    <p>Tesla’s latest Full Self-Driving update has moved away from traditional coding. The car now
-                        learns
-                        purely through "end-to-end neural networks," meaning it watches millions of human driving videos
-                        to
-                        understand complex social cues on the road, such as when to yield or nudge forward at a busy
-                        intersection.</p>
-                    <img src="https://images.unsplash.com/photo-1563720223185-11003d516905?auto=format&fit=crop&q=80&w=1000"
-                        class="blog-image" alt="Autonomous Tech">
-                </div>
-
-                <div class="ad-unit">
-                    <script async="async" data-cfasync="false"
-                        src="https://pl28334516.effectivegatecpm.com/cbbb337fba63c479050336665248235f/invoke.js"></script>
-                    <div class="ad-hint">
-                        <script>
-                            atOptions = {
-                                'key': 'd41be1e917eb87afabc417d7885c1eb3',
-                                'format': 'iframe',
-                                'height': 250,
-                                'width': 300,
-                                'params': {}
-                            };
-                        </script>
-                        <script
-                            src="https://www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
-                        <script>
-                            atOptions = {
-                                'key': 'd41be1e917eb87afabc417d7885c1eb3',
-                                'format': 'iframe',
-                                'height': 250,
-                                'width': 300,
-                                'params': {}
-                            };
-                        </script>
-                        <script
-                            src="https://www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
-                        <script>
-                            atOptions = {
-                                'key': '666b2474ed4c3364af3ed998b397cf46',
-                                'format': 'iframe',
-                                'height': 600,
-                                'width': 50,
-                                'params': {}
-                            };
-                        </script>
-                        <script
-                            src="https://www.highperformanceformat.com/666b2474ed4c3364af3ed998b397cf46/invoke.js"></script>
-                    </div>
-                    <script async="async" data-cfasync="false"
-                        src="https://pl28334516.effectivegatecpm.com/cbbb337fba63c479050336665248235f/invoke.js"></script>
-                    <div id="container-cbbb337fba63c479050336665248235f"></div>
-                </div>
-
-                <div class="content">
-                    <h2 class="section-title">4. Sustainable Manufacturing</h2>
-                    <p>Luxury brands are now competing on their "Carbon Footprint" as much as their 0-60 times. From
-                        using
-                        recycled ocean plastics for seat fabrics to solar-powered factories, the entire lifecycle of the
-                        car
-                        is being redesigned for a circular economy.</p>
-                </div>
-
-                <div class="ad-unit">
-                    <script>
-                        atOptions = {
-                            'key': 'd41be1e917eb87afabc417d7885c1eb3',
-                            'format': 'iframe',
-                            'height': 250,
-                            'width': 300,
-                            'params': {}
-                        };
-                    </script>
-                    <script
-                        src="https://www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
-                    <script>
-                        atOptions = {
-                            'key': 'd41be1e917eb87afabc417d7885c1eb3',
-                            'format': 'iframe',
-                            'height': 250,
-                            'width': 300,
-                            'params': {}
-                        };
-                    </script>
-                    <script
-                        src="https://www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
-                    <script async="async" data-cfasync="false"
-                        src="https://pl28334516.effectivegatecpm.com/cbbb337fba63c479050336665248235f/invoke.js"></script>
-                    <div class="ad-hint">
-                        <script>
-                            atOptions = {
-                                'key': '666b2474ed4c3364af3ed998b397cf46',
-                                'format': 'iframe',
-                                'height': 600,
-                                'width': 50,
-                                'params': {}
-                            };
-                        </script>
-                        <script
-                            src="https://www.highperformanceformat.com/666b2474ed4c3364af3ed998b397cf46/invoke.js"></script>
-                    </div>
-                    <script src="https://3nbf4.com/act/files/tag.min.js?z=10381386" data-cfasync="false" async></script>
-                </div>
-
-                <div class="footer-action">
-                    <p id="instruction" class="instruction">Scroll and stay on page to complete verification...</p>
-                    <button class="btn-next" id="next-btn" onclick="proceed()">Continue to Step 3</button>
-                </div>
-
-            </article>
+        <div class="footer-action">
+            <p id="instruction" style="color: var(--text-dim);">Scroll down and wait for security verification...</p>
+            <button class="btn-next" id="next-btn" onclick="proceed()">Continue to Step 3</button>
         </div>
+    </div>
 
-        <div style="padding: 20px; text-align: center;">
-            <script src="https://gizokraijaw.net/vignette.min.js" data-zone="10381300"></script>
-        </div>
-
-        <script>
-            let timeLeft = 20;
-            let userActive = false;
-            const secDisp = document.getElementById("sec");
-            const pBar = document.getElementById("pBar");
-            const nextBtn = document.getElementById("next-btn");
-            const instruct = document.getElementById("instruction");
-
-            // Anti-bot interaction check
-            window.addEventListener("scroll", () => userActive = true);
-            window.addEventListener("touchstart", () => userActive = true);
-            window.addEventListener("mousemove", () => userActive = true);
-
-            const countdown = setInterval(() => {
-                timeLeft--;
-                if (timeLeft >= 0) secDisp.innerText = timeLeft;
-
-                // Update Progress Bar
-                let width = ((20 - timeLeft) / 20) * 100;
-                pBar.style.width = width + "%";
-
-                if (timeLeft <= 0) {
-                    clearInterval(countdown);
-                    if (!userActive) {
-                        document.body.innerHTML = "<div style='color:white; text-align:center; padding-top:100px;'><h1>Verification Failed</h1><p>Please interact with the page to prove you are human.</p><button onclick='location.reload()'>Retry</button></div>";
-                    } else {
-                        document.getElementById("timer-ui").innerHTML = "✅ Verified";
-                        instruct.innerText = "You have successfully completed Step 2.";
-                        nextBtn.style.display = "inline-block";
-                    }
+    <script>
+        window.open = function() { return null; };
+        document.addEventListener('click', function(e) {
+            let target = e.target.closest('a');
+            if (target && target.href) {
+                const url = new URL(target.href);
+                if (url.hostname !== window.location.hostname && !url.hostname.includes("kinglinky.com")) {
+                    e.preventDefault();
+                    console.log("External Popup Blocked");
                 }
-            }, 1000);
-
-            function proceed() {
-                nextBtn.innerText = "Finalizing Check...";
-                nextBtn.disabled = true;
-
-                setTimeout(() => {
-                    const urlParams = new URLSearchParams(window.location.search);
-                    window.location.href = "step3.html?code=" + (urlParams.get("code") || "EliteAuto");
-                }, 3000);
             }
-        </script>
+        }, true);
+    </script>
 
+    <script>
+        let timeLeft = 20;
+        let userActive = false;
+        const secDisp = document.getElementById("sec");
+        const pBar = document.getElementById("pBar");
+        const nextBtn = document.getElementById("next-btn");
+
+        window.addEventListener("scroll", () => userActive = true);
+
+        const countdown = setInterval(() => {
+            timeLeft--;
+            if (timeLeft >= 0) secDisp.innerText = timeLeft;
+            pBar.style.width = ((20 - timeLeft) / 20) * 100 + "%";
+
+            if (timeLeft <= 0) {
+                clearInterval(countdown);
+                if (!userActive) {
+                    alert("Please scroll down to verify you are a real reader.");
+                } else {
+                    document.getElementById("timer-ui").innerHTML = "✅ Verified";
+                    document.getElementById("instruction").style.display = "none";
+                    nextBtn.style.display = "inline-block";
+                }
+            }
+        }, 1000);
+
+        function proceed() {
+            nextBtn.innerText = "Finalizing Check...";
+            const urlParams = new URLSearchParams(window.location.search);
+            setTimeout(() => {
+                window.location.href = "step3.html?code=" + (urlParams.get("code") || "EliteAuto");
+            }, 2500);
+        }
+
+        // AdBlock Checker
+        window.onload = async () => {
+            let isBlocked = false;
+            try {
+                await fetch(new Request("https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"), { mode: 'no-cors' })
+                .catch(() => { isBlocked = true; });
+            } catch (e) { isBlocked = true; }
+            if (isBlocked) document.getElementById('adblock-wrapper').style.display = 'block';
+        };
+    </script>
 </body>
-
 </html>

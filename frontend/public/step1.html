@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,404 +14,136 @@
             --text-dim: #b0b0b0;
             --border-color: #222;
         }
+        body { background-color: var(--bg-color); color: var(--text-main); font-family: 'Poppins', sans-serif; margin: 0; line-height: 1.8; }
+        #pBar { position: fixed; top: 0; left: 0; height: 5px; background: linear-gradient(to right, var(--accent), #00d4ff); width: 0%; z-index: 10000; }
+        header { background: rgba(10, 10, 10, 0.95); padding: 15px 5%; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 999; display: flex; justify-content: space-between; align-items: center; }
+        .timer-badge { background: #1e1e1e; padding: 8px 15px; border-radius: 5px; border-left: 4px solid var(--accent); font-weight: bold; }
+        .main-content { max-width: 900px; margin: 40px auto; padding: 0 20px; }
+        
+        /* Content Styling */
+        .blog-section { margin-bottom: 40px; }
+        h1 { font-size: 2.5rem; margin-bottom: 10px; color: var(--accent); }
+        h2 { color: var(--accent); margin-top: 30px; }
+        .feature-img { width: 100%; height: 400px; object-fit: cover; border-radius: 15px; margin: 20px 0; border: 1px solid var(--border-color); }
+        .meta { color: var(--text-dim); font-size: 0.9rem; margin-bottom: 30px; }
 
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            font-family: 'Poppins', sans-serif;
-            margin: 0;
-            line-height: 1.8;
-        }
+        /* Ads Layout */
+        .ad-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; margin: 30px 0; padding: 15px; background: #0f0f0f; border-radius: 10px; border: 1px dashed #333; }
+        .ad-label { width: 100%; text-align: center; font-size: 10px; color: #555; text-transform: uppercase; margin-bottom: 10px; }
 
-        /* Top Progress Bar */
-        #pBar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            height: 5px;
-            background: linear-gradient(to right, var(--accent), #00d4ff);
-            width: 0%;
-            z-index: 10000;
-        }
-
-        /* Header */
-        header {
-            background: rgba(10, 10, 10, 0.95);
-            padding: 15px 5%;
-            border-bottom: 1px solid var(--border-color);
-            position: sticky;
-            top: 0;
-            z-index: 999;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .timer-badge {
-            background: #1e1e1e;
-            padding: 8px 15px;
-            border-radius: 5px;
-            border-left: 4px solid var(--accent);
-            font-weight: bold;
-        }
-
-        .main-content {
-            max-width: 900px;
-            margin: 40px auto;
-            padding: 0 20px;
-        }
-
-        /* Blog Sections */
-        article h1 {
-            font-size: 2.8rem;
-            margin-bottom: 10px;
-            line-height: 1.2;
-        }
-
-        .meta-data {
-            color: var(--text-dim);
-            margin-bottom: 40px;
-            font-size: 0.9rem;
-        }
-
-        .blog-section {
-            margin-bottom: 60px;
-        }
-
-        .blog-section h2 {
-            color: var(--accent);
-            font-size: 1.8rem;
-            margin-bottom: 20px;
-        }
-
-        .feature-img {
-            width: 100%;
-            height: auto;
-            border-radius: 15px;
-            margin: 25px 0;
-            border: 1px solid var(--border-color);
-        }
-
-        /* Ad Styling - Professional Gaps */
-        .ad-container {
-            background: #0f0f0f;
-            border: 1px dashed #333;
-            margin: 40px 0;
-            padding: 20px;
-            text-align: center;
-            min-height: 250px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            border-radius: 10px;
-        }
-
-        .ad-tag {
-            font-size: 11px;
-            color: #444;
-            margin-bottom: 10px;
-            text-transform: uppercase;
-        }
-
-        /* Button Area */
-        .footer-action {
-            text-align: center;
-            padding: 60px 0;
-            border-top: 1px solid var(--border-color);
-            margin-top: 50px;
-        }
-
-        .btn-continue {
-            background: var(--accent);
-            color: #000;
-            padding: 20px 60px;
-            font-size: 1.2rem;
-            font-weight: 700;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            display: none;
-            box-shadow: 0 10px 30px rgba(0, 255, 136, 0.3);
-            transition: 0.3s;
-        }
-
-        .btn-continue:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 40px rgba(0, 255, 136, 0.5);
-        }
-
-        .scrolling-note {
-            color: var(--text-dim);
-            font-style: italic;
-        }
+        .footer-action { text-align: center; padding: 50px 0; border-top: 1px solid var(--border-color); }
+        .btn-continue { background: var(--accent); color: #000; padding: 20px 60px; font-size: 1.2rem; font-weight: 700; border: none; border-radius: 10px; cursor: pointer; display: none; box-shadow: 0 10px 30px rgba(0, 255, 136, 0.3); }
+        
+        #adblock-wrapper { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); z-index: 99999; color: white; text-align: center; padding-top: 150px; }
     </style>
 </head>
-
 <body>
-    <div id="adblock-wrapper"
-        style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 99999; color: white; text-align: center; padding-top: 100px; font-family: Arial, sans-serif;">
-        <div style="max-width: 500px; margin: auto; padding: 20px; border: 2px solid #e74c3c; border-radius: 10px;">
-            <h1 style="color: #e74c3c;">AdBlock Detected! 🚫</h1>
-            <p style="font-size: 18px; line-height: 1.6;">Our service is provided free of charge because of
-                advertisements.
 
-                Please turn off your ad blocker and reload the page.</p>
-            <button onclick="window.location.reload()"
-                style="background: #2ecc71; color: white; border: none; padding: 15px 30px; font-size: 18px; cursor: pointer; border-radius: 5px; margin-top: 20px;">I've
-                Disabled It (Reload)</button>
+    <div id="adblock-wrapper">
+        <div style="max-width: 500px; margin: auto; padding: 30px; border: 2px solid #e74c3c; border-radius: 15px;">
+            <h1 style="color: #e74c3c;">AdBlock Detected!</h1>
+            <p>Please disable AdBlock to access the link. We use ads to keep our service free.</p>
+            <button onclick="window.location.reload()" style="background: #2ecc71; color: white; border: none; padding: 15px 30px; cursor: pointer; border-radius: 5px; font-weight: bold;">I've Disabled It (Reload)</button>
         </div>
     </div>
-    <script>
-        atOptions = {
-            'key': 'd41be1e917eb87afabc417d7885c1eb3',
-            'format': 'iframe',
-            'height': 250,
-            'width': 300,
-            'params': {}
-        };
-    </script>
-    <script src="https://www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
-    <script>
-        atOptions = {
-            'key': 'd41be1e917eb87afabc417d7885c1eb3',
-            'format': 'iframe',
-            'height': 250,
-            'width': 300,
-            'params': {}
-        };
-    </script>
-    <script src="https://www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
-    <script>(function (s) { s.dataset.zone = '10400040', s.src = 'https://nap5k.com/tag.min.js' })([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
-    <script>(function (s) { s.dataset.zone = '10400040', s.src = 'https://nap5k.com/tag.min.js' })([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
-    <script>(function (s) { s.dataset.zone = '10400040', s.src = 'https://nap5k.com/tag.min.js' })([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
+
     <div id="pBar"></div>
 
     <header>
-        <div style="font-size: 1.5rem; font-weight: 800; letter-spacing: -1px;">ELITE<span
-                style="color: var(--accent);">BLOG</span></div>
+        <div style="font-size: 1.5rem; font-weight: 800;">ELITE<span style="color: var(--accent);">BLOG</span></div>
         <div class="timer-badge" id="timer-box">Wait: <span id="sec">20</span>s</div>
     </header>
 
     <div class="main-content">
-
-        <div class="ad-container">
-            <div class="ad-tag">
-                <script>
-                    atOptions = {
-                        'key': 'd41be1e917eb87afabc417d7885c1eb3',
-                        'format': 'iframe',
-                        'height': 250,
-                        'width': 300,
-                        'params': {}
-                    };
-                </script>
-                <script src="https://www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
-                <script>
-                    atOptions = {
-                        'key': 'd41be1e917eb87afabc417d7885c1eb3',
-                        'format': 'iframe',
-                        'height': 250,
-                        'width': 300,
-                        'params': {}
-                    };
-                </script>
-                <script src="https://www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
-                <script async="async" data-cfasync="false"
-                    src="https://pl28334516.effectivegatecpm.com/cbbb337fba63c479050336665248235f/invoke.js"></script>
-                <div id="container-cbbb337fba63c479050336665248235f"></div>
-                <script src="https://www.highperformanceformat.com/666b2474ed4c3364af3ed998b397cf46/invoke.js"></script>
-            </div>
-            <script src="https://3nbf4.com/act/files/tag.min.js?z=10381339" data-cfasync="false" async></script>
+        <div class="ad-row">
+            <div class="ad-label">Sponsored</div>
+            <script type="text/javascript">atOptions={'key':'d41be1e917eb87afabc417d7885c1eb3','format':'iframe','height':250,'width':300,'params':{}};</script>
+            <script type="text/javascript" src="//www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
+            <script type="text/javascript">atOptions={'key':'d41be1e917eb87afabc417d7885c1eb3','format':'iframe','height':250,'width':300,'params':{}};</script>
+            <script type="text/javascript" src="//www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
+            <script type="text/javascript">atOptions={'key':'d41be1e917eb87afabc417d7885c1eb3','format':'iframe','height':250,'width':300,'params':{}};</script>
+            <script type="text/javascript" src="//www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
         </div>
 
         <article>
-            <h1>Next-Gen Tech: What to Expect in Late 2025</h1>
-            <div class="meta-data">By Tech Insider • Updated 5 mins ago • 12 Min Read</div>
-
+            <h1>The Future of Artificial Intelligence in 2026</h1>
+            <p class="meta">Published by Admin • 5 Min Read • Technology</p>
+            
+            <img src="https://images.unsplash.com/photo-1677442136019-21780ecad995?q=80&w=1000" class="feature-img" alt="AI Future">
+            
             <div class="blog-section">
-                <p>The technological landscape of 2025 is moving at breakneck speed. From the integration of Generative
-                    AI in our daily gadgets to the revolution in electric performance, we are witnessing a complete
-                    overhaul of how we interact with machines.</p>
-
-                <h2>1. The Rise of AI-First Smartphones</h2>
-                <p>Gone are the days when smartphones were just communication devices. In 2025, AI-First devices like
-                    the latest Pixel and Galaxy series are utilizing on-device LLMs (Large Language Models). These
-                    phones can now anticipate your needs, edit videos in real-time using voice commands, and manage your
-                    entire digital life without sending data to the cloud.</p>
-                <img src="https://images.unsplash.com/photo-1616348436168-de43ad0db179?auto=format&fit=crop&q=80&w=800"
-                    alt="AI Phone" class="feature-img">
+                <h2>1. Neural Link Integration</h2>
+                <p>In late 2025 and heading into 2026, the integration of AI with biological systems has reached a new peak. Neural interfaces are no longer science fiction. Developers are now creating apps that respond to cognitive patterns, allowing for hands-free device control.</p>
             </div>
 
-            <div class="ad-container">
-                <div class="ad-tag">
-                    <script>
-                        atOptions = {
-                            'key': 'd41be1e917eb87afabc417d7885c1eb3',
-                            'format': 'iframe',
-                            'height': 250,
-                            'width': 300,
-                            'params': {}
-                        };
-                    </script>
-                    <script
-                        src="https://www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
-                    <script>
-                        atOptions = {
-                            'key': 'd41be1e917eb87afabc417d7885c1eb3',
-                            'format': 'iframe',
-                            'height': 250,
-                            'width': 300,
-                            'params': {}
-                        };
-                    </script>
-                    <script
-                        src="https://www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
-                    <script async="async" data-cfasync="false"
-                        src="https://pl28334516.effectivegatecpm.com/cbbb337fba63c479050336665248235f/invoke.js"></script>
-                    <div id="container-cbbb337fba63c479050336665248235f"></div>
-                    <script
-                        src="https://www.highperformanceformat.com/666b2474ed4c3364af3ed998b397cf46/invoke.js"></script>
-                    t
-                </div>
-                <script>atOptions = { 'key': 'd41be1e917eb87afabc417d7885c1eb3', 'format': 'iframe', 'height': 250, 'width': 300, 'params': {} };</script>
+            <div class="ad-row">
+                <script type="text/javascript">atOptions={'key':'d41be1e917eb87afabc417d7885c1eb3','format':'iframe','height':250,'width':300,'params':{}};</script>
+                <script type="text/javascript" src="//www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
+                <script type="text/javascript">atOptions={'key':'d41be1e917eb87afabc417d7885c1eb3','format':'iframe','height':250,'width':300,'params':{}};</script>
+                <script type="text/javascript" src="//www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
+                <script type="text/javascript">atOptions={'key':'d41be1e917eb87afabc417d7885c1eb3','format':'iframe','height':250,'width':300,'params':{}};</script>
+                <script type="text/javascript" src="//www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
             </div>
 
             <div class="blog-section">
-                <h2>2. Superbikes: Aerodynamics & Active Wings</h2>
-                <p>In the world of two-wheelers, 2025 is the year of <b>Active Aerodynamics</b>. Inspired by MotoGP,
-                    consumer superbikes now feature wings that adjust their angle based on your lean angle and speed.
-                    The new Kawasaki H2 and Ducati Panigale variants are pushing the 320km/h barrier with stability
-                    never seen before.</p>
-                <img src="https://images.unsplash.com/photo-1558981403-c5f91cbba527?auto=format&fit=crop&q=80&w=800"
-                    alt="Superbike Aero" class="feature-img">
+                <h2>2. Sustainable Tech & Green Energy</h2>
+                <p>The tech world is shifting towards carbon-negative manufacturing. New smartphones are being built with 90% recycled materials, and solid-state batteries are finally becoming the standard for portable electronics, offering double the life of Li-ion.</p>
+                <img src="https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?q=80&w=1000" class="feature-img" alt="Green Tech">
             </div>
 
-            <div class="ad-container">
-                <script>
-                    atOptions = {
-                        'key': 'd41be1e917eb87afabc417d7885c1eb3',
-                        'format': 'iframe',
-                        'height': 250,
-                        'width': 300,
-                        'params': {}
-                    };
-                </script>
-                <script src="https://www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
-                <script>
-                    atOptions = {
-                        'key': 'd41be1e917eb87afabc417d7885c1eb3',
-                        'format': 'iframe',
-                        'height': 250,
-                        'width': 300,
-                        'params': {}
-                    };
-                </script>
-                <script src="https://www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
-                <div class="ad-tag">
-                    <script async="async" data-cfasync="false"
-                        src="https://pl28334516.effectivegatecpm.com/cbbb337fba63c479050336665248235f/invoke.js"></script>
-                    <div id="container-cbbb337fba63c479050336665248235f"></div>
-                </div>
-                <script
-                    src="https://pl28328281.effectivegatecpm.com/27/3c/53/273c5378ff0557eae1a862b03131344a.js"></script>
+            <div class="ad-row">
+                <script type="text/javascript">atOptions={'key':'d41be1e917eb87afabc417d7885c1eb3','format':'iframe','height':250,'width':300,'params':{}};</script>
+                <script type="text/javascript" src="//www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
+                <script type="text/javascript">atOptions={'key':'d41be1e917eb87afabc417d7885c1eb3','format':'iframe','height':250,'width':300,'params':{}};</script>
+                <script type="text/javascript" src="//www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
+                <script type="text/javascript">atOptions={'key':'d41be1e917eb87afabc417d7885c1eb3','format':'iframe','height':250,'width':300,'params':{}};</script>
+                <script type="text/javascript" src="//www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
             </div>
 
             <div class="blog-section">
-                <h2>3. Quantum Computing in Consumer Cloud</h2>
-                <p>While we don't have quantum computers on our desks yet, 2025 marks the first year that major cloud
-                    providers have opened up "Quantum-as-a-Service" for public developers. This allows for complex
-                    encryption and medical research to happen at speeds 100x faster than traditional silicon chips.</p>
-                <img src="https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&q=80&w=800"
-                    alt="Quantum Computing" class="feature-img">
+                <h2>3. The Evolution of Gaming Hardware</h2>
+                <p>Cloud gaming has matured. With 6G tests being successful in urban hubs, high-fidelity gaming no longer requires a $2000 PC. Ultra-low latency streaming is bringing console-quality experiences to budget mobile devices worldwide.</p>
+                <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=1000" class="feature-img" alt="Gaming Future">
             </div>
 
-            <div class="ad-container">
-                <script>
-                    atOptions = {
-                        'key': 'd41be1e917eb87afabc417d7885c1eb3',
-                        'format': 'iframe',
-                        'height': 250,
-                        'width': 300,
-                        'params': {}
-                    };
-                </script>
-                <script src="https://www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
-                <script>
-                    atOptions = {
-                        'key': 'd41be1e917eb87afabc417d7885c1eb3',
-                        'format': 'iframe',
-                        'height': 250,
-                        'width': 300,
-                        'params': {}
-                    };
-                </script>
-                <script src="https://www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
-                <script>
-                    atOptions = {
-                        'key': 'd41be1e917eb87afabc417d7885c1eb3',
-                        'format': 'iframe',
-                        'height': 250,
-                        'width': 300,
-                        'params': {}
-                    };
-                </script>
-                <script src="https://www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
-                <div class="ad-tag">
-                    <script async="async" data-cfasync="false"
-                        src="https://pl28334516.effectivegatecpm.com/cbbb337fba63c479050336665248235f/invoke.js"></script>
-                    <div id="container-cbbb337fba63c479050336665248235f"></div>
-                    <script
-                        src="https://www.highperformanceformat.com/666b2474ed4c3364af3ed998b397cf46/invoke.js"></script>
-                </div>
-                <script async="async" data-cfasync="false"
-                    src="https://pl28334516.effectivegatecpm.com/cbbb337fba63c479050336665248235f/invoke.js"></script>
-                <div id="container-cbbb337fba63c479050336665248235f"></div>
+            <div class="ad-row">
+                <script type="text/javascript">atOptions={'key':'d41be1e917eb87afabc417d7885c1eb3','format':'iframe','height':250,'width':300,'params':{}};</script>
+                <script type="text/javascript" src="//www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
+                <script type="text/javascript">atOptions={'key':'d41be1e917eb87afabc417d7885c1eb3','format':'iframe','height':250,'width':300,'params':{}};</script>
+                <script type="text/javascript" src="//www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
+                <script type="text/javascript">atOptions={'key':'d41be1e917eb87afabc417d7885c1eb3','format':'iframe','height':250,'width':300,'params':{}};</script>
+                <script type="text/javascript" src="//www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
             </div>
 
-            <div class="blog-section">
-                <h2>4. The EV Revolution: Solid State Batteries</h2>
-                <p>Toyota and Tesla have finally teased their first solid-state battery prototypes this year. These
-                    batteries promise a 1,000km range with just a 10-minute charge. This solves the "range anxiety" that
-                    has held back the electric vehicle market for the last decade.</p>
-                <img src="https://images.unsplash.com/photo-1593941707882-a5bba14938c7?auto=format&fit=crop&q=80&w=800"
-                    alt="EV Battery Tech" class="feature-img">
+            <div class="ad-row">
+                <script type="text/javascript">atOptions={'key':'d41be1e917eb87afabc417d7885c1eb3','format':'iframe','height':250,'width':300,'params':{}};</script>
+                <script type="text/javascript" src="//www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
+                <script type="text/javascript">atOptions={'key':'d41be1e917eb87afabc417d7885c1eb3','format':'iframe','height':250,'width':300,'params':{}};</script>
+                <script type="text/javascript" src="//www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
+                <script type="text/javascript">atOptions={'key':'d41be1e917eb87afabc417d7885c1eb3','format':'iframe','height':250,'width':300,'params':{}};</script>
+                <script type="text/javascript" src="//www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
             </div>
-
         </article>
 
         <div class="footer-action">
-            <p id="msg" class="scrolling-note">Please read the article to verify you are human...</p>
+            <p id="msg" style="color: var(--text-dim); font-style: italic;">Wait for verification to complete...</p>
             <button class="btn-continue" id="main-btn">Continue to Next Step</button>
         </div>
-<script>
-  atOptions = {
-    'key' : 'd41be1e917eb87afabc417d7885c1eb3',
-    'format' : 'iframe',
-    'height' : 250,
-    'width' : 300,
-    'params' : {}
-  };
-</script>
-<script src="https://www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script><script>
-  atOptions = {
-    'key' : 'd41be1e917eb87afabc417d7885c1eb3',
-    'format' : 'iframe',
-    'height' : 250,
-    'width' : 300,
-    'params' : {}
-  };
-</script>
-<script src="https://www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script><script>
-  atOptions = {
-    'key' : 'd41be1e917eb87afabc417d7885c1eb3',
-    'format' : 'iframe',
-    'height' : 250,
-    'width' : 300,
-    'params' : {}
-  };
-</script>
-<script src="https://www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
     </div>
+
+    <script>
+        window.open = function() { return null; };
+        document.addEventListener('click', function(e) {
+            let target = e.target.closest('a');
+            if (target && target.href) {
+                const url = new URL(target.href);
+                if (url.hostname !== window.location.hostname && !url.hostname.includes("kinglinky.com")) {
+                    e.preventDefault();
+                    console.log("Redirect Ad Blocked");
+                }
+            }
+        }, true);
+    </script>
 
     <script>
         let timeLeft = 20;
@@ -420,78 +151,44 @@
         const sec = document.getElementById("sec");
         const pBar = document.getElementById("pBar");
         const btn = document.getElementById("main-btn");
-        const msg = document.getElementById("msg");
 
-        // Check for real user activity
         window.addEventListener("scroll", () => { scrolled = true; });
 
         const timer = setInterval(() => {
             timeLeft--;
             sec.innerText = timeLeft;
-
-            // Progress bar logic
-            let pWidth = ((20 - timeLeft) / 20) * 100;
-            pBar.style.width = pWidth + "%";
+            pBar.style.width = ((20 - timeLeft) / 20) * 100 + "%";
 
             if (timeLeft <= 0) {
                 clearInterval(timer);
                 if (!scrolled) {
-                    document.body.innerHTML = "<h2 style='color:white;text-align:center;margin-top:50px;'>Bot Detected! Please scroll while reading.</h2>";
+                    alert("Please scroll down to read the full article.");
+                    timeLeft = 5; // Give extra time if not scrolled
                 } else {
                     document.getElementById("timer-box").innerHTML = "✅ Verified";
-                    msg.style.display = "none";
+                    document.getElementById("msg").style.display = "none";
                     btn.style.display = "inline-block";
                 }
             }
         }, 1000);
 
         btn.onclick = () => {
-            btn.innerText = "Verifying Link...";
-            btn.disabled = true;
+            btn.innerText = "Processing...";
+            const urlParams = new URLSearchParams(window.location.search);
             setTimeout(() => {
-                const urlParams = new URLSearchParams(window.location.search);
-                window.location.href = "step2.html?code=" + (urlParams.get("code") || "VerifiedUser");
-            }, 2500);
+                window.location.href = "step2.html?code=" + (urlParams.get("code") || "User");
+            }, 2000);
+        };
+
+        // AdBlock Check
+        window.onload = async () => {
+            let isBlocked = false;
+            try {
+                await fetch(new Request("https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"), { mode: 'no-cors' })
+                .catch(() => { isBlocked = true; });
+            } catch (e) { isBlocked = true; }
+            if (isBlocked) document.getElementById('adblock-wrapper').style.display = 'block';
         };
     </script>
-    <script>
-        async function detectAdBlock() {
-            let adBlockEnabled = false;
-
-            // Method 1: Fetch a known Ad script (Google/Adsterra patterns)
-            const googleAdsUrl = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js";
-            try {
-                await fetch(new Request(googleAdsUrl), { mode: 'no-cors' }).catch(() => {
-                    adBlockEnabled = true;
-                });
-            } catch (e) {
-                adBlockEnabled = true;
-            }
-
-            // Method 2: Check if an 'ad-check' element is hidden
-            // Palaya blockers idhai detect pannum
-            const testAd = document.createElement('div');
-            testAd.innerHTML = '&nbsp;';
-            testAd.className = 'adsbox'; // common ad class
-            document.body.appendChild(testAd);
-            window.setTimeout(function () {
-                if (testAd.offsetHeight === 0) {
-                    adBlockEnabled = true;
-                }
-                testAd.remove();
-
-                // Result: If blocked, show the overlay and stop execution
-                if (adBlockEnabled) {
-                    document.getElementById('adblock-wrapper').style.display = 'block';
-                    // Stop the rest of your link shortening logic here
-                    console.error("Link access blocked due to AdBlocker");
-                }
-            }, 100);
-        }
-
-        // Page load aagum pothu check pannum
-        window.onload = detectAdBlock;
-    </script>
 </body>
-
 </html>
