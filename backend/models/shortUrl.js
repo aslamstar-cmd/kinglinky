@@ -1,19 +1,27 @@
 import mongoose from "mongoose";
 
-const shortUrlSchema = new mongoose.Schema({
-    full: {
-        type: String,
-        required: true,
-    },
-    short: {
-        type: String,
-        requird: true,
-    },
-    clicks: {
-        type: Number,
-        required: true,
-        default: 0,
-    },
-});
+const shortcutSchema = new mongoose.Schema(
+  {
+    fullUrl: String,
+    shortCode: String,
+    shortUrl: String,
+    ownerEmail: String,
 
-export default mongoose.model("ShortUrl", shortUrlSchema);
+    clicks: { type: Number, default: 0 },
+
+    // ✅ ADD THIS
+    dailyClicks: {
+      type: Map,
+      of: Number,
+      default: {}
+    },
+
+    clickedFPs: {
+      type: [String],
+      default: []
+    }
+  },
+  { timestamps: true }
+);
+
+export default mongoose.model("Shortcut", shortcutSchema);
