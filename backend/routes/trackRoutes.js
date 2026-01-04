@@ -29,21 +29,31 @@ router.post("/final", async (req, res) => {
       });
     }
 
-    /* =========================
-       DUPLICATE CLICK PROTECTION
-    ========================= */
+    // Prepare Destination URL beforehand
+    let destination = link.fullUrl?.trim();
+    if (destination && !destination.startsWith("http://") && !destination.startsWith("https://")) {
+      destination = "https://" + destination;
+    }
+
+    /* ============================================================
+       DUPLICATE CLICK PROTECTION (FIXED)
+       ============================================================ */
     if (!link.clickedFPs) link.clickedFPs = [];
 
     if (fingerprint && link.clickedFPs.includes(fingerprint)) {
+      // User thirumba varaanga, so count ethuvum pannaama 
+      // direct-ah redirect URL mattum anuppiduvom.
+      console.log("♻️ DUPLICATE USER - BYPASSING COUNT");
       return res.json({
-        success: false,
-        message: "Duplicate click blocked"
+        success: false, // Success false-na dashboard-la count yeraathu
+        message: "Duplicate click - Redirecting anyway",
+        redirect: destination // <--- Ithuthaan logic! User-ku link poyidum
       });
     }
 
-    /* =========================
-       1️⃣ TOTAL CLICKS UPDATE
-    ========================= */
+    /* ============================================================
+       1️⃣ TOTAL CLICKS UPDATE (Only for New Users)
+       ============================================================ */
     link.clicks = (link.clicks || 0) + 1;
 
     if (fingerprint) {
@@ -52,13 +62,11 @@ router.post("/final", async (req, res) => {
 
     /* =========================
        2️⃣ DAILY CLICKS UPDATE
-    ========================= */
+       ========================= */
     const today = new Date().toISOString().split("T")[0];
-
     if (!link.dailyClicks) {
       link.dailyClicks = new Map();
     }
-
     link.dailyClicks.set(
       today,
       (link.dailyClicks.get(today) || 0) + 1
@@ -66,17 +74,14 @@ router.post("/final", async (req, res) => {
 
     /* =========================
        3️⃣ EARNINGS (CPM LOGIC)
-    ========================= */
-    const CPM = 10; // $10 CPM
-    const earn = CPM / 1000; // per click earning
+       ========================= */
+    const CPM = 10; 
+    const earn = CPM / 1000;
 
     /* =========================
        4️⃣ USER WALLET UPDATE
-    ========================= */
-    const user = await User.findOne({
-      email: link.ownerEmail
-    });
-
+       ========================= */
+    const user = await User.findOne({ email: link.ownerEmail });
     if (user) {
       user.wallet = Number(user.wallet || 0) + earn;
       user.totalEarnings = Number(user.totalEarnings || 0) + earn;
@@ -85,13 +90,8 @@ router.post("/final", async (req, res) => {
 
     /* =========================
        SAVE LINK
-    ========================= */
+       ========================= */
     await link.save();
-
-    /* =========================
-       FINAL DESTINATION FIX
-    ========================= */
-    let destination = link.fullUrl?.trim();
 
     if (!destination) {
       return res.json({
@@ -100,18 +100,8 @@ router.post("/final", async (req, res) => {
       });
     }
 
-    if (
-      !destination.startsWith("http://") &&
-      !destination.startsWith("https://")
-    ) {
-      destination = "https://" + destination;
-    }
+    console.log("✅ NEW HIT - REDIRECTING:", destination);
 
-    console.log("✅ FINAL REDIRECT:", destination);
-
-    /* =========================
-       SEND RESPONSE
-    ========================= */
     return res.json({
       success: true,
       redirect: destination
