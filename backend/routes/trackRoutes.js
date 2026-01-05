@@ -8,7 +8,7 @@ const router = express.Router();
  * FINAL REDIRECT
  * POST /api/track/final
  */
-router.post("/final", async (req, res) => {
+router.post("/api/track/final", async (req, res) => {
   try {
     const { code, fingerprint } = req.body;
 
