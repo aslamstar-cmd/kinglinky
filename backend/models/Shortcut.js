@@ -3,13 +3,19 @@ import mongoose from "mongoose";
 const shortcutSchema = new mongoose.Schema(
   {
     fullUrl: String,
-    shortCode: String,
+    shortCode: { type: String, unique: true },
     shortUrl: String,
     ownerEmail: String,
     clicks: { type: Number, default: 0 },
-
-    // ✅ SAME NAME everywhere
-    clickedFPs: { type: [String], default: [] },
+    dailyClicks: {
+      type: Map,
+      of: Number,
+      default: {}
+    },
+    clickedFPs: {
+      type: [String],
+      default: []
+    }
   },
   { timestamps: true }
 );

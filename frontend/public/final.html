@@ -67,17 +67,11 @@
       }
     });
   }
-
-  async function go() {
-    if (!code) {
-      alert("Error: Security code is missing. Please restart the process.");
-      return;
-    }
+async function go() {
+    if (!code) return alert("Security code missing.");
     
-    // UI Update
     btn.disabled = true;
     btn.innerHTML = '<span class="loader"></span> REDIRECTING...';
-    statusTxt.innerText = "Verifying with server, please wait...";
 
     try {
       const fp = await getFP();
@@ -89,26 +83,21 @@
 
       const data = await res.json();
 
-      // IMPORTANT: Redirect if URL exists (handles both new hits and duplicates)
+      // REDIRECT LOGIC: Redirect user NO MATTER WHAT if link exists
       if (data.redirect) {
         statusTxt.innerText = "Success! Opening destination...";
-        setTimeout(() => {
-          window.location.href = data.redirect;
-        }, 500); 
-      } 
-      else {
-        // Fallback for real errors
-        alert(data.message || "Verification failed. Link might be expired.");
-        btn.innerText = "RETRY AGAIN";
+        window.location.href = data.redirect;
+      } else {
+        alert(data.message || "Link expired.");
         btn.disabled = false;
-        statusTxt.innerText = "Could not find the link. Try again.";
+        btn.innerText = "RETRY";
       }
     } catch (err) {
-      console.error(err);
-      alert("Connection error. Please check your internet and refresh.");
-      btn.innerText = "GET DESTINATION LINK";
+      alert("Network error. Check connection.");
       btn.disabled = false;
     }
+  
+    
   }
 </script>
 
