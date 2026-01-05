@@ -150,7 +150,12 @@
       const res = await fetch(`${API_BASE}/api/track/final`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ code })
+        body: JSON.stringify({ code,
+                               fingerprint: 
+                                navigator.useAgent +
+                                screen.width +
+                                screen.height
+         })
       });
 
       const data = await res.json();

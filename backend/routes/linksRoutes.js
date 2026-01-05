@@ -39,7 +39,7 @@ router.post("/shorten", async (req, res) => {
       return res.status(400).json({ message: "URL or email missing" });
     }
     const code = Math.random().toString(36).substring(2, 8);
-    const shortUrl = `${process.env.BASE_URL}/step1.html?code=${code}`;
+    const shortUrl = `${process.env.BASE_URL}/step1/${code}`;
 
     const link = await Shortcut.create({
       fullUrl: longUrl,

@@ -27,23 +27,4 @@ router.get("/step1/:code", async (req, res) => {
   `);
 });
 
-/**
- * FINAL TRACK
- * POST /api/track/final
- */
-router.post("/api/track/final", async (req, res) => {
-  const { code } = req.body;
-
-  const link = await Shortcut.findOne({ shortCode: code });
-  if (!link) return res.json({ success: false });
-
-  link.clicks += 1;
-  await link.save();
-
-  res.json({
-    success: true,
-    redirect: link.fullUrl,
-  });
-});
-
 export default router;
