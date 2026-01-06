@@ -14,25 +14,24 @@
             --text-dim: #b0b0b0;
             --border-color: #222;
         }
-        body { background-color: var(--bg-color); color: var(--text-main); font-family: 'Poppins', sans-serif; margin: 0; line-height: 1.8; }
-        #pBar { position: fixed; top: 0; left: 0; height: 5px; background: linear-gradient(to right, var(--accent), #00d4ff); width: 0%; z-index: 10000; }
+        body { background-color: var(--bg-color); color: var(--text-main); font-family: 'Poppins', sans-serif; margin: 0; line-height: 1.8; overflow-x: hidden; }
+        #pBar { position: fixed; top: 0; left: 0; height: 5px; background: linear-gradient(to right, var(--accent), #00d4ff); width: 0%; z-index: 10000; transition: width 0.3s; }
         header { background: rgba(10, 10, 10, 0.95); padding: 15px 5%; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 999; display: flex; justify-content: space-between; align-items: center; }
-        .timer-badge { background: #1e1e1e; padding: 8px 15px; border-radius: 5px; border-left: 4px solid var(--accent); font-weight: bold; }
+        .timer-badge { background: #1e1e1e; padding: 8px 15px; border-radius: 5px; border-left: 4px solid var(--accent); font-weight: bold; min-width: 100px; text-align: center; }
         .main-content { max-width: 900px; margin: 40px auto; padding: 0 20px; }
         
-        /* Content Styling */
         .blog-section { margin-bottom: 40px; }
         h1 { font-size: 2.5rem; margin-bottom: 10px; color: var(--accent); }
         h2 { color: var(--accent); margin-top: 30px; }
-        .feature-img { width: 100%; height: 400px; object-fit: cover; border-radius: 15px; margin: 20px 0; border: 1px solid var(--border-color); }
+        .feature-img { width: 100%; height: auto; max-height: 450px; object-fit: cover; border-radius: 15px; margin: 20px 0; border: 1px solid var(--border-color); }
         .meta { color: var(--text-dim); font-size: 0.9rem; margin-bottom: 30px; }
 
-        /* Ads Layout */
-        .ad-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; margin: 30px 0; padding: 15px; background: #0f0f0f; border-radius: 10px; border: 1px dashed #333; }
+        .ad-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; margin: 30px 0; padding: 15px; background: #0f0f0f; border-radius: 10px; border: 1px dashed #333; min-height: 100px; }
         .ad-label { width: 100%; text-align: center; font-size: 10px; color: #555; text-transform: uppercase; margin-bottom: 10px; }
 
         .footer-action { text-align: center; padding: 50px 0; border-top: 1px solid var(--border-color); }
-        .btn-continue { background: var(--accent); color: #000; padding: 20px 60px; font-size: 1.2rem; font-weight: 700; border: none; border-radius: 10px; cursor: pointer; display: none; box-shadow: 0 10px 30px rgba(0, 255, 136, 0.3); }
+        .btn-continue { background: var(--accent); color: #000; padding: 20px 60px; font-size: 1.2rem; font-weight: 700; border: none; border-radius: 10px; cursor: pointer; display: none; box-shadow: 0 10px 30px rgba(0, 255, 136, 0.3); transition: transform 0.2s; }
+        .btn-continue:hover { transform: scale(1.05); }
         
         #adblock-wrapper { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); z-index: 99999; color: white; text-align: center; padding-top: 150px; }
     </style>
@@ -56,14 +55,8 @@
 
     <div class="main-content">
         <div class="ad-row">
-            <div class="ad-label">Sponsored</div>
-            <script type="text/javascript">atOptions={'key':'d41be1e917eb87afabc417d7885c1eb3','format':'iframe','height':250,'width':300,'params':{}};</script>
-            <script type="text/javascript" src="//www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
-            <script type="text/javascript">atOptions={'key':'d41be1e917eb87afabc417d7885c1eb3','format':'iframe','height':250,'width':300,'params':{}};</script>
-            <script type="text/javascript" src="//www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
-            <script type="text/javascript">atOptions={'key':'d41be1e917eb87afabc417d7885c1eb3','format':'iframe','height':250,'width':300,'params':{}};</script>
-            <script type="text/javascript" src="//www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
-        </div>
+            <div class="ad-label">Sponsored Content</div>
+            </div>
 
         <article>
             <h1>The Future of Artificial Intelligence in 2026</h1>
@@ -77,13 +70,7 @@
             </div>
 
             <div class="ad-row">
-                <script type="text/javascript">atOptions={'key':'d41be1e917eb87afabc417d7885c1eb3','format':'iframe','height':250,'width':300,'params':{}};</script>
-                <script type="text/javascript" src="//www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
-                <script type="text/javascript">atOptions={'key':'d41be1e917eb87afabc417d7885c1eb3','format':'iframe','height':250,'width':300,'params':{}};</script>
-                <script type="text/javascript" src="//www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
-                <script type="text/javascript">atOptions={'key':'d41be1e917eb87afabc417d7885c1eb3','format':'iframe','height':250,'width':300,'params':{}};</script>
-                <script type="text/javascript" src="//www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
-            </div>
+                </div>
 
             <div class="blog-section">
                 <h2>2. Sustainable Tech & Green Energy</h2>
@@ -91,104 +78,89 @@
                 <img src="https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?q=80&w=1000" class="feature-img" alt="Green Tech">
             </div>
 
-            <div class="ad-row">
-                <script type="text/javascript">atOptions={'key':'d41be1e917eb87afabc417d7885c1eb3','format':'iframe','height':250,'width':300,'params':{}};</script>
-                <script type="text/javascript" src="//www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
-                <script type="text/javascript">atOptions={'key':'d41be1e917eb87afabc417d7885c1eb3','format':'iframe','height':250,'width':300,'params':{}};</script>
-                <script type="text/javascript" src="//www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
-                <script type="text/javascript">atOptions={'key':'d41be1e917eb87afabc417d7885c1eb3','format':'iframe','height':250,'width':300,'params':{}};</script>
-                <script type="text/javascript" src="//www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
-            </div>
-
             <div class="blog-section">
                 <h2>3. The Evolution of Gaming Hardware</h2>
                 <p>Cloud gaming has matured. With 6G tests being successful in urban hubs, high-fidelity gaming no longer requires a $2000 PC. Ultra-low latency streaming is bringing console-quality experiences to budget mobile devices worldwide.</p>
-                <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=1000" class="feature-img" alt="Gaming Future">
-            </div>
-
-            <div class="ad-row">
-                <script type="text/javascript">atOptions={'key':'d41be1e917eb87afabc417d7885c1eb3','format':'iframe','height':250,'width':300,'params':{}};</script>
-                <script type="text/javascript" src="//www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
-                <script type="text/javascript">atOptions={'key':'d41be1e917eb87afabc417d7885c1eb3','format':'iframe','height':250,'width':300,'params':{}};</script>
-                <script type="text/javascript" src="//www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
-                <script type="text/javascript">atOptions={'key':'d41be1e917eb87afabc417d7885c1eb3','format':'iframe','height':250,'width':300,'params':{}};</script>
-                <script type="text/javascript" src="//www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
-            </div>
-
-            <div class="ad-row">
-                <script type="text/javascript">atOptions={'key':'d41be1e917eb87afabc417d7885c1eb3','format':'iframe','height':250,'width':300,'params':{}};</script>
-                <script type="text/javascript" src="//www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
-                <script type="text/javascript">atOptions={'key':'d41be1e917eb87afabc417d7885c1eb3','format':'iframe','height':250,'width':300,'params':{}};</script>
-                <script type="text/javascript" src="//www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
-                <script type="text/javascript">atOptions={'key':'d41be1e917eb87afabc417d7885c1eb3','format':'iframe','height':250,'width':300,'params':{}};</script>
-                <script type="text/javascript" src="//www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
             </div>
         </article>
 
         <div class="footer-action">
-            <p id="msg" style="color: var(--text-dim); font-style: italic;">Wait for verification to complete...</p>
+            <p id="msg" style="color: var(--text-dim); font-style: italic;">Please scroll and wait for verification...</p>
             <button class="btn-continue" id="main-btn">Continue to Next Step</button>
         </div>
     </div>
 
     <script>
+        // Security: Prevent ad redirection hijacking
         window.open = function() { return null; };
-        document.addEventListener('click', function(e) {
-            let target = e.target.closest('a');
-            if (target && target.href) {
-                const url = new URL(target.href);
-                if (url.hostname !== window.location.hostname && !url.hostname.includes("kinglinky.com")) {
-                    e.preventDefault();
-                    console.log("Redirect Ad Blocked");
-                }
-            }
-        }, true);
-    </script>
-
-    <script>
+        
         let timeLeft = 20;
         let scrolled = false;
         const sec = document.getElementById("sec");
         const pBar = document.getElementById("pBar");
         const btn = document.getElementById("main-btn");
+        const timerBox = document.getElementById("timer-box");
 
-        window.addEventListener("scroll", () => { scrolled = true; });
+        // Track scrolling
+        window.addEventListener("scroll", () => { 
+            if (window.scrollY > 300) scrolled = true; 
+        });
 
         const timer = setInterval(() => {
             timeLeft--;
-            sec.innerText = timeLeft;
-            pBar.style.width = ((20 - timeLeft) / 20) * 100 + "%";
+            if(timeLeft >= 0) {
+                sec.innerText = timeLeft;
+                pBar.style.width = ((20 - timeLeft) / 20) * 100 + "%";
+            }
 
             if (timeLeft <= 0) {
-                clearInterval(timer);
                 if (!scrolled) {
-                    alert("Please scroll down to read the full article.");
-                    timeLeft = 5; // Give extra time if not scrolled
+                    sec.innerText = "0";
+                    document.getElementById("msg").innerText = "⚠️ Please scroll down to verify you are human.";
                 } else {
-                    document.getElementById("timer-box").innerHTML = "✅ Verified";
+                    clearInterval(timer);
+                    timerBox.innerHTML = "✅ Verified";
+                    timerBox.style.borderColor = "#00ff88";
                     document.getElementById("msg").style.display = "none";
                     btn.style.display = "inline-block";
+                    pBar.style.width = "100%";
                 }
             }
         }, 1000);
 
+        // NEXT STEP LOGIC
         btn.onclick = () => {
-            btn.innerText = "Processing...";
+            btn.disabled = true;
+            btn.innerText = "Processing Security Check...";
+            
             const urlParams = new URLSearchParams(window.location.search);
+            const code = urlParams.get("code");
+
+            if (!code) {
+                alert("Session Error: Please restart from the original link.");
+                window.location.href = "https://www.kinglinky.com";
+                return;
+            }
+
+            // Redirecting to Step 2 with the code
             setTimeout(() => {
-                window.location.href = "step2.html?code=" + (urlParams.get("code") || "User");
-            }, 2000);
+                window.location.href = `/step2.html?code=${code}`;
+            }, 1500);
         };
 
-        // AdBlock Check
-        window.onload = async () => {
+        // AdBlock Detector
+        window.addEventListener('load', async () => {
             let isBlocked = false;
             try {
-                await fetch(new Request("https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"), { mode: 'no-cors' })
-                .catch(() => { isBlocked = true; });
-            } catch (e) { isBlocked = true; }
-            if (isBlocked) document.getElementById('adblock-wrapper').style.display = 'block';
-        };
+                const response = await fetch(new Request("https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"), { mode: 'no-cors' });
+            } catch (e) {
+                isBlocked = true;
+            }
+            if (isBlocked) {
+                document.getElementById('adblock-wrapper').style.display = 'block';
+                document.body.style.overflow = 'hidden';
+            }
+        });
     </script>
 </body>
 </html>

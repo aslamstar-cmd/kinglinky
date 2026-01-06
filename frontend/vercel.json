@@ -1,28 +1,36 @@
 {
   "rewrites": [
     {
+      "source": "/step1/:code",
+      "destination": "/api/track/step1/:code"
+    },
+    {
+      "source": "/api/(.*)",
+      "destination": "/backend/server.js"
+    },
+    {
       "source": "/step1.html",
-      "destination": "/step1.html"
+      "destination": "/frontend/public/step1.html"
     },
     {
       "source": "/step2.html",
-      "destination": "/step2.html"
+      "destination": "/frontend/public/step2.html"
     },
     {
       "source": "/step3.html",
-      "destination": "/step3.html"
+      "destination": "/frontend/public/step3.html"
     },
     {
       "source": "/step4.html",
-      "destination": "/step4.html"
+      "destination": "/frontend/public/step4.html"
     },
     {
       "source": "/final.html",
-      "destination": "/final.html"
+      "destination": "/frontend/public/final.html"
     },
     {
       "source": "/(.*)",
-      "destination": "index.html"
+      "destination": "/frontend/index.html"
     }
   ]
 }
