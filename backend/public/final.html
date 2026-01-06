@@ -3,179 +3,160 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Final Step | Verification</title>
+  <title>Final Verification | Secure Link</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-color: #061c1c;
-      --card-bg: #0b3d3d;
-      --accent: #00ffd0;
-      --text-color: #eafffa;
+      --bg: #030712;
+      --card: #0f172a;
+      --accent: #10b981;
+      --text: #f3f4f6;
+      --border: #1e293b;
     }
     body {
-      background: var(--bg-color);
-      color: var(--text-color);
-      font-family: 'Segoe UI', Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Plus Jakarta Sans', sans-serif;
       margin: 0;
-      padding: 20px;
       display: flex;
-      flex-direction: column;
+      justify-content: center;
       align-items: center;
       min-height: 100vh;
     }
-
     .box {
-      max-width: 500px;
-      width: 100%;
-      background: var(--card-bg);
-      padding: 30px;
-      border-radius: 15px;
+      max-width: 450px;
+      width: 90%;
+      background: var(--card);
+      padding: 40px;
+      border-radius: 24px;
+      border: 1px solid var(--border);
       text-align: center;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-      border: 1px solid rgba(0, 255, 208, 0.2);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
     }
-
-    h2 { color: var(--accent); margin-bottom: 10px; }
-    p { font-size: 15px; opacity: 0.9; }
-
-    #wait-timer {
-      font-size: 24px;
-      font-weight: bold;
-      color: var(--accent);
-      margin: 20px 0;
-    }
-
-    .ad-slot {
-      background: rgba(0,0,0,0.3);
-      height: 200px;
+    h2 { font-weight: 800; margin-bottom: 10px; color: var(--accent); }
+    .timer-circle {
+      width: 100px;
+      height: 100px;
+      border: 4px solid var(--border);
+      border-top: 4px solid var(--accent);
+      border-radius: 50%;
+      margin: 30px auto;
       display: flex;
       align-items: center;
       justify-content: center;
-      border-radius: 8px;
-      margin: 20px 0;
-      border: 1px dashed #1a4a4a;
-      font-size: 12px;
-      color: #4a7a7a;
-      text-transform: uppercase;
-    }
-
-    #final-btn {
-      padding: 15px 40px;
-      background: var(--accent);
-      color: #061c1c;
-      border: none;
-      border-radius: 50px;
-      font-weight: bold;
-      font-size: 18px;
-      cursor: pointer;
-      width: 100%;
-      box-shadow: 0 5px 15px rgba(0, 255, 208, 0.3);
+      font-size: 2rem;
+      font-weight: 800;
       transition: 0.3s;
-      display: none;
     }
-    #final-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0, 255, 208, 0.5); }
-    #final-btn:disabled { background: #334e4e; color: #777; cursor: not-allowed; }
-
-    .loading-msg { display: none; color: var(--accent); margin-top: 15px; font-weight: bold; }
-    .denied { color: #ff4d4d; font-weight: bold; margin-top: 50px; text-align: center; }
+    .ad-slot {
+      background: rgba(255,255,255,0.03);
+      padding: 15px;
+      border-radius: 12px;
+      margin: 20px 0;
+      font-size: 10px;
+      color: #475569;
+      border: 1px dashed var(--border);
+    }
+    #final-btn {
+      background: var(--accent);
+      color: #000;
+      width: 100%;
+      padding: 18px;
+      border: none;
+      border-radius: 12px;
+      font-weight: 800;
+      font-size: 1.1rem;
+      cursor: pointer;
+      display: none;
+      transition: 0.3s;
+      box-shadow: 0 10px 20px rgba(16, 185, 129, 0.2);
+    }
+    #final-btn:hover { transform: translateY(-2px); box-shadow: 0 15px 30px rgba(16, 185, 129, 0.4); }
+    #final-btn:disabled { background: #1e293b; color: #475569; cursor: not-allowed; transform: none; }
   </style>
 </head>
 <body>
 
-<script>
-  if (sessionStorage.getItem("step") !== "4") {
-    document.body.innerHTML = "<div class='denied'>❌ Access Denied: Please complete the previous steps.</div>";
-  }
-</script>
-
 <div class="box">
-  <h2>Final Step</h2>
+  <h2>Final Security Check</h2>
+  <p style="opacity: 0.7; font-size: 0.9rem;">Please wait while we generate your secure destination link.</p>
 
-  <div class="ad-slot">-- Advertisement Slot 1 --</div>
-
-  <div id="timer-container">
-    <p>Please wait, preparing your secure link...</p>
-    <div id="wait-timer">5</div>
+  <div class="ad-slot">
+      ADVERTISEMENT
   </div>
 
-  <button id="final-btn" onclick="finish()">GET LINK</button>
+  <div id="timer-box" class="timer-circle">8</div>
 
-  <div id="loading" class="loading-msg">Redirecting to destination...</div>
+  <button id="final-btn" onclick="finish()">GET DESTINATION LINK</button>
+  
+  <p id="status" style="margin-top: 20px; font-size: 0.8rem; color: #64748b;"></p>
 
-  <div class="ad-slot" style="height: 150px;">-- Advertisement Slot 2 --</div>
-
-  <p style="font-size: 11px; opacity: 0.5; margin-top: 10px;">
-    Verification complete. You can now access your content.
-  </p>
+  <div class="ad-slot">
+      ADVERTISEMENT
+  </div>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fingerprintjs2/2.1.0/fingerprint2.min.js"></script>
 <script>
-  // --- COUNTDOWN ---
-  let timeLeft = 5;
-  const waitTimer = document.getElementById("wait-timer");
-  const timerContainer = document.getElementById("timer-container");
-  const finalBtn = document.getElementById("final-btn");
+  let timeLeft = 8;
+  const timerEl = document.getElementById("timer-box");
+  const btn = document.getElementById("final-btn");
+  const API_BASE = "https://api.kinglinky.com";
 
+  // Fingerprint generator
+  function getFingerprint() {
+    return new Promise(resolve => {
+      Fingerprint2.get(components => {
+        const values = components.map(c => c.value);
+        resolve(Fingerprint2.x64hash128(values.join(''), 31));
+      });
+    });
+  }
+
+  // Countdown
   const countdown = setInterval(() => {
     timeLeft--;
-    waitTimer.innerText = timeLeft;
-
+    timerEl.innerText = timeLeft;
     if (timeLeft <= 0) {
       clearInterval(countdown);
-      timerContainer.style.display = "none";
-      finalBtn.style.display = "block";
+      timerEl.style.display = "none";
+      btn.style.display = "block";
     }
   }, 1000);
 
-  // 🔥 BACKEND API BASE (IMPORTANT FIX)
-  const API_BASE = "https://api.kinglinky.com";
-  // if subdomain illa na temporarily:
-  // const API_BASE = "https://kinglinky.onrender.com";
-
-  async function finish(){
-    const btn = document.getElementById("final-btn");
-    const loading = document.getElementById("loading");
-    const params = new URLSearchParams(location.search);
+  async function finish() {
+    const params = new URLSearchParams(window.location.search);
     const code = params.get("code");
+    const status = document.getElementById("status");
 
-    if(!code){
-      alert("Error: Link code missing!");
-      return;
-    }
+    if (!code) return alert("Error: Invalid Session");
 
     btn.disabled = true;
-    btn.innerText = "Verifying...";
-    loading.style.display = "block";
+    btn.innerText = "VERIFYING...";
+    status.innerText = "Connecting to secure server...";
 
     try {
-      const res = await fetch(`${API_BASE}/api/track/final`, {
+      const fp = await getFingerprint();
+      const response = await fetch(`${API_BASE}/api/track/final`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ code,
-                               fingerprint: 
-                                navigator.useAgent +
-                                screen.width +
-                                screen.height
-         })
+        body: JSON.stringify({ code, fingerprint: fp })
       });
 
-      const data = await res.json();
+      const data = await response.json();
 
-      if(data.success){
-        sessionStorage.clear();
-        setTimeout(() => {
-          location.href = data.redirect;
-        }, 1500);
+      if (data.redirect) {
+        status.innerText = "Success! Redirecting...";
+        window.location.href = data.redirect;
       } else {
+        status.innerText = "Verification failed or link expired.";
         btn.disabled = false;
-        btn.innerText = "Get Link";
-        loading.style.display = "none";
-        alert("Verification Failed.");
+        btn.innerText = "RETRY";
       }
     } catch (err) {
-      console.error("Fetch error:", err);
+      status.innerText = "Network error. Please try again.";
       btn.disabled = false;
-      btn.innerText = "Get Link";
-      loading.style.display = "none";
+      btn.innerText = "RETRY";
     }
   }
 </script>

@@ -3,239 +3,86 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Future Tech 2030 | Intelligence Hub</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <title>Future Tech 2030 | Final Step</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --bg: #030712;
-            --card: #0f172a;
-            --accent: #10b981;
-            --text-main: #f3f4f6;
-            --text-dim: #9ca3af;
-            --border: #1e293b;
-        }
-
-        body {
-            background-color: var(--bg);
-            color: var(--text-main);
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            margin: 0;
-            line-height: 1.8;
-        }
-
-        #pBar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            height: 5px;
-            background: linear-gradient(to right, var(--accent), #3b82f6);
-            width: 0%;
-            z-index: 10000;
-        }
-
-        header {
-            background: rgba(3, 7, 18, 0.95);
-            backdrop-filter: blur(10px);
-            padding: 15px 5%;
-            border-bottom: 1px solid var(--border);
-            position: sticky;
-            top: 0;
-            z-index: 999;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .timer-badge {
-            background: rgba(16, 185, 129, 0.1);
-            color: var(--accent);
-            padding: 8px 16px;
-            border-radius: 8px;
-            border: 1px solid var(--accent);
-            font-weight: 800;
-            font-size: 0.85rem;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 30px auto;
-            padding: 0 20px;
-        }
-
-        /* NEAT AD CARD STYLE */
-        .ad-container {
-            background: var(--card);
-            border: 1px solid var(--border);
-            margin: 30px 0;
-            padding: 15px;
-            border-radius: 12px;
-            text-align: center;
-            min-height: 250px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .ad-info {
-            font-size: 10px;
-            color: var(--text-dim);
-            margin-bottom: 10px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        h1 { font-size: 3rem; font-weight: 800; letter-spacing: -1.5px; margin-bottom: 15px; }
-        h2 { font-size: 1.8rem; color: var(--accent); margin-top: 50px; border-left: 4px solid var(--accent); padding-left: 15px; }
-        p { font-size: 1.15rem; color: #d1d5db; margin-bottom: 25px; }
-        
-        .blog-img {
-            width: 100%;
-            border-radius: 16px;
-            margin: 35px 0;
-            border: 1px solid var(--border);
-        }
-
-        .action-zone {
-            background: #0a0f1d;
-            padding: 50px 20px;
-            border-radius: 24px;
-            border: 2px solid var(--border);
-            text-align: center;
-            margin-top: 60px;
-        }
-
-        .btn-ready {
-            background: var(--accent);
-            color: #000;
-            padding: 20px 45px;
-            font-size: 1.2rem;
-            font-weight: 800;
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            display: none;
-            transition: 0.3s;
-            text-transform: uppercase;
-        }
-
-        .btn-ready:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.4);
-        }
+        :root { --bg: #030712; --accent: #10b981; --text-main: #f3f4f6; --border: #1e293b; }
+        body { background-color: var(--bg); color: var(--text-main); font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; }
+        #pBar { position: fixed; top: 0; height: 5px; background: linear-gradient(to right, var(--accent), #3b82f6); width: 0%; z-index: 10000; transition: width 0.3s; }
+        header { background: rgba(3, 7, 18, 0.95); padding: 15px 5%; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; position: sticky; top:0; }
+        .timer-badge { border: 1px solid var(--accent); padding: 8px 16px; border-radius: 8px; color: var(--accent); font-weight: 800; }
+        .container { max-width: 800px; margin: 30px auto; padding: 0 20px; }
+        .blog-img { width: 100%; border-radius: 16px; margin: 35px 0; border: 1px solid var(--border); }
+        .btn-ready { background: var(--accent); color: #000; padding: 20px 45px; font-weight: 800; border: none; border-radius: 12px; cursor: pointer; display: none; width: 100%; text-transform: uppercase; }
     </style>
 </head>
 <body>
-
-    <script>(function (s) { s.dataset.zone = '10400040', s.src = 'https://nap5k.com/tag.min.js' })([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
-
     <div id="pBar"></div>
-
     <header>
         <div style="font-weight: 800; font-size: 1.4rem;">TECH<span style="color:var(--accent)">2030</span></div>
-        <div class="timer-badge" id="timer-ui">SYSTEM SYNC: <span id="sec">25</span>s</div>
+        <div class="timer-badge" id="timer-ui">SCANNING: <span id="sec">25</span>s</div>
     </header>
 
     <div class="container">
-        
-        <div class="ad-container">
-            <span class="ad-info">Sponsored content</span>
-            <script type="text/javascript">
-                atOptions = { 'key': 'd41be1e917eb87afabc417d7885c1eb3', 'format': 'iframe', 'height': 250, 'width': 300, 'params': {} };
-            </script>
+        <h1>The Great Convergence: 2030</h1>
+        <p>As we approach 2030, the boundaries between physical reality and digital simulation are dissolving...</p>
+        <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=1000" class="blog-img">
+
+        <div style="margin: 20px 0; text-align: center;">
+            <script type="text/javascript">atOptions={'key':'d41be1e917eb87afabc417d7885c1eb3','format':'iframe','height':250,'width':300,'params':{}};</script>
             <script type="text/javascript" src="https://www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script>
         </div>
 
-        <article>
-            <h1>The Great Convergence: 2030 Digital Shift</h1>
-            <p>As we approach 2030, the boundaries between physical reality and digital simulation are dissolving. The exponential growth of AI and quantum processing is rewriting the rules of human existence.</p>
-
-            <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=1000" class="blog-img" alt="Cyber Security">
-
-            <div class="ad-container"><script type="text/javascript">atOptions={'key':'d41be1e917eb87afabc417d7885c1eb3','format':'iframe','height':250,'width':300,'params':{}};</script><script type="text/javascript" src="https://www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script></div>
-            <div class="ad-container"><script type="text/javascript">atOptions={'key':'d41be1e917eb87afabc417d7885c1eb3','format':'iframe','height':250,'width':300,'params':{}};</script><script type="text/javascript" src="https://www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script></div>
-
-            <h2>Autonomous Neural Networks</h2>
-            <p>Labor markets are shifting toward automation. Every industry from healthcare to construction now utilizes humanoid robots that learn in real-time. These machines are no longer programmed; they are trained through experience.</p>
-            
-            <img src="https://images.unsplash.com/photo-1485827404703-89b55fcc595e?q=80&w=1000" class="blog-img" alt="AI Robot">
-
-            <div class="ad-container"><script type="text/javascript">atOptions={'key':'d41be1e917eb87afabc417d7885c1eb3','format':'iframe','height':250,'width':300,'params':{}};</script><script type="text/javascript" src="https://www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script></div>
-            <div class="ad-container"><script type="text/javascript">atOptions={'key':'d41be1e917eb87afabc417d7885c1eb3','format':'iframe','height':250,'width':300,'params':{}};</script><script type="text/javascript" src="https://www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script></div>
-
-            <h2>Quantum Medicine</h2>
-            <p>Quantum computers allow us to map proteins instantly. This has led to the development of personalized vaccines that are created based on a patient's DNA in under 24 hours.</p>
-
-            <img src="https://images.unsplash.com/photo-1532187863486-abf51ad94466?q=80&w=1000" class="blog-img" alt="Medical Tech">
-
-            <div class="ad-container"><script type="text/javascript">atOptions={'key':'d41be1e917eb87afabc417d7885c1eb3','format':'iframe','height':250,'width':300,'params':{}};</script><script type="text/javascript" src="https://www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script></div>
-            <div class="ad-container"><script type="text/javascript">atOptions={'key':'d41be1e917eb87afabc417d7885c1eb3','format':'iframe','height':250,'width':300,'params':{}};</script><script type="text/javascript" src="https://www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script></div>
-
-            <h2>Energy & Fusion</h2>
-            <p>Decentralized grids and the first commercial fusion reactors are providing clean, unlimited energy to the world's megacities. The fossil fuel era is officially a relic of the past.</p>
-
-            <img src="https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?q=80&w=1000" class="blog-img" alt="Clean Energy">
-
-            <div class="ad-container"><script type="text/javascript">atOptions={'key':'d41be1e917eb87afabc417d7885c1eb3','format':'iframe','height':250,'width':300,'params':{}};</script><script type="text/javascript" src="https://www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script></div>
-            <div class="ad-container"><script type="text/javascript">atOptions={'key':'d41be1e917eb87afabc417d7885c1eb3','format':'iframe','height':250,'width':300,'params':{}};</script><script type="text/javascript" src="https://www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script></div>
-
-            <h2>Brain-Computer Interface</h2>
-            <p>Non-invasive headbands now allow for direct mental control of smart environments. Communication is becoming instantaneous, bypassing the need for physical keyboards or screens.</p>
-
-            <img src="https://images.unsplash.com/photo-1507413245164-6160d8298b31?q=80&w=1000" class="blog-img" alt="Neuroscience">
-
-            <div class="ad-container"><script type="text/javascript">atOptions={'key':'d41be1e917eb87afabc417d7885c1eb3','format':'iframe','height':250,'width':300,'params':{}};</script><script type="text/javascript" src="https://www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script></div>
-            <div class="ad-container"><script type="text/javascript">atOptions={'key':'d41be1e917eb87afabc417d7885c1eb3','format':'iframe','height':250,'width':300,'params':{}};</script><script type="text/javascript" src="https://www.highperformanceformat.com/d41be1e917eb87afabc417d7885c1eb3/invoke.js"></script></div>
-
-        </article>
-
-        <div class="action-zone">
-            <h3 style="margin-bottom: 10px;">Security Verification</h3>
-            <p id="status-msg" style="color:var(--text-dim); font-size: 0.9rem;">Analysing engagement... Please scroll to the bottom.</p>
-            <button class="btn-ready" id="final-btn" onclick="finish()">Access Link</button>
+        <div style="background: #0a0f1d; padding: 40px; border-radius: 20px; border: 2px solid var(--border); text-align: center;">
+            <p id="status-msg">Analyzing engagement... Please scroll to bottom.</p>
+            <button class="btn-ready" id="final-btn">Get Final Link</button>
         </div>
     </div>
 
     <script>
-        let timeLeft = 25;
-        let hasScrolled = false;
-        const secLabel = document.getElementById("sec");
-        const pBar = document.getElementById("pBar");
-        const finalBtn = document.getElementById("final-btn");
-        const statusMsg = document.getElementById("status-msg");
+        const urlParams = new URLSearchParams(window.location.search);
+        const code = urlParams.get("code");
+        let timeLeft = 25, hasScrolled = false;
 
-        window.onscroll = () => {
-            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 500) {
-                hasScrolled = true;
-            }
-        };
+        window.onscroll = () => { if(window.scrollY > 400) hasScrolled = true; };
 
         const countdown = setInterval(() => {
             timeLeft--;
             if (timeLeft >= 0) {
-                secLabel.innerText = timeLeft;
-                pBar.style.width = ((25 - timeLeft) / 25) * 100 + "%";
-            } else {
-                clearInterval(countdown);
+                document.getElementById("sec").innerText = timeLeft;
+                document.getElementById("pBar").style.width = ((25 - timeLeft) / 25) * 100 + "%";
+            }
+            if (timeLeft <= 0) {
                 if (hasScrolled) {
+                    clearInterval(countdown);
                     document.getElementById("timer-ui").innerHTML = "✅ VERIFIED";
-                    statusMsg.innerHTML = "Success! Security check passed.";
-                    statusMsg.style.color = "#10b981";
-                    finalBtn.style.display = "inline-block";
+                    document.getElementById("status-msg").style.display = "none";
+                    document.getElementById("final-btn").style.display = "block";
                 } else {
-                    alert("Please scroll through the content to verify you are not a bot.");
-                    location.reload();
+                    document.getElementById("status-msg").innerText = "⚠️ Scroll down to unlock link.";
                 }
             }
         }, 1000);
 
-        function finish() {
-            finalBtn.innerText = "LOADING...";
-            const code = new URLSearchParams(window.location.search).get("code") || "TX-2030";
-            setTimeout(() => {
-                window.location.href = "final.html?code=" + code;
-            }, 2000);
-        }
+        document.getElementById("final-btn").onclick = async () => {
+            const btn = document.getElementById("final-btn");
+            btn.innerText = "GENERATING FINAL LINK...";
+            btn.disabled = true;
+
+            try {
+                // Ippo backend-ku request anuppi destination URL-ah vangrom
+                const response = await fetch(`/api/get-link?code=${code}`);
+                const data = await response.json();
+
+                if (data.url) {
+                    window.location.href = data.url;
+                } else {
+                    alert("Error: Link not found!");
+                }
+            } catch (err) {
+                alert("Server connection failed.");
+            }
+        };
     </script>
 </body>
 </html>
