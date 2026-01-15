@@ -25,7 +25,7 @@ router.get("/step1/:code", async (req, res) => {
 
     // 3️⃣ REDIRECT TO BLOGGER PAGE 1
     return res.redirect(
-      `https://techalchemistgo.blogspot.com/2026/01/how-online-tools-help-people-save-time_15.htmlfrom=short&code=${code}`
+      `https://techalchemistgo.blogspot.com/2026/01/how-online-tools-help-people-save-time_15.html?from=short&code=${code}`
     );
 
   } catch (err) {
