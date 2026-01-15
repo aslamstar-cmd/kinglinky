@@ -43,6 +43,7 @@ app.use(cors({
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(stepRoutes);
 app.use(express.static(path.join(__dirname, "public")));
 
 /* ================= DB CONNECTION ================= */
@@ -59,7 +60,7 @@ app.use("/api/admin/settings", settingsRoutes);
 app.use("/api/withdraw", withdrawRoutes);
 app.use("/api/links", linksRoutes);
 app.use("/api/track", trackRoutes);
-app.use(stepRoutes);
+
 
 /* =================================================
    ✅ USER PROFILE API (DASHBOARD FIX – ADDED)
