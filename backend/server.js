@@ -112,12 +112,9 @@ app.get("/go/:code", async (req, res) => {
     const { code } = req.params;
 
     const link = await Shortcut.findOne({ shortCode: code });
-    if (!link) {
-      return res.status(404).send("Link not found");
-    }
+    if (!link) return res.status(404).send("Link not found");
     link.clicks = (link.clicks || 0) + 1;
     const today = new Date().toISOString().split("T")[0];
-
     if (!link.dailyClicks) {
       link.dailyClicks = new Map();
     }
@@ -126,10 +123,19 @@ app.get("/go/:code", async (req, res) => {
       (link.dailyClicks.get(today) || 0) + 1
     );
     await link.save();
+    const user = await User.findOne({ email: link.ownerEmail });
+
+    if (user) {
+      const perClickEarning = 10 / 1000; // ₹10 CPM
+      const earn = perClickEarning;
+      user.wallet = (user.wallet || 0) + earn;
+      user.totalEarnings = (user.totalEarnings || 0) + earn;
+      await user.save();
+    }
     return res.redirect(link.fullUrl);
   } catch (err) {
     console.error("FINAL REDIRECT ERROR:", err);
-    return res.status(500).send("Redirect failed");
+    res.status(500).send("Redirect failed");
   }
 });
 
