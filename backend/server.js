@@ -58,6 +58,23 @@ app.use("/api/admin", adminUsers);
 app.use("/api/admin/settings", settingsRoutes);
 app.use("/api/withdraw", withdrawRoutes);
 app.use("/api/links", linksRoutes);
+app.get("/step1/:code", async (req, res) => {
+  try {
+    const { code } = req.params;
+
+    const link = await Shortcut.findOne({ shortCode: code });
+
+    if (!link) {
+      return res.status(404).send("Link not found");
+    }
+
+    return res.redirect(link.fullUrl);
+
+  } catch (err) {
+    console.error("REDIRECT ERROR:", err);
+    res.status(500).send("Server error");
+  }
+});
 app.use("/api/track", trackRoutes);
 
 
@@ -97,30 +114,6 @@ app.get("/api/users/profile", async (req, res) => {
   } catch (err) {
     console.error("PROFILE API ERROR ❌", err);
     return res.status(500).json({ message: "Server error" });
-  }
-});
-
-// server.js kulla direct-ah podunga
-app.get("/step1/:code", async (req, res) => {
-  try {
-    const { code } = req.params;
-    console.log("Searching for code:", code);
-
-    // Shortcut model-ah use panni DB-la thedurom
-    const link = await Shortcut.findOne({ shortCode: code });
-    
-    if (!link) {
-      console.log("Code not found in DB!");
-      return res.status(404).send("<h1>Link Not Found</h1>");
-    }
-
-    console.log("Link found, redirecting to Blogger...");
-    // Blogger-ku redirect panniduvom
-    return res.redirect(`https://techalchemistgo.blogspot.com/2026/01/how-online-tools-help-people-save-time_15.html?from=short&code=${code}`);
-
-  } catch (err) {
-    console.error("Redirect error:", err);
-    res.status(500).send("Server error: " + err.message);
   }
 });
 
