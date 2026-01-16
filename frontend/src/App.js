@@ -6,6 +6,7 @@ import Home from "./Home";
 import Login from "./Login";
 import Signup from "./Signup";
 import Dashboard from "./Dashboard";
+import RedirectPage from "./RedirectPage";
 
 /* ADMIN */
 import AdminLogin from "./admin/AdminLogin";
@@ -16,6 +17,7 @@ import AdminUsers from "./admin/AdminUsers";
 import AdminLinks from "./admin/AdminLinks";
 import AdminWithdraws from "./admin/AdminWithdraws";
 import AdminSettings from "./admin/AdminSettings";
+
 
 export default function App() {
   // 🔥 USER STATE
@@ -38,7 +40,7 @@ export default function App() {
         />
 
         <Route path="/signup" element={<Signup />} />
-
+        <Route path="/step1/:code" element={<RedirectPage />} />
         <Route path="/dashboard" element={<Dashboard user={user} />} />
 
         {/* ⭐ ADMIN LOGIN */}

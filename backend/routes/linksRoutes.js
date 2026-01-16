@@ -32,6 +32,7 @@ router.get("/", async (req, res) => {
 });
 
 /* SHORTEN LINK */
+/* SHORTEN LINK */
 router.post("/shorten", async (req, res) => {
   try {
     const { longUrl, email } = req.body;
@@ -39,7 +40,9 @@ router.post("/shorten", async (req, res) => {
       return res.status(400).json({ message: "URL or email missing" });
     }
     const code = Math.random().toString(36).substring(2, 8);
-    const shortUrl = `${process.env.BASE_URL}/step1/${code}`;
+    
+    // ✅ Ippo unga domain-ey varum
+    const shortUrl = `https://www.kinglinky.com/step1/${code}`;
 
     const link = await Shortcut.create({
       fullUrl: longUrl,
