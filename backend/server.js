@@ -25,14 +25,16 @@ import trackRoutes from "./routes/trackRoutes.js";
 /* ================= CONFIG ================= */
 dotenv.config();
 const app = express();
+
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.resolve();
+const __dirname = path.dirname(__filename);
 
 /* ================= MIDDLEWARE ================= */
 app.use(cors({
   origin: [
     "https://kinglinky.com",
     "https://www.kinglinky.com",
+    "https://kinglinky.onrender.com",
     "http://localhost:3000"
   ],
   methods: ["GET", "POST", "PUT", "DELETE"],
@@ -43,6 +45,7 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+/* ✅ STATIC FILES */
 app.use(express.static(path.join(__dirname, "public")));
 
 /* ================= DB CONNECTION ================= */
@@ -51,14 +54,18 @@ mongoose
   .then(() => console.log("MongoDB Connected ✅"))
   .catch(err => console.error("Mongo Error ❌", err));
 
-/* ================= ROUTE MOUNT ================= */
+/* ================= API ROUTES ================= */
 app.use("/api/admin", adminAuthRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/admin", adminUsers);
 app.use("/api/admin/settings", settingsRoutes);
 app.use("/api/withdraw", withdrawRoutes);
 app.use("/api/links", linksRoutes);
-// STEP 1 → BLOGGER AD PAGE
+app.use("/api/track", trackRoutes);
+
+/* =================================================
+   STEP 1 → SHORT URL → BLOGGER AD PAGE
+================================================= */
 app.get("/step1/:code", async (req, res) => {
   try {
     const { code } = req.params;
@@ -66,10 +73,9 @@ app.get("/step1/:code", async (req, res) => {
     const link = await Shortcut.findOne({ shortCode: code });
     if (!link) return res.status(404).send("Link not found");
 
-    // 🔥 Blogger Ad Page
     return res.redirect(
       "https://techalchemistgo.blogspot.com/2026/01/how-online-tools-help-people-save-time_15.html" +
-      "?from=short&code=" + code
+      "?from=short&code=" + encodeURIComponent(code)
     );
 
   } catch (err) {
@@ -78,8 +84,9 @@ app.get("/step1/:code", async (req, res) => {
   }
 });
 
-
-// STEP 2 → GET LINK PAGE (KINGLINKY)
+/* =================================================
+   STEP 2 → GET LINK PAGE (STATIC HTML)
+================================================= */
 app.get("/get/:code", async (req, res) => {
   try {
     const { code } = req.params;
@@ -87,15 +94,19 @@ app.get("/get/:code", async (req, res) => {
     const link = await Shortcut.findOne({ shortCode: code });
     if (!link) return res.status(404).send("Invalid link");
 
-    res.sendFile(path.join(__dirname, "public/getlink.html"));
+    return res.sendFile(
+      path.join(__dirname, "public", "getlink.html")
+    );
 
   } catch (err) {
+    console.error("GET PAGE ERROR:", err);
     res.status(500).send("Server error");
   }
 });
 
-
-// FINAL STEP → REAL URL
+/* =================================================
+   FINAL STEP → REAL URL (COUNT CLICK HERE ONLY)
+================================================= */
 app.get("/go/:code", async (req, res) => {
   try {
     const { code } = req.params;
@@ -103,41 +114,37 @@ app.get("/go/:code", async (req, res) => {
     const link = await Shortcut.findOne({ shortCode: code });
     if (!link) return res.status(404).send("Link not found");
 
-    // ✅ count only FINAL click
-    link.clicks += 1;
+    // ✅ count only final click
+    link.clicks = (link.clicks || 0) + 1;
     await link.save();
 
     return res.redirect(link.fullUrl);
 
   } catch (err) {
+    console.error("FINAL REDIRECT ERROR:", err);
     res.status(500).send("Redirect failed");
   }
 });
 
-
 /* =================================================
-   ✅ USER PROFILE API (DASHBOARD FIX – ADDED)
+   USER PROFILE API
 ================================================= */
 app.get("/api/users/profile", async (req, res) => {
   try {
     const { email } = req.query;
-    if (!email) {
-      return res.status(400).json({ message: "Email missing" });
-    }
+    if (!email) return res.status(400).json({ message: "Email missing" });
 
     const user = await User.findOne({ email: email.toLowerCase() });
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
+    if (!user) return res.status(404).json({ message: "User not found" });
 
     const today = new Date().toISOString().split("T")[0];
     const links = await Shortcut.find({ ownerEmail: user.email });
 
     let todayEarnings = 0;
     links.forEach(link => {
-      if (link.dailyClicks && typeof link.dailyClicks.get === "function") {
-        const clicksToday = link.dailyClicks.get(today) || 0;
-        todayEarnings += (clicksToday / 1000) * 10;
+      if (link.dailyClicks?.get) {
+        const c = link.dailyClicks.get(today) || 0;
+        todayEarnings += (c / 1000) * 10;
       }
     });
 
@@ -149,8 +156,8 @@ app.get("/api/users/profile", async (req, res) => {
     });
 
   } catch (err) {
-    console.error("PROFILE API ERROR ❌", err);
-    return res.status(500).json({ message: "Server error" });
+    console.error("PROFILE ERROR:", err);
+    res.status(500).json({ message: "Server error" });
   }
 });
 
@@ -158,13 +165,11 @@ app.get("/api/users/profile", async (req, res) => {
 app.post("/api/signup", async (req, res) => {
   try {
     const { name, email, password } = req.body;
-
     if (!name || !email || !password)
       return res.status(400).json({ message: "Missing fields" });
 
     const exists = await User.findOne({ email: email.toLowerCase() });
-    if (exists)
-      return res.status(400).json({ message: "User exists" });
+    if (exists) return res.status(400).json({ message: "User exists" });
 
     const hashed = await bcrypt.hash(password, 10);
     await User.create({
@@ -175,9 +180,9 @@ app.post("/api/signup", async (req, res) => {
       totalEarnings: 0
     });
 
-    return res.json({ success: true });
+    res.json({ success: true });
   } catch (err) {
-    return res.status(500).json({ message: "Signup failed" });
+    res.status(500).json({ message: "Signup failed" });
   }
 });
 
@@ -196,18 +201,18 @@ app.post("/api/login", async (req, res) => {
       { expiresIn: "7d" }
     );
 
-    return res.json({
+    res.json({
       success: true,
       token,
       user: { name: user.name, email: user.email }
     });
   } catch (err) {
-    return res.status(500).json({ message: "Login failed" });
+    res.status(500).json({ message: "Login failed" });
   }
 });
 
 /* ================= ADMIN CREATE ================= */
-app.get("/create-admin", async (req, res) => {
+app.get("/create-admin", async (_req, res) => {
   const hashed = await bcrypt.hash("aslamlord", 10);
   await admin.findOneAndUpdate(
     { username: "kingaslam" },
@@ -224,6 +229,6 @@ app.get("/", (_req, res) => {
 
 /* ================= SERVER ================= */
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, "0.0.0.0", () =>
-  console.log(`Server running on port ${PORT}`)
-);
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`Server running on port ${PORT}`);
+});
