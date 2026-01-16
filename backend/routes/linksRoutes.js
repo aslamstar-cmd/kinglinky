@@ -42,7 +42,7 @@ router.post("/shorten", async (req, res) => {
     const code = Math.random().toString(36).substring(2, 8);
     
     // ✅ Ippo unga domain-ey varum
-    const shortUrl = `https://kinglinky.onrender.com/step1/${code}`;
+    const shortUrl = `https://kinglinky.onrender.com/${code}`;
 
     const link = await Shortcut.create({
       fullUrl: longUrl,
