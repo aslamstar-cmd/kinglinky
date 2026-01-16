@@ -21,7 +21,6 @@ import withdrawRoutes from "./routes/withdrawRoutes.js";
 import linksRoutes from "./routes/linksRoutes.js";
 import settingsRoutes from "./routes/settingsRoutes.js";
 import trackRoutes from "./routes/trackRoutes.js";
-import stepRoutes from "./routes/stepRoutes.js";
 
 /* ================= CONFIG ================= */
 dotenv.config();
@@ -42,7 +41,6 @@ app.use(cors({
 }));
 
 app.use(express.json());
-app.use(stepRoutes);
 app.use(express.urlencoded({ extended: true }));
 
 app.use(express.static(path.join(__dirname, "public")));
@@ -99,6 +97,30 @@ app.get("/api/users/profile", async (req, res) => {
   } catch (err) {
     console.error("PROFILE API ERROR ❌", err);
     return res.status(500).json({ message: "Server error" });
+  }
+});
+
+// server.js kulla direct-ah podunga
+app.get("/step1/:code", async (req, res) => {
+  try {
+    const { code } = req.params;
+    console.log("Searching for code:", code);
+
+    // Shortcut model-ah use panni DB-la thedurom
+    const link = await Shortcut.findOne({ shortCode: code });
+    
+    if (!link) {
+      console.log("Code not found in DB!");
+      return res.status(404).send("<h1>Link Not Found</h1>");
+    }
+
+    console.log("Link found, redirecting to Blogger...");
+    // Blogger-ku redirect panniduvom
+    return res.redirect(`https://techalchemistgo.blogspot.com/2026/01/how-online-tools-help-people-save-time_15.html?from=short&code=${code}`);
+
+  } catch (err) {
+    console.error("Redirect error:", err);
+    res.status(500).send("Server error: " + err.message);
   }
 });
 

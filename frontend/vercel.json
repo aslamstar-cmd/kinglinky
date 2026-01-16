@@ -3,14 +3,6 @@
     {
       "source": "/step1/:code",
       "destination": "https://kinglinky-backend.onrender.com/step1/:code"
-    },
-    {
-      "source": "/final/:code",
-      "destination": "https://kinglinky-backend.onrender.com/step1/:code/final"
-    },
-    {
-      "source": "/api/:path*",
-      "destination": "https://kinglinky-backend.onrender.com/api/:path*"
     }
   ]
 }
