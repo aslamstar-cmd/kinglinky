@@ -68,7 +68,7 @@ app.get("/step1/:code", async (req, res) => {
       return res.status(404).send("Link not found");
     }
 
-    return res.redirect(`https://techalchemistgo.blogspot.com/2026/01/how-online-tools-help-people-save-time_15.html?code=${code}`);
+    return res.redirect(`https://techalchemistgo.blogspot.com/2026/01/how-online-tools-help-people-save-time_15.html?from=short&code=${code}`);
 
   } catch (err) {
     console.error("REDIRECT ERROR:", err);
