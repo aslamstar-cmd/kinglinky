@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Get Your Link</title>
+  <style>
+    body {
+      font-family: Arial;
+      background: #f5f5f5;
+      text-align: center;
+      padding-top: 80px;
+    }
+    button {
+      background: #4CAF50;
+      color: white;
+      padding: 14px 25px;
+      border: none;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 6px;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Your link is ready 🎉</h2>
+
+  <button onclick="go()">GET LINK</button>
+
+  <script>
+    function go() {
+      const code = window.location.pathname.split("/").pop();
+      window.location.href = "/go/" + code;
+    }
+  </script>
+
+</body>
+</html>

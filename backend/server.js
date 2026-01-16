@@ -58,24 +58,61 @@ app.use("/api/admin", adminUsers);
 app.use("/api/admin/settings", settingsRoutes);
 app.use("/api/withdraw", withdrawRoutes);
 app.use("/api/links", linksRoutes);
+// STEP 1 → BLOGGER AD PAGE
 app.get("/step1/:code", async (req, res) => {
   try {
     const { code } = req.params;
 
     const link = await Shortcut.findOne({ shortCode: code });
+    if (!link) return res.status(404).send("Link not found");
 
-    if (!link) {
-      return res.status(404).send("Link not found");
-    }
-
-    return res.redirect(`https://techalchemistgo.blogspot.com/2026/01/how-online-tools-help-people-save-time_15.html?from=short&code=${code}`);
+    // 🔥 Blogger Ad Page
+    return res.redirect(
+      "https://techalchemistgo.blogspot.com/2026/01/how-online-tools-help-people-save-time_15.html" +
+      "?from=short&code=" + code
+    );
 
   } catch (err) {
-    console.error("REDIRECT ERROR:", err);
+    console.error("STEP1 ERROR:", err);
     res.status(500).send("Server error");
   }
 });
-app.use("/api/track", trackRoutes);
+
+
+// STEP 2 → GET LINK PAGE (KINGLINKY)
+app.get("/get/:code", async (req, res) => {
+  try {
+    const { code } = req.params;
+
+    const link = await Shortcut.findOne({ shortCode: code });
+    if (!link) return res.status(404).send("Invalid link");
+
+    res.sendFile(path.join(__dirname, "public/getlink.html"));
+
+  } catch (err) {
+    res.status(500).send("Server error");
+  }
+});
+
+
+// FINAL STEP → REAL URL
+app.get("/go/:code", async (req, res) => {
+  try {
+    const { code } = req.params;
+
+    const link = await Shortcut.findOne({ shortCode: code });
+    if (!link) return res.status(404).send("Link not found");
+
+    // ✅ count only FINAL click
+    link.clicks += 1;
+    await link.save();
+
+    return res.redirect(link.fullUrl);
+
+  } catch (err) {
+    res.status(500).send("Redirect failed");
+  }
+});
 
 
 /* =================================================
