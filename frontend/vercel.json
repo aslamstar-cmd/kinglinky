@@ -1,8 +1,17 @@
 {
+  "version": 2,
   "rewrites": [
     {
       "source": "/step1/:code",
       "destination": "https://kinglinky-backend.onrender.com/step1/:code"
+    },
+    {
+      "source": "/api/:path*",
+      "destination": "https://kinglinky-backend.onrender.com/api/:path*"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ]
 }
