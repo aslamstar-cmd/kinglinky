@@ -10,27 +10,21 @@ const router = express.Router();
 router.get("/step1/:code", async (req, res) => {
   try {
     const { code } = req.params;
+    console.log("Searching for code:", code); // Console-la check panna
 
-    // 1️⃣ Validate short link
     const link = await Shortcut.findOne({ shortCode: code });
+    
     if (!link) {
-      return res
-        .status(404)
-        .send("<h1>Invalid Link</h1><p>This short link does not exist.</p>");
+      console.log("Link not found in DB!");
+      return res.status(404).send("<h1>Invalid Link</h1>");
     }
 
-    // 2️⃣ (Optional) Count click
-    link.clicks = (link.clicks || 0) + 1;
-    await link.save();
-
-    // 3️⃣ REDIRECT TO BLOGGER PAGE 1
-    return res.redirect(
-      `https://techalchemistgo.blogspot.com/2026/01/how-online-tools-help-people-save-time_15.html?from=short&code=${code}`
-    );
+    console.log("Link found, redirecting to Blogger...");
+    return res.redirect(`https://techalchemistgo.blogspot.com/2026/01/how-online-tools-help-people-save-time_15.html?from=short&code=${code}`);
 
   } catch (err) {
     console.error("Step1 error:", err);
-    res.status(500).send("Server error");
+    res.status(500).send("Server error: " + err.message);
   }
 });
 
