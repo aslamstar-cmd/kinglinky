@@ -48,6 +48,7 @@ app.use(express.urlencoded({ extended: true }));
 /* ✅ STATIC FILES */
 app.use(express.static(path.join(__dirname, "public")));
 
+
 /* ================= DB CONNECTION ================= */
 mongoose
   .connect(process.env.MONGO_URI)
