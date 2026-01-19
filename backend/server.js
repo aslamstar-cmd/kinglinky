@@ -113,7 +113,6 @@ app.get("/go/:code", async (req, res) => {
   try {
     const { code } = req.params;
 
-    // 🌐 GET USER IP
     const ip =
       req.headers["x-forwarded-for"]?.split(",")[0] ||
       req.socket.remoteAddress ||
@@ -126,54 +125,48 @@ app.get("/go/:code", async (req, res) => {
       return res.status(404).send("Invalid link");
     }
 
-    // 🛡️ ENSURE MAPS (SAFE FOR OLD DATA)
-    if (!(link.dailyClicks instanceof Map)) {
-      link.dailyClicks = new Map(
-        Object.entries(link.dailyClicks || {})
-      );
+    // 🔥 FIX FULL URL (THIS IS THE KEY)
+    let finalUrl = link.fullUrl.trim();
+    if (!finalUrl.startsWith("http://") && !finalUrl.startsWith("https://")) {
+      finalUrl = "https://" + finalUrl;
     }
 
+    // MAP SAFETY
+    if (!(link.dailyClicks instanceof Map)) {
+      link.dailyClicks = new Map(Object.entries(link.dailyClicks || {}));
+    }
     if (!(link.countedVisitors instanceof Map)) {
-      link.countedVisitors = new Map(
-        Object.entries(link.countedVisitors || {})
-      );
+      link.countedVisitors = new Map(Object.entries(link.countedVisitors || {}));
     }
 
     const lastCountedDate = link.countedVisitors.get(ip);
 
-    // ✅ COUNT ONLY ONCE PER DAY PER USER
     if (lastCountedDate !== today) {
-      // 🔢 TOTAL CLICKS
       link.clicks = (link.clicks || 0) + 1;
 
-      // 📅 TODAY CLICKS
       link.dailyClicks.set(
         today,
         (link.dailyClicks.get(today) || 0) + 1
       );
 
-      // 🔐 MARK USER AS COUNTED
       link.countedVisitors.set(ip, today);
-
       await link.save();
 
-      // 💰 WALLET UPDATE
       const user = await User.findOne({ email: link.ownerEmail });
       if (user) {
-        const earn = 10 / 1000; // ₹10 CPM
+        const earn = 10 / 1000;
         user.wallet = (user.wallet || 0) + earn;
-        user.totalEarnings =
-          (user.totalEarnings || 0) + earn;
+        user.totalEarnings = (user.totalEarnings || 0) + earn;
         await user.save();
       }
     }
 
-    // 🔁 ALWAYS REDIRECT (EVEN IF NOT COUNTED)
-    return res.redirect(link.fullUrl);
+    // ✅ GUARANTEED REDIRECT
+    return res.redirect(finalUrl);
 
   } catch (err) {
     console.error("GO ROUTE ERROR:", err);
-    res.status(500).send("Redirect failed");
+    return res.status(500).send("Redirect failed");
   }
 });
 /* =================================================
