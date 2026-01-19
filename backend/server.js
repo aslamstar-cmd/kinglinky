@@ -113,7 +113,6 @@ app.get("/go/:code", async (req, res) => {
   try {
     const { code } = req.params;
 
-    // 🔍 GET USER IP (RENDER / PROXY SAFE)
     const ip =
       req.headers["x-forwarded-for"]?.split(",")[0] ||
       req.socket.remoteAddress;
@@ -121,41 +120,47 @@ app.get("/go/:code", async (req, res) => {
     const today = new Date().toISOString().split("T")[0];
 
     const link = await Shortcut.findOne({ shortCode: code });
-    if (!link) return res.status(404).send("Link not found");
+    if (!link || !link.fullUrl) {
+      return res.status(404).send("Invalid link");
+    }
 
-    // 🧠 INIT MAPS
-    if (!link.dailyClicks) link.dailyClicks = new Map();
-    if (!link.countedVisitors) link.countedVisitors = new Map();
+    // 🛡️ SAFE MAP INIT
+    if (!link.dailyClicks || !(link.dailyClicks instanceof Map)) {
+      link.dailyClicks = new Map(
+        Object.entries(link.dailyClicks || {})
+      );
+    }
+
+    if (!link.countedVisitors || !(link.countedVisitors instanceof Map)) {
+      link.countedVisitors = new Map(
+        Object.entries(link.countedVisitors || {})
+      );
+    }
 
     const lastCountedDate = link.countedVisitors.get(ip);
 
-    // ✅ COUNT ONLY ONCE PER DAY PER IP
     if (lastCountedDate !== today) {
-
-      // 🔢 TOTAL CLICKS
       link.clicks = (link.clicks || 0) + 1;
 
-      // 📅 DAILY CLICKS
-      const todayClicks = link.dailyClicks.get(today) || 0;
-      link.dailyClicks.set(today, todayClicks + 1);
+      link.dailyClicks.set(
+        today,
+        (link.dailyClicks.get(today) || 0) + 1
+      );
 
-      // 🔒 MARK USER AS COUNTED
       link.countedVisitors.set(ip, today);
-
       await link.save();
 
-      // 💰 USER WALLET UPDATE
+      // 💰 WALLET UPDATE
       const user = await User.findOne({ email: link.ownerEmail });
       if (user) {
-        const perClickEarning = 10 / 1000; // ₹10 CPM
-        user.wallet = (user.wallet || 0) + perClickEarning;
+        const earn = 10 / 1000;
+        user.wallet = (user.wallet || 0) + earn;
         user.totalEarnings =
-          (user.totalEarnings || 0) + perClickEarning;
+          (user.totalEarnings || 0) + earn;
         await user.save();
       }
     }
 
-    // 🔁 ALWAYS REDIRECT (NO BLOCK EVER)
     return res.redirect(link.fullUrl);
 
   } catch (err) {
