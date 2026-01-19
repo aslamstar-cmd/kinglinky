@@ -33,6 +33,11 @@ const shortcutSchema = new mongoose.Schema(
       of: Number,
       default: {},
     },
+    countedVisitors: {
+      type: Map,
+      of: Date,
+      default:{}
+    },
   },
   {
     timestamps: true,   // 🔥 VERY IMPORTANT

@@ -106,36 +106,60 @@ app.get("/get/:code", async (req, res) => {
 });
 
 /* =================================================
-   FINAL STEP → REAL URL (COUNT CLICK HERE ONLY)
+   FINAL STEP → REAL URL
+   COUNT ONLY ONCE PER DAY PER USER (IP)
 ================================================= */
 app.get("/go/:code", async (req, res) => {
   try {
     const { code } = req.params;
 
+    // 🔍 GET USER IP (RENDER / PROXY SAFE)
+    const ip =
+      req.headers["x-forwarded-for"]?.split(",")[0] ||
+      req.socket.remoteAddress;
+
+    const today = new Date().toISOString().split("T")[0];
+
     const link = await Shortcut.findOne({ shortCode: code });
     if (!link) return res.status(404).send("Link not found");
-    link.clicks = (link.clicks || 0) + 1;
-    const today = new Date().toISOString().split("T")[0];
-    if (!link.dailyClicks) {
-      link.dailyClicks = new Map();
-    }
-    link.dailyClicks.set(
-      today,
-      (link.dailyClicks.get(today) || 0) + 1
-    );
-    await link.save();
-    const user = await User.findOne({ email: link.ownerEmail });
 
-    if (user) {
-      const perClickEarning = 10 / 1000; // ₹10 CPM
-      const earn = perClickEarning;
-      user.wallet = (user.wallet || 0) + earn;
-      user.totalEarnings = (user.totalEarnings || 0) + earn;
-      await user.save();
+    // 🧠 INIT MAPS
+    if (!link.dailyClicks) link.dailyClicks = new Map();
+    if (!link.countedVisitors) link.countedVisitors = new Map();
+
+    const lastCountedDate = link.countedVisitors.get(ip);
+
+    // ✅ COUNT ONLY ONCE PER DAY PER IP
+    if (lastCountedDate !== today) {
+
+      // 🔢 TOTAL CLICKS
+      link.clicks = (link.clicks || 0) + 1;
+
+      // 📅 DAILY CLICKS
+      const todayClicks = link.dailyClicks.get(today) || 0;
+      link.dailyClicks.set(today, todayClicks + 1);
+
+      // 🔒 MARK USER AS COUNTED
+      link.countedVisitors.set(ip, today);
+
+      await link.save();
+
+      // 💰 USER WALLET UPDATE
+      const user = await User.findOne({ email: link.ownerEmail });
+      if (user) {
+        const perClickEarning = 10 / 1000; // ₹10 CPM
+        user.wallet = (user.wallet || 0) + perClickEarning;
+        user.totalEarnings =
+          (user.totalEarnings || 0) + perClickEarning;
+        await user.save();
+      }
     }
+
+    // 🔁 ALWAYS REDIRECT (NO BLOCK EVER)
     return res.redirect(link.fullUrl);
+
   } catch (err) {
-    console.error("FINAL REDIRECT ERROR:", err);
+    console.error("GO ROUTE ERROR:", err);
     res.status(500).send("Redirect failed");
   }
 });
