@@ -36,7 +36,7 @@ const shortcutSchema = new mongoose.Schema(
     countedVisitors: {
       type: Map,
       of: Date,
-      default:{}
+      default: {},
     },
   },
   {
