@@ -125,22 +125,24 @@ app.get("/go/:code", async (req, res) => {
       return res.status(404).send("Invalid link");
     }
 
-    // 🔥 FIX FULL URL (THIS IS THE KEY)
-    let finalUrl = link.fullUrl.trim();
-    if (!finalUrl.startsWith("http://") && !finalUrl.startsWith("https://")) {
-      finalUrl = "https://" + finalUrl;
+    // ✅ FORCE VALID URL
+    let redirectUrl = link.fullUrl;
+    if (!redirectUrl.startsWith("http://") && !redirectUrl.startsWith("https://")) {
+      redirectUrl = "https://" + redirectUrl;
     }
 
-    // MAP SAFETY
+    // 🛡️ SAFE MAP INIT
     if (!(link.dailyClicks instanceof Map)) {
       link.dailyClicks = new Map(Object.entries(link.dailyClicks || {}));
     }
+
     if (!(link.countedVisitors instanceof Map)) {
       link.countedVisitors = new Map(Object.entries(link.countedVisitors || {}));
     }
 
     const lastCountedDate = link.countedVisitors.get(ip);
 
+    // ✅ COUNT ONLY ONCE PER DAY PER USER
     if (lastCountedDate !== today) {
       link.clicks = (link.clicks || 0) + 1;
 
@@ -152,6 +154,7 @@ app.get("/go/:code", async (req, res) => {
       link.countedVisitors.set(ip, today);
       await link.save();
 
+      // 💰 WALLET UPDATE
       const user = await User.findOne({ email: link.ownerEmail });
       if (user) {
         const earn = 10 / 1000;
@@ -161,12 +164,12 @@ app.get("/go/:code", async (req, res) => {
       }
     }
 
-    // ✅ GUARANTEED REDIRECT
-    return res.redirect(finalUrl);
+    // 🔁 ALWAYS REDIRECT
+    return res.redirect(redirectUrl);
 
   } catch (err) {
     console.error("GO ROUTE ERROR:", err);
-    return res.status(500).send("Redirect failed");
+    res.status(500).send("Redirect failed");
   }
 });
 /* =================================================
