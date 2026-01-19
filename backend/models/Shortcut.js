@@ -24,23 +24,23 @@ const shortcutSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
-    clickedIPs: {
-      type: [String],
-      default: [],
-    },
+
+    // 🔥 DAILY CLICKS (date => count)
     dailyClicks: {
       type: Map,
       of: Number,
       default: {},
     },
+
+    // 🔒 ONE COUNT PER DAY PER USER/IP
     countedVisitors: {
       type: Map,
-      of: Date,
+      of: String,   // ✅ FIXED (WAS Date ❌)
       default: {},
     },
   },
   {
-    timestamps: true,   // 🔥 VERY IMPORTANT
+    timestamps: true,
   }
 );
 

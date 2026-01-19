@@ -113,9 +113,11 @@ app.get("/go/:code", async (req, res) => {
   try {
     const { code } = req.params;
 
+    // 🌐 GET USER IP
     const ip =
       req.headers["x-forwarded-for"]?.split(",")[0] ||
-      req.socket.remoteAddress;
+      req.socket.remoteAddress ||
+      "unknown";
 
     const today = new Date().toISOString().split("T")[0];
 
@@ -124,14 +126,14 @@ app.get("/go/:code", async (req, res) => {
       return res.status(404).send("Invalid link");
     }
 
-    // 🛡️ SAFE MAP INIT
-    if (!link.dailyClicks || !(link.dailyClicks instanceof Map)) {
+    // 🛡️ ENSURE MAPS (SAFE FOR OLD DATA)
+    if (!(link.dailyClicks instanceof Map)) {
       link.dailyClicks = new Map(
         Object.entries(link.dailyClicks || {})
       );
     }
 
-    if (!link.countedVisitors || !(link.countedVisitors instanceof Map)) {
+    if (!(link.countedVisitors instanceof Map)) {
       link.countedVisitors = new Map(
         Object.entries(link.countedVisitors || {})
       );
@@ -139,21 +141,26 @@ app.get("/go/:code", async (req, res) => {
 
     const lastCountedDate = link.countedVisitors.get(ip);
 
+    // ✅ COUNT ONLY ONCE PER DAY PER USER
     if (lastCountedDate !== today) {
+      // 🔢 TOTAL CLICKS
       link.clicks = (link.clicks || 0) + 1;
 
+      // 📅 TODAY CLICKS
       link.dailyClicks.set(
         today,
         (link.dailyClicks.get(today) || 0) + 1
       );
 
+      // 🔐 MARK USER AS COUNTED
       link.countedVisitors.set(ip, today);
+
       await link.save();
 
       // 💰 WALLET UPDATE
       const user = await User.findOne({ email: link.ownerEmail });
       if (user) {
-        const earn = 10 / 1000;
+        const earn = 10 / 1000; // ₹10 CPM
         user.wallet = (user.wallet || 0) + earn;
         user.totalEarnings =
           (user.totalEarnings || 0) + earn;
@@ -161,6 +168,7 @@ app.get("/go/:code", async (req, res) => {
       }
     }
 
+    // 🔁 ALWAYS REDIRECT (EVEN IF NOT COUNTED)
     return res.redirect(link.fullUrl);
 
   } catch (err) {
@@ -168,7 +176,6 @@ app.get("/go/:code", async (req, res) => {
     res.status(500).send("Redirect failed");
   }
 });
-
 /* =================================================
    USER PROFILE API
 ================================================= */
