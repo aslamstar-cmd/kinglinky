@@ -105,40 +105,43 @@ export default function Dashboard({ user }) {
   }
 
   /* ========= ACTIONS ========= */
-  async function shorten() {
-    if (!longUrl) return alert("Paste URL first!");
-    try {
-      await axios.post(`${API_BASE}/api/links/shorten`, { longUrl, email: user.email }, auth);
-      setLongUrl("");
-      loadData();
-      alert("Link Shortened! 🚀");
-    } catch { alert("Shorten failed"); }
-  }
+async function requestWithdraw() {
+    // 1. Input-la user kudukkurathu Rupees (INR)
+    const amtInINR = Number(withdrawAmount); 
+    
+    // 2. Athai USD-ku mathi check pannanum (Dollar calculation kaaga)
+    const amtInUSD = amtInINR / USD_TO_INR;
 
-  async function deleteLink(id) {
-    if (!window.confirm("Delete this link?")) return;
-    try {
-      await axios.delete(`${API_BASE}/api/links/${id}`, auth);
-      setLinks(prev => prev.filter(l => l._id !== id));
-      // alert("Deleted! 🗑️");
-    } catch { alert("Delete failed!"); }
-  }
-
-  async function requestWithdraw() {
-    const amt = Number(withdrawAmount);
     if (hasRequestedToday) return alert("One request per day only!");
-    if (!amt || amt < MIN_WITHDRAW) return alert(`Min withdraw is ${money(MIN_WITHDRAW)}`);
-    if (amt > walletUSD) return alert("Insufficient balance!");
+    
+    // 3. Minimum check (Rupees-laye check panrom)
+    const minINR = MIN_WITHDRAW * USD_TO_INR;
+    if (!amtInINR || amtInINR < minINR) {
+        return alert(`Min withdraw is ₹${minINR.toFixed(2)}`);
+    }
+
+    // 4. Balance check (Wallet-la irukura USD-ah INR-ah mathi check panrom)
+    const walletINR = walletUSD * USD_TO_INR;
+    if (amtInINR > walletINR) {
+        return alert("Insufficient balance in your wallet!");
+    }
 
     try {
-      await axios.post(`${API_BASE}/api/withdraw`, { amount: amt, note }, auth);
-      alert("Request Sent! ✅");
-      setWithdrawAmount("");
-      setNote("");
-      loadData();
-    } catch { alert("Withdraw request failed"); }
-  }
+        // Backend-ku USD value-ah thaan anupanum (calculation easy-ah irukka)
+        await axios.post(`${API_BASE}/api/withdraw`, { 
+            amount: amtInUSD, // USD value 
+            amountINR: amtInINR, // Reference-ku INR value
+            note 
+        }, auth);
 
+        alert("Withdraw Request Sent! ✅ (Admin approve panna udane wallet-la koraiyum)");
+        setWithdrawAmount("");
+        setNote("");
+        loadData();
+    } catch (err) { 
+        alert(err.response?.data?.message || "Withdraw request failed"); 
+    }
+}
   if (loading) {
     return (
       <div style={{ ...styles.wrap, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
