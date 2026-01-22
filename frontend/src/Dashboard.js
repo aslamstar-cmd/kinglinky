@@ -105,7 +105,26 @@ export default function Dashboard({ user }) {
   }
 
   /* ========= ACTIONS ========= */
-async function requestWithdraw() {
+  async function shorten() {
+    if (!longUrl) return alert("Paste URL first!");
+    try {
+      await axios.post(`${API_BASE}/api/links/shorten`, { longUrl, email: user.email }, auth);
+      setLongUrl("");
+      loadData();
+      alert("Link Shortened! 🚀");
+    } catch { alert("Shorten failed"); }
+  }
+
+  async function deleteLink(id) {
+    if (!window.confirm("Delete this link?")) return;
+    try {
+      await axios.delete(`${API_BASE}/api/links/${id}`, auth);
+      setLinks(prev => prev.filter(l => l._id !== id));
+      // alert("Deleted! 🗑️");
+    } catch { alert("Delete failed!"); }
+  }
+
+  async function requestWithdraw() {
     // 1. Input-la user kudukkurathu Rupees (INR)
     const amtInINR = Number(withdrawAmount); 
     
