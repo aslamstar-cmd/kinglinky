@@ -25,6 +25,10 @@ export default function Dashboard({ user }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [loading, setLoading] = useState(true);
 
+  // 📅 Month Filter State (Default: Current Month)
+  const currentMonthKey = new Date().toISOString().slice(0, 7); // e.g., "2026-01"
+  const [selectedMonth, setSelectedMonth] = useState(currentMonthKey);
+
   /* ========= DYNAMIC CPM LOGIC ========= */
   const calculateCPM = (views) => (views >= 5000 ? 9.8 : 10);
 
@@ -33,92 +37,82 @@ export default function Dashboard({ user }) {
       loadData();
     }
   }, [user, token]);
-async function loadData() {
-  setLoading(true);
-  try {
-    const [linksRes, wdRes, userRes] = await Promise.all([
-      axios.get(`${API_BASE}/api/links?email=${user.email}`, auth),
 
-      // ✅ FIX 1: correct axios.get syntax (email removed)
-      axios.get(`${API_BASE}/api/withdraw/my`, auth),
+  async function loadData() {
+    setLoading(true);
+    try {
+      const [linksRes, wdRes, userRes] = await Promise.all([
+        axios.get(`${API_BASE}/api/links?email=${user.email}`, auth),
+        axios.get(`${API_BASE}/api/withdraw/my`, auth),
+        axios.get(`${API_BASE}/api/users/profile?email=${user.email}`, auth),
+      ]);
 
-      axios.get(`${API_BASE}/api/users/profile?email=${user.email}`, auth),
-    ]);
-
-    setLinks(Array.isArray(linksRes.data) ? linksRes.data : []);
-
-    // ✅ FIX 2: withdraw response correct-ah read
-    setWithdraws(wdRes.data?.data || []);
-
-    setUserData(userRes.data);
-  } catch (err) {
-    console.error("Dashboard load error", err);
-  } finally {
-    setLoading(false);
+      setLinks(Array.isArray(linksRes.data) ? linksRes.data : []);
+      setWithdraws(wdRes.data?.data || []);
+      setUserData(userRes.data);
+    } catch (err) {
+      console.error("Dashboard load error", err);
+    } finally {
+      setLoading(false);
+    }
   }
-}
 
-/* ========= STATS ========= */
+  /* ========= STATS CALCULATION ========= */
+  const todayKey = new Date().toISOString().slice(0, 10);
 
-// ✅ FIX 3: todayKey FIRST define pannanum
-const todayKey = new Date().toISOString().slice(0, 10);
+  // 🟢 Selected Month Views Calculation
+  const monthlyViews = links.reduce((sum, l) => {
+    if (l?.dailyClicks && typeof l.dailyClicks === "object") {
+      // Filter keys that start with "2026-01" etc.
+      const monthData = Object.entries(l.dailyClicks)
+        .filter(([date]) => date.startsWith(selectedMonth))
+        .reduce((s, [_, count]) => s + Number(count), 0);
+      return sum + monthData;
+    }
+    return sum;
+  }, 0);
 
-// TOTAL VIEWS
-const totalViews = links.reduce(
-  (sum, l) => sum + (Number(l?.clicks) || 0),
-  0
-);
+  // Overall Total Views (All time)
+  const totalViews = links.reduce((sum, l) => sum + (Number(l?.clicks) || 0), 0);
+  const currentCPM = calculateCPM(totalViews);
 
-const currentCPM = calculateCPM(totalViews);
+  // Estimated Monthly Earnings based on CPM
+  const monthlyUSD = (monthlyViews * currentCPM) / 1000;
 
-// WALLET + ALL TIME
-const walletUSD = Number(userData?.wallet || 0);
-const allTimeUSD = Number(userData?.totalEarnings || 0);
+  const walletUSD = Number(userData?.wallet || 0);
+  const paidUSD = withdraws
+    .filter((w) => w.status === "paid")
+    .reduce((sum, w) => sum + (Number(w.amount) || 0), 0);
 
-// WITHDRAWN (PAID)
-const paidUSD = withdraws
-  .filter((w) => w.status === "paid")
-  .reduce((sum, w) => sum + (Number(w.amount) || 0), 0);
+  const todayViews = links.reduce((sum, l) => {
+    if (l?.dailyClicks && typeof l.dailyClicks === "object") {
+      return sum + Number(l.dailyClicks[todayKey] || 0);
+    }
+    return sum;
+  }, 0);
 
-// TODAY VIEWS (from dailyClicks map → object)
-const todayViews = links.reduce((sum, l) => {
-  if (l?.dailyClicks && typeof l.dailyClicks === "object") {
-    return sum + Number(l.dailyClicks[todayKey] || 0);
+  const todayUSD = Number(userData?.todayEarnings || 0);
+
+  const hasRequestedToday = withdraws.some(
+    (w) => new Date(w.createdAt).toISOString().slice(0, 10) === todayKey
+  );
+
+  function money(v) {
+    const val = Number(v) || 0;
+    return currency === "USD"
+      ? `$ ${val.toFixed(2)}`
+      : `₹ ${(val * USD_TO_INR).toFixed(2)}`;
   }
-  return sum;
-}, 0);
-
-// ✅ FIX 4: today earnings BACKEND-la irundhu
-const todayUSD = Number(userData?.todayEarnings || 0);
-
-// DAILY WITHDRAW LIMIT
-const hasRequestedToday = withdraws.some(
-  (w) =>
-    new Date(w.createdAt).toISOString().slice(0, 10) === todayKey
-);
-
-function money(v) {
-  const val = Number(v) || 0;
-  return currency === "USD"
-    ? `$ ${val.toFixed(2)}`
-    : `₹ ${(val * USD_TO_INR).toFixed(2)}`;
-}
 
   /* ========= ACTIONS ========= */
   async function shorten() {
     if (!longUrl) return alert("Paste URL first!");
     try {
-      await axios.post(
-        `${API_BASE}/api/links/shorten`,
-        { longUrl, email: user.email },
-        auth
-      );
+      await axios.post(`${API_BASE}/api/links/shorten`, { longUrl, email: user.email }, auth);
       setLongUrl("");
       loadData();
       alert("Link Shortened! 🚀");
-    } catch {
-      alert("Shorten failed");
-    }
+    } catch { alert("Shorten failed"); }
   }
 
   async function deleteLink(id) {
@@ -127,39 +121,32 @@ function money(v) {
       await axios.delete(`${API_BASE}/api/links/${id}`, auth);
       setLinks(prev => prev.filter(l => l._id !== id));
       alert("Deleted! 🗑️");
-    } catch {
-      alert("Delete failed!");
-    }
+    } catch { alert("Delete failed!"); }
   }
 
   async function requestWithdraw() {
     const amt = Number(withdrawAmount);
     if (hasRequestedToday) return alert("One request per day only!");
-    if (!amt || amt < MIN_WITHDRAW) return alert(`Minimum withdrawal is ${money(MIN_WITHDRAW)}`);
-    if (amt > walletUSD) return alert("Insufficient balance in wallet!");
+    if (!amt || amt < MIN_WITHDRAW) return alert(`Min withdraw is ${money(MIN_WITHDRAW)}`);
+    if (amt > walletUSD) return alert("Insufficient balance!");
 
     try {
-      await axios.post(
-        `${API_BASE}/api/withdraw`,
-        { amount: amt, note },
-        auth
-      );
-      alert("Withdraw Request Sent! ✅");
+      await axios.post(`${API_BASE}/api/withdraw`, { amount: amt, note }, auth);
+      alert("Request Sent! ✅");
       setWithdrawAmount("");
       setNote("");
       loadData();
-    } catch {
-      alert("Withdraw request failed");
-    }
+    } catch { alert("Withdraw request failed"); }
   }
 
   if (loading) {
     return (
       <div style={{ ...styles.wrap, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-        <h2 style={{ color: '#00ffd0' }}>👑{userData?.name || user?.name} Dashboard...</h2>
+        <h2 style={{ color: '#00ffd0' }}>👑 Loading Kinglinky...</h2>
       </div>
     );
   }
+
   return (
     <div style={styles.wrap}>
       {/* HEADER */}
@@ -184,6 +171,17 @@ function money(v) {
         </div>
       )}
 
+      {/* MONTH SELECTOR (Dynamic Stats) */}
+      <div style={styles.monthFilterRow}>
+        <span style={{ fontSize: 13, color: '#aaa' }}>Filter Month:</span>
+        <input 
+          type="month" 
+          value={selectedMonth} 
+          onChange={(e) => setSelectedMonth(e.target.value)}
+          style={styles.monthInput}
+        />
+      </div>
+
       <div style={styles.userBanner}>
         <span>👑 <b>{userData?.name || user?.name}</b></span>
         <span style={styles.cpmBadge}>CPM: ${currentCPM}</span>
@@ -192,15 +190,19 @@ function money(v) {
       {tab === "dashboard" && (
         <>
           <div style={styles.grid}>
+            {/* Filtered Monthly Stats */}
+            <Card title={`${selectedMonth} Views`} value={monthlyViews} color="#00ffd0" />
+            <Card title={`${selectedMonth} Earnings`} value={money(monthlyUSD)} color="#00ffd0" />
+            
             <Card title="Today Views" value={todayViews} />
             <Card title="Today Earnings" value={money(todayUSD)} />
-            <Card title="Total Views" value={totalViews} color="#00ffd0" />
-            <Card title="Wallet" value={money(walletUSD)} color="#00ffd0" />
-            <Card title="Withdrawn" value={money(paidUSD)} color="#ff4444" />
+            
+            <Card title="Wallet Balance" value={money(walletUSD)} color="#00ffd0" />
+            <Card title="Total Withdrawn" value={money(paidUSD)} color="#ff4444" />
           </div>
 
           <div style={styles.chartContainer}>
-            <h4 style={{ marginBottom: 15, fontSize: 14 }}>Recent Link Performance</h4>
+            <h4 style={{ marginBottom: 15, fontSize: 14 }}>Global Link Performance</h4>
             <ResponsiveContainer width="100%" height={220}>
               <LineChart data={links.slice(-8).map(l => ({ n: 'Link', c: l.clicks }))}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#053737" />
@@ -225,7 +227,7 @@ function money(v) {
               <div key={l._id} style={styles.linkBox}>
                 <div style={{ overflow: 'hidden', marginRight: 10 }}>
                   <div style={{ color: '#00ffd0', fontWeight: 'bold', fontSize: 14 }}>{l.shortUrl}</div>
-                  <small style={{ color: '#aaa' }}>{l.clicks} clicks</small>
+                  <small style={{ color: '#aaa' }}>{l.clicks} clicks total</small>
                 </div>
                 <div style={{ display: 'flex', gap: 5 }}>
                   <button style={styles.iconBtn} onClick={() => { navigator.clipboard.writeText(l.shortUrl); alert("Copied!") }}>📋</button>
@@ -241,11 +243,11 @@ function money(v) {
         <div style={styles.withdrawCard}>
           <h3 style={{ marginTop: 0 }}>Wallet: {money(walletUSD)}</h3>
           {hasRequestedToday ? (
-            <p style={{ color: '#ffcc00', fontSize: 13 }}>⚠️ You have already sent a request today. Come back tomorrow!</p>
+            <p style={{ color: '#ffcc00', fontSize: 13 }}>⚠️ Limit: One request per day. Come back tomorrow!</p>
           ) : (
             <>
               <input type="number" style={styles.inputFull} value={withdrawAmount} onChange={e => setWithdrawAmount(e.target.value)} placeholder={`Min ${money(MIN_WITHDRAW)}`} />
-              <textarea style={styles.inputFull} value={note} onChange={e => setNote(e.target.value)} placeholder="UPI ID / GPay / Bank Details" rows={3} />
+              <textarea style={styles.inputFull} value={note} onChange={e => setNote(e.target.value)} placeholder="UPI ID / GPay Details" rows={3} />
               <button style={styles.btnWithdraw} onClick={requestWithdraw}>Request Withdrawal</button>
             </>
           )}
@@ -272,7 +274,7 @@ function money(v) {
         <div style={styles.supportBox}>
           <div style={{ fontSize: 50, marginBottom: 10 }}>💬</div>
           <h3>Help Center</h3>
-          <p style={{ color: '#aaa', fontSize: 14 }}>Contact support on Telegram if you face any issues.</p>
+          <p style={{ color: '#aaa', fontSize: 14 }}>Issues with payments? Contact Telegram.</p>
           <button style={styles.btnTg} onClick={() => window.open("https://t.me/KingLinkySupport_Bot")}>
             Chat on Telegram
           </button>
@@ -285,8 +287,8 @@ function money(v) {
 function Card({ title, value, color = "#fff" }) {
   return (
     <div style={styles.card}>
-      <div style={{ color: '#aaa', fontSize: 11, marginBottom: 5, textTransform: 'uppercase' }}>{title}</div>
-      <div style={{ color: color, fontSize: 18, fontWeight: 'bold' }}>{value}</div>
+      <div style={{ color: '#aaa', fontSize: 10, marginBottom: 5, textTransform: 'uppercase' }}>{title}</div>
+      <div style={{ color: color, fontSize: 17, fontWeight: 'bold' }}>{value}</div>
     </div>
   );
 }
@@ -297,8 +299,10 @@ const styles = {
   headerRight: { display: "flex", gap: 12, alignItems: "center" },
   burger: { fontSize: 26, cursor: "pointer", color: "#00ffd0" },
   select: { background: "#053737", color: "#fff", border: "1px solid #00ffd0", borderRadius: 4, padding: "2px 5px" },
-  mobileMenu: { background: "#021c1c", borderRadius: 10, padding: 8, marginBottom: 15, border: "1px solid #053737", position: 'absolute', right: 15, top: 60, zIndex: 100, width: 150 },
-  menuItem: { padding: "12px", borderBottom: "1px solid #033", cursor: "pointer", fontWeight: "600", fontSize: 13 },
+  mobileMenu: { background: "#021c1c", borderRadius: 10, padding: 8, border: "1px solid #053737", position: 'absolute', right: 15, top: 60, zIndex: 100, width: 150 },
+  menuItem: { padding: "12px", borderBottom: "1px solid #033", cursor: "pointer", fontSize: 13 },
+  monthFilterRow: { display: 'flex', alignItems: 'center', gap: 10, marginBottom: 15, background: '#021c1c', padding: '10px', borderRadius: 8, border: '1px solid #053737' },
+  monthInput: { background: '#053737', border: '1px solid #00ffd0', color: '#fff', padding: '5px', borderRadius: 5, fontSize: 13 },
   userBanner: { display: "flex", justifyContent: "space-between", background: "#022626", padding: "12px", borderRadius: 10, marginBottom: 15, border: "1px solid #053737" },
   cpmBadge: { color: "#00ffd0", fontSize: 11, border: "1px solid #00ffd0", padding: "2px 8px", borderRadius: 12 },
   grid: { display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 10 },
@@ -308,11 +312,11 @@ const styles = {
   inputRow: { display: "flex", gap: 8, marginBottom: 15 },
   input: { flex: 1, padding: 12, borderRadius: 8, border: "none", background: "#053737", color: "#fff" },
   linkBox: { background: "#053737", padding: "12px 15px", borderRadius: 10, display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 },
-  iconBtn: { background: "#011111", border: "1px solid #053737", color: "#fff", padding: "6px 10px", borderRadius: 6, cursor: "pointer" },
-  btnAction: { background: "#00ffd0", border: "none", padding: "0 15px", borderRadius: 8, fontWeight: "bold", cursor: "pointer" },
+  iconBtn: { background: "#011111", border: "1px solid #053737", color: "#fff", padding: "6px 10px", borderRadius: 6 },
+  btnAction: { background: "#00ffd0", border: "none", padding: "0 15px", borderRadius: 8, fontWeight: "bold" },
   withdrawCard: { background: "#021c1c", padding: 20, borderRadius: 15, border: "1px solid #053737", textAlign: "center" },
   inputFull: { width: "100%", padding: 12, marginBottom: 10, borderRadius: 8, border: "none", background: "#053737", color: "#fff", boxSizing: "border-box" },
-  btnWithdraw: { width: "100%", padding: 12, background: "#00ffd0", border: "none", borderRadius: 8, fontWeight: "bold", cursor: "pointer" },
+  btnWithdraw: { width: "100%", padding: 12, background: "#00ffd0", border: "none", borderRadius: 8, fontWeight: "bold" },
   supportBox: { textAlign: "center", padding: "30px 15px", background: "#021c1c", borderRadius: 15, border: "1px solid #053737" },
-  btnTg: { background: "#0088cc", color: "#fff", border: "none", padding: "12px 25px", borderRadius: 25, fontWeight: "bold", cursor: "pointer" }
+  btnTg: { background: "#0088cc", color: "#fff", border: "none", padding: "12px 25px", borderRadius: 25, fontWeight: "bold" }
 };
