@@ -171,17 +171,6 @@ export default function Dashboard({ user }) {
         </div>
       )}
 
-      {/* MONTH SELECTOR (Dynamic Stats)
-      <div style={styles.monthFilterRow}>
-        <span style={{ fontSize: 13, color: '#aaa' }}>Filter Month:</span>
-        <input 
-          type="month" 
-          value={selectedMonth} 
-          onChange={(e) => setSelectedMonth(e.target.value)}
-          style={styles.monthInput}
-        />
-      </div> */}
-
       <div style={styles.userBanner}>
         <span>👑 <b>{userData?.name || user?.name}</b></span>
         <span style={styles.cpmBadge}>CPM: ${currentCPM}</span>
@@ -200,6 +189,16 @@ export default function Dashboard({ user }) {
             <Card title="Wallet Balance" value={money(walletUSD)} color="#00ffd0" />
             <Card title="Total Withdrawn" value={money(paidUSD)} color="#ff4444" />
           </div>
+            {/* MONTH SELECTOR (Dynamic Stats) */}
+      <div style={styles.monthFilterRow}>
+        <span style={{ fontSize: 13, color: '#aaa' }}>Filter Month:</span>
+        <input 
+          type="month" 
+          value={selectedMonth} 
+          onChange={(e) => setSelectedMonth(e.target.value)}
+          style={styles.monthInput}
+        />
+      </div>
 
           <div style={styles.chartContainer}>
             <h4 style={{ marginBottom: 15, fontSize: 14 }}>Global Link Performance</h4>
@@ -215,18 +214,7 @@ export default function Dashboard({ user }) {
           </div>
         </>
       )}
-      {/* MONTH SELECTOR (Dynamic Stats) */}
-      <div style={styles.monthFilterRow}>
-        <span style={{ fontSize: 13, color: '#aaa' }}>Filter Month:</span>
-        <input 
-          type="month" 
-          value={selectedMonth} 
-          onChange={(e) => setSelectedMonth(e.target.value)}
-          style={styles.monthInput}
-        />
-      </div>
-
-
+    
       {tab === "manage" && (
         <div style={styles.section}>
           <div style={styles.inputRow}>
