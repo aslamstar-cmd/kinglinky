@@ -112,63 +112,52 @@ app.get("/get/:code", async (req, res) => {
 app.get("/go/:code", async (req, res) => {
   try {
     const { code } = req.params;
-
-    // Get Clean IP
-    const ip =
-      req.headers["x-forwarded-for"]?.split(",")[0].trim() ||
-      req.socket.remoteAddress ||
-      "unknown";
-
+    const ip = req.headers["x-forwarded-for"]?.split(",")[0].trim() || req.socket.remoteAddress || "unknown";
     const today = new Date().toISOString().split("T")[0];
 
-    // 1. Find Link
     const link = await Shortcut.findOne({ shortCode: code });
-    if (!link || !link.fullUrl) {
-      return res.status(404).send("Invalid link");
-    }
+    if (!link || !link.fullUrl) return res.status(404).send("Invalid link");
 
-    // 2. Prepare Redirect URL
     let redirectUrl = link.fullUrl;
-    if (!redirectUrl.startsWith("http://") && !redirectUrl.startsWith("https://")) {
-      redirectUrl = "https://" + redirectUrl;
-    }
+    if (!redirectUrl.startsWith("http")) redirectUrl = "https://" + redirectUrl;
 
-    // 3. Logic: Check if user already counted today
-    const alreadyCounted = link.countedVisitors.find(
-      (v) => v.ip === ip && v.date === today
-    );
+    // ✅ LOGIC: Check if this IP clicked this specific link TODAY
+    const alreadyClicked = link.countedVisitors.some(v => v.ip === ip && v.date === today);
 
-    if (!alreadyCounted) {
-      // ✅ User is New Today - Perform Updates
+    if (!alreadyClicked) {
+      // 1. Link Clicks Update
       link.clicks = (link.clicks || 0) + 1;
 
-      // Update Daily Clicks Map
+      // 2. Daily Graph Update
       const currentDaily = link.dailyClicks.get(today) || 0;
       link.dailyClicks.set(today, currentDaily + 1);
 
-      // Add to counted list
+      // 3. Add to Tracking Array
       link.countedVisitors.push({ ip, date: today });
-      
-      // Save Link Changes
+
+      // 🧹 Database-ah clean-ah vekka, 2 nalaiku munnadi ulla records-ah delete pannuvom
+      if (link.countedVisitors.length > 500) { 
+         link.countedVisitors = link.countedVisitors.filter(v => v.date === today);
+      }
+
       await link.save();
 
-      // 💰 WALLET UPDATE (Owner-ku kaasu seranum)
+      // 💰 Pay Owner
       const user = await User.findOne({ email: link.ownerEmail });
       if (user) {
-        const earn = 10 / 1000; // $0.01 per valid click
+        const earn = 0.01; // $0.01 per unique daily device click
         user.wallet = (user.wallet || 0) + earn;
         user.totalEarnings = (user.totalEarnings || 0) + earn;
         await user.save();
       }
     }
 
-    // 4. ALWAYS REDIRECT (Count aanalum aagalanalum user destination-ku povanum)
+    // ALWAYS REDIRECT
     return res.redirect(redirectUrl);
 
   } catch (err) {
     console.error("GO ROUTE ERROR:", err);
-    // Even if database fails, try to redirect if we have the link
-    res.status(500).send("System error, please try again.");
+    res.status(500).send("Redirect failed");
   }
 });
 /* =================================================
