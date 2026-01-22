@@ -113,63 +113,62 @@ app.get("/go/:code", async (req, res) => {
   try {
     const { code } = req.params;
 
+    // Get Clean IP
     const ip =
-      req.headers["x-forwarded-for"]?.split(",")[0] ||
+      req.headers["x-forwarded-for"]?.split(",")[0].trim() ||
       req.socket.remoteAddress ||
       "unknown";
 
     const today = new Date().toISOString().split("T")[0];
 
+    // 1. Find Link
     const link = await Shortcut.findOne({ shortCode: code });
     if (!link || !link.fullUrl) {
       return res.status(404).send("Invalid link");
     }
 
-    // ✅ FORCE VALID URL
+    // 2. Prepare Redirect URL
     let redirectUrl = link.fullUrl;
     if (!redirectUrl.startsWith("http://") && !redirectUrl.startsWith("https://")) {
       redirectUrl = "https://" + redirectUrl;
     }
 
-    // 🛡️ SAFE MAP INIT
-    if (!(link.dailyClicks instanceof Map)) {
-      link.dailyClicks = new Map(Object.entries(link.dailyClicks || {}));
-    }
+    // 3. Logic: Check if user already counted today
+    const alreadyCounted = link.countedVisitors.find(
+      (v) => v.ip === ip && v.date === today
+    );
 
-    if (!(link.countedVisitors instanceof Map)) {
-      link.countedVisitors = new Map(Object.entries(link.countedVisitors || {}));
-    }
-
-    const lastCountedDate = link.countedVisitors.get(ip);
-
-    // ✅ COUNT ONLY ONCE PER DAY PER USER
-    if (lastCountedDate !== today) {
+    if (!alreadyCounted) {
+      // ✅ User is New Today - Perform Updates
       link.clicks = (link.clicks || 0) + 1;
 
-      link.dailyClicks.set(
-        today,
-        (link.dailyClicks.get(today) || 0) + 1
-      );
+      // Update Daily Clicks Map
+      const currentDaily = link.dailyClicks.get(today) || 0;
+      link.dailyClicks.set(today, currentDaily + 1);
 
-      link.countedVisitors.set(ip, today);
+      // Add to counted list
+      link.countedVisitors.push({ ip, date: today });
+      
+      // Save Link Changes
       await link.save();
 
-      // 💰 WALLET UPDATE
+      // 💰 WALLET UPDATE (Owner-ku kaasu seranum)
       const user = await User.findOne({ email: link.ownerEmail });
       if (user) {
-        const earn = 10 / 1000;
+        const earn = 10 / 1000; // $0.01 per valid click
         user.wallet = (user.wallet || 0) + earn;
         user.totalEarnings = (user.totalEarnings || 0) + earn;
         await user.save();
       }
     }
 
-    // 🔁 ALWAYS REDIRECT
+    // 4. ALWAYS REDIRECT (Count aanalum aagalanalum user destination-ku povanum)
     return res.redirect(redirectUrl);
 
   } catch (err) {
     console.error("GO ROUTE ERROR:", err);
-    res.status(500).send("Redirect failed");
+    // Even if database fails, try to redirect if we have the link
+    res.status(500).send("System error, please try again.");
   }
 });
 /* =================================================
